@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut as fbSignOut,
   type User,
@@ -19,6 +20,7 @@ interface AuthValue {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  reinitialiserMotDePasse: (email: string) => Promise<void>;
   // Adresse e-mail : renvoi du message de confirmation, et relecture de l'état après avoir cliqué sur le lien.
   renvoyerVerification: () => Promise<void>;
   actualiserVerification: () => Promise<boolean>;
@@ -48,6 +50,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { user: nouveau } = await createUserWithEmailAndPassword(auth, email, password);
       // Le compte est créé même si l'envoi échoue : l'appli reste utilisable, la confirmation peut être renvoyée plus tard.
       await sendEmailVerification(nouveau).catch(() => undefined);
+    },
+    reinitialiserMotDePasse: async (email) => {
+      await sendPasswordResetEmail(auth, email);
     },
     renvoyerVerification: async () => {
       if (auth.currentUser) await sendEmailVerification(auth.currentUser);

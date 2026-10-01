@@ -19,6 +19,10 @@ function messageErreur(code: string): string {
       return "Un compte existe déjà avec cet email.";
     case "auth/weak-password":
       return "Le mot de passe doit contenir au moins 6 caractères.";
+    case "auth/missing-email":
+      return "Saisissez d’abord votre adresse e-mail.";
+    case "auth/too-many-requests":
+      return "Trop de tentatives. Réessayez dans quelques minutes.";
     case "auth/network-request-failed":
       return "Pas de connexion internet.";
     default:
@@ -28,7 +32,7 @@ function messageErreur(code: string): string {
 
 // Même page de connexion que sur le site UFOLEP : e-mail + mot de passe, création de compte pour synchroniser les appareils.
 export default function Connexion() {
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, reinitialiserMotDePasse } = useAuth();
   const router = useRouter();
   const [mode, setMode] = useState<"connexion" | "inscription">("connexion");
   const [email, setEmail] = useState("");
@@ -36,10 +40,31 @@ export default function Connexion() {
   const [afficher, setAfficher] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const [occupe, setOccupe] = useState(false);
+  const [info, setInfo] = useState<string | null>(null);
+
+  // Envoie un e-mail de réinitialisation à l'adresse saisie ; le message est le même que le compte existe ou non.
+  async function motDePasseOublie() {
+    setErreur(null);
+    setInfo(null);
+    if (!email.trim()) return setErreur(messageErreur("auth/missing-email"));
+    setOccupe(true);
+    try {
+      await reinitialiserMotDePasse(email.trim());
+      setInfo("Si un compte existe pour cette adresse, un e-mail pour choisir un nouveau mot de passe vient d’être envoyé. Pensez à regarder les courriers indésirables.");
+    } catch (err) {
+      const code = err instanceof Error && "code" in err ? String((err as { code: unknown }).code) : "";
+      // « Utilisateur introuvable » n'est pas révélé : même message de confirmation.
+      if (code === "auth/user-not-found") setInfo("Si un compte existe pour cette adresse, un e-mail pour choisir un nouveau mot de passe vient d’être envoyé. Pensez à regarder les courriers indésirables.");
+      else setErreur(messageErreur(code));
+    } finally {
+      setOccupe(false);
+    }
+  }
 
   async function envoyer(e: FormEvent) {
     e.preventDefault();
     setErreur(null);
+    setInfo(null);
     setOccupe(true);
     try {
       if (mode === "connexion") await signIn(email, motDePasse);
@@ -100,7 +125,13 @@ export default function Connexion() {
               </button>
             </div>
           </div>
+          {mode === "connexion" && (
+            <button type="button" onClick={motDePasseOublie} disabled={occupe || !firebaseConfigure} className="accent-gradient-text text-xs font-medium underline disabled:opacity-50">
+              Mot de passe oublié ?
+            </button>
+          )}
           {erreur && <p className="text-sm text-danger">{erreur}</p>}
+          {info && <p className="text-sm text-success">{info}</p>}
           <button type="submit" disabled={occupe || !firebaseConfigure} className="accent-gradient w-full rounded px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90 disabled:opacity-50">
             {occupe ? "…" : mode === "connexion" ? "Se connecter" : "Créer mon compte"}
           </button>
@@ -109,6 +140,7 @@ export default function Connexion() {
         <button
           onClick={() => {
             setErreur(null);
+            setInfo(null);
             setMode((m) => (m === "connexion" ? "inscription" : "connexion"));
           }}
           className="accent-gradient-text mt-4 text-center text-sm font-medium"
