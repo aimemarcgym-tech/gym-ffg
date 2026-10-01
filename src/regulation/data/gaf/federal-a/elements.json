@@ -166,7 +166,8 @@
     "nom": "Tour d’appui avant jambes tendues",
     "valeur": 1.0,
     "verified": true,
-    "sourcePage": 8
+    "sourcePage": 8,
+    "bonifFamille": "TOUR_PROCHE"
   },
   {
     "id": "FA-BR-019",
