@@ -17,6 +17,7 @@ const app = getApps().length
     });
 
 export const auth = getAuth(app);
+auth.languageCode = "fr";
 
 export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),

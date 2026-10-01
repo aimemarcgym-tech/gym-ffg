@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut as fbSignOut,
   type User,
@@ -18,6 +19,9 @@ interface AuthValue {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  // Adresse e-mail : renvoi du message de confirmation, et relecture de l'état après avoir cliqué sur le lien.
+  renvoyerVerification: () => Promise<void>;
+  actualiserVerification: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthValue | null>(null);
@@ -25,6 +29,7 @@ const AuthContext = createContext<AuthValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [, setVersion] = useState(0);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (u) => {
@@ -40,7 +45,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await signInWithEmailAndPassword(auth, email, password);
     },
     signUp: async (email, password) => {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const { user: nouveau } = await createUserWithEmailAndPassword(auth, email, password);
+      // Le compte est créé même si l'envoi échoue : l'appli reste utilisable, la confirmation peut être renvoyée plus tard.
+      await sendEmailVerification(nouveau).catch(() => undefined);
+    },
+    renvoyerVerification: async () => {
+      if (auth.currentUser) await sendEmailVerification(auth.currentUser);
+    },
+    actualiserVerification: async () => {
+      if (!auth.currentUser) return false;
+      await auth.currentUser.reload();
+      setVersion((v) => v + 1);
+      return auth.currentUser.emailVerified;
     },
     signOut: async () => {
       arreterSync();
