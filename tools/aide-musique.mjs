@@ -10,7 +10,7 @@ import { join } from "node:path";
 
 const PORT = Number(process.env.AIDE_MUSIQUE_PORT ?? 47615);
 // Seules les pages de l'appli (en local, ou l'adresse GitHub Pages) peuvent parler à cette aide : pas n'importe quel site web.
-const ORIGINES = [/^https?:\/\/localhost(:\d+)?$/, /^https?:\/\/127\.0\.0\.1(:\d+)?$/, ...(process.env.AIDE_MUSIQUE_ORIGINES ?? "https://aimemarcgym-tech.github.io").split(",").map((o) => new RegExp(`^${o.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))];
+const ORIGINES = [/^https?:\/\/localhost(:\d+)?$/, /^https?:\/\/127\.0\.0\.1(:\d+)?$/, ...(process.env.AIDE_MUSIQUE_ORIGINES ?? "https://aimemarcgym-tech.github.io,https://gym-ffg.web.app,https://gym-ffg.firebaseapp.com").split(",").map((o) => new RegExp(`^${o.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))];
 
 const travaux = new Map();
 
