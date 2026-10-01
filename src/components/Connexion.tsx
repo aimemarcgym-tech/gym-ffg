@@ -33,6 +33,7 @@ export default function Connexion() {
   const [mode, setMode] = useState<"connexion" | "inscription">("connexion");
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
+  const [afficher, setAfficher] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const [occupe, setOccupe] = useState(false);
 
@@ -79,7 +80,25 @@ export default function Connexion() {
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-muted">Mot de passe</label>
-            <input type="password" required minLength={6} value={motDePasse} onChange={(e) => setMotDePasse(e.target.value)} autoComplete={mode === "connexion" ? "current-password" : "new-password"} className={champ} />
+            <div className="relative">
+              <input
+                type={afficher ? "text" : "password"}
+                required
+                minLength={6}
+                value={motDePasse}
+                onChange={(e) => setMotDePasse(e.target.value)}
+                autoComplete={mode === "connexion" ? "current-password" : "new-password"}
+                className={`${champ} pr-24`}
+              />
+              <button
+                type="button"
+                onClick={() => setAfficher((v) => !v)}
+                aria-pressed={afficher}
+                className="absolute inset-y-0 right-2 my-auto h-7 rounded px-2 text-xs font-medium text-muted hover:text-foreground"
+              >
+                {afficher ? "🙈 Masquer" : "👁 Afficher"}
+              </button>
+            </div>
           </div>
           {erreur && <p className="text-sm text-danger">{erreur}</p>}
           <button type="submit" disabled={occupe || !firebaseConfigure} className="accent-gradient w-full rounded px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90 disabled:opacity-50">
