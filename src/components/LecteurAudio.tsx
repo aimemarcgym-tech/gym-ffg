@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { formatDuree } from "@/lib/format";
 
+// Un seul lecteur joue à la fois : en lancer un met en pause celui qui jouait.
+let enCours: HTMLAudioElement | null = null;
+
 // Même lecteur que sur le site UFOLEP : lecture, barre de progression, durée, volume.
 export default function LecteurAudio({ src }: { src: string }) {
   const audio = useRef<HTMLAudioElement>(null);
@@ -52,7 +55,11 @@ export default function LecteurAudio({ src }: { src: string }) {
       <audio
         ref={audio}
         src={src}
-        onPlay={() => setLecture(true)}
+        onPlay={(e) => {
+          if (enCours && enCours !== e.currentTarget) enCours.pause();
+          enCours = e.currentTarget;
+          setLecture(true);
+        }}
         onPause={() => setLecture(false)}
         onEnded={() => setLecture(false)}
         onLoadedMetadata={(e) => setDuree(e.currentTarget.duration)}
