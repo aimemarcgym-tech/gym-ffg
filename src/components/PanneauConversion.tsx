@@ -47,6 +47,18 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
     return etat;
   }
 
+  // À l'ouverture de l'onglet : si l'aide ne répond pas, on la lance toute seule (une seule tentative).
+  useEffect(() => {
+    let vivant = true;
+    (async () => {
+      const etat = (await etatAide()) ?? (await demarrerAide());
+      if (vivant) setAide(etat);
+    })();
+    return () => {
+      vivant = false;
+    };
+  }, []);
+
   useEffect(() => {
     if (source !== "lien") return;
     let vivant = true;
