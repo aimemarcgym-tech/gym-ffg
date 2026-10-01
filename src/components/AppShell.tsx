@@ -19,7 +19,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   }, []);
   const sansNav = pathname.startsWith("/partage/") || pathname.startsWith("/connexion/");
   // La fiche gymnaste, le constructeur de mouvement et les pages de partage et de sauvegarde gèrent eux-mêmes leur bandeau et leur largeur.
-  const libre = pathname.startsWith("/gymnaste") || pathname.startsWith("/mouvement") || pathname.startsWith("/partage/") || pathname.startsWith("/sauvegarde") || pathname.startsWith("/media") || pathname.startsWith("/entrainement") || pathname.startsWith("/table") || pathname.startsWith("/competition/calendrier") || pathname.startsWith("/competition/resultats") || pathname.startsWith("/faire-musiques");
+  const libre = pathname.startsWith("/gymnaste") || pathname.startsWith("/mouvement") || pathname.startsWith("/partage/") || pathname.startsWith("/sauvegarde") || pathname.startsWith("/media") || pathname.startsWith("/entrainement") || pathname.startsWith("/table") || pathname.startsWith("/competition/calendrier") || pathname.startsWith("/competition/resultats") || pathname.startsWith("/faire-musiques") || pathname.startsWith("/connexion");
   return (
     <AuthProvider>
       <DialoguesProvider>
