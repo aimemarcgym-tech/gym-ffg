@@ -1,0 +1,267 @@
+{
+ "titre": "Lieux de compétitions – 2026/2027",
+ "source": "Lieux de compétitions 2026/2027 (CRIFGYM)",
+ "avertissement": "Attributions en attente de validation du bureau du CRIFGYM.",
+ "competitions": [
+  {
+   "debut": "2027-02-27",
+   "dateTexte": "27 et 28 février",
+   "intitule": "ID Indiv’ Performance Fédéral A",
+   "colonnes": [
+    "ind_nat",
+    "ind_natc",
+    "ind_reg_p",
+    "ind_fa_id"
+   ],
+   "secteurs": [
+    {
+     "secteur": "77-91-93-95",
+     "lieux": [
+      {
+       "nom": "Savigny-le-Temple"
+      },
+      {
+       "nom": "Bures-sur-Yvette"
+      }
+     ]
+    },
+    {
+     "secteur": "75-78-92-94",
+     "lieux": [
+      {
+       "nom": "Élancourt Maurepas"
+      },
+      {
+       "nom": "En recherche de lieu",
+       "recherche": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-03-06",
+   "dateTexte": "6 et 7 mars",
+   "intitule": "ID Équipes Fédéral A, A2 et A3",
+   "colonnes": [
+    "fa_trophee",
+    "a2a3_id"
+   ],
+   "secteurs": [
+    {
+     "secteur": "77-91-93-95",
+     "lieux": [
+      {
+       "nom": "Saint-Prix",
+       "clubs": [
+        "Chelles Gymnastique"
+       ]
+      },
+      {
+       "nom": "Goussainville",
+       "clubs": [
+        "Noisy le Sec"
+       ]
+      }
+     ]
+    },
+    {
+     "secteur": "75-78-92-94",
+     "lieux": [
+      {
+       "nom": "Puteaux",
+       "clubs": [
+        "Élancourt Maurepas"
+       ]
+      },
+      {
+       "nom": "Vélizy"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-03-13",
+   "dateTexte": "13 et 14 mars",
+   "intitule": "ID Performance Équipes",
+   "colonnes": [
+    "perf_nat_a",
+    "perf_nat_bc",
+    "perf_reg_p"
+   ],
+   "secteurs": [
+    {
+     "secteur": "77-91-93-95",
+     "lieux": [
+      {
+       "nom": "Épinay sous Sénart"
+      },
+      {
+       "nom": "Pontault Combault"
+      }
+     ]
+    },
+    {
+     "secteur": "75-78-92-94",
+     "lieux": [
+      {
+       "nom": "Clamart"
+      },
+      {
+       "nom": "Puteaux"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-03-27",
+   "dateTexte": "27 et 28 mars",
+   "intitule": "Région Individuelle Performance",
+   "colonnes": [
+    "ind_nat",
+    "ind_natc",
+    "ind_reg_p"
+   ],
+   "secteurs": [
+    {
+     "secteur": "Région",
+     "lieux": [
+      {
+       "nom": "Combs la Ville"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-04-03",
+   "dateTexte": "3 et 4 avril",
+   "intitule": "Région Équipes Fédéral A",
+   "colonnes": [
+    "fa_trophee"
+   ],
+   "secteurs": [
+    {
+     "secteur": "Région",
+     "lieux": [
+      {
+       "nom": "Montigny",
+       "clubs": [
+        "Goussainville",
+        "Villeparisis"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-04-17",
+   "dateTexte": "16, 17 et 18 avril",
+   "intitule": "Région Équipes Performance",
+   "colonnes": [
+    "perf_nat_a",
+    "perf_nat_bc"
+   ],
+   "secteurs": [
+    {
+     "secteur": "Région",
+     "lieux": [
+      {
+       "nom": "Herblay",
+       "clubs": [
+        "VGA"
+       ],
+       "note": "Si la FFGym nous autorise l’organisation d’une compétition sur 3 jours",
+       "noteClubs": "En plus d’Herblay si la FFGym ne nous autorise pas l’organisation d’une compétition sur 3 jours"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-04-24",
+   "dateTexte": "24 et 25 avril",
+   "intitule": "Finale régionale Équipes Fédéral A2 et A3",
+   "colonnes": [
+    "a2a3_id"
+   ],
+   "secteurs": [
+    {
+     "secteur": "Région",
+     "lieux": [
+      {
+       "nom": "Roissy en Brie",
+       "clubs": [
+        "Villeparisis"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-05-22",
+   "dateTexte": "22 et 23 mai",
+   "intitule": "Finale régionale Équipes Perf Poussines",
+   "colonnes": [
+    "perf_reg_p"
+   ],
+   "secteurs": [
+    {
+     "secteur": "Région",
+     "lieux": [
+      {
+       "nom": "Noisy le Grand",
+       "clubs": [
+        "Ozoir Gym"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "debut": "2027-05-29",
+   "dateTexte": "29 et 30 mai",
+   "intitule": "Finale ID Fédéral B",
+   "remarque": "Envisager 2 lieux par secteur",
+   "colonnes": [
+    "b_id"
+   ],
+   "secteurs": [
+    {
+     "secteur": "77-91-93-95",
+     "lieux": [
+      {
+       "nom": "Eaubonne",
+       "clubs": [
+        "Les Coudreaux",
+        "Les Manicoux"
+       ]
+      },
+      {
+       "nom": "À réfléchir en fonction des quotas",
+       "note": "",
+       "reflexion": true
+      }
+     ]
+    },
+    {
+     "secteur": "75-78-92-94",
+     "lieux": [
+      {
+       "nom": "Kremlin Bicêtre",
+       "clubs": [
+        "Villeneuve-la-Garenne",
+        "Villecresnes"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

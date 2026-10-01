@@ -1,0 +1,52 @@
+{
+  "verified": true,
+  "source": "Brochure des programmes GAF 2026-2027, Fédéral A, pages 5 à 16",
+  "temps": [
+    { "agres": "POUTRE", "label": "Poutre : durée maximum", "valeur": "1'00", "page": 14 },
+    { "agres": "POUTRE", "label": "Poutre : temps de chute sans pénalité", "valeur": "10 s", "page": 14 },
+    { "agres": "SOL", "label": "Sol : durée maximum", "valeur": "1'00", "page": 16 },
+    { "agres": "BARRES", "label": "Barres : temps de chute sans pénalité", "valeur": "30 s", "page": 10 }
+  ],
+  "infos": {
+    "COMMUN": [
+      "7 éléments au maximum sont comptés, de valeur 0,40 à 1,00, sortie comprise.",
+      "3 bonifications de 0,50 au maximum, réalisées sans chute : la note D maximale est 8,50.",
+      "Un élément répété n’est compté qu’une fois; un élément non reconnu, avec aide ou en rotation incomplète n’est pas compté."
+    ],
+    "SAUT": [
+      "Table de saut à 1,25 m; course d’élan de 25 m maximum.",
+      "Tremplin FIG ou trampo-tremp (hauteur non modifiable) : seule la note de départ change.",
+      "2 sauts identiques ou différents, le meilleur est pris en compte.",
+      "1 tapis de 10 cm obligatoire au-dessus du tapis de réception de 20 cm.",
+      "Saut non répertorié, aide ou appui de la tête sur la table : saut nul.",
+      "Absence de l’entraîneur près de la table : 0,50 de pénalité."
+    ],
+    "BARRES": [
+      "Enchaînement libre sur une seule barre (BI ou BS) ou sur les 2 barres.",
+      "Présence de l’entraîneur obligatoire durant tout l’exercice (absence : 0,50).",
+      "Retrait du tremplin juste après l’entrée (sinon 0,50).",
+      "Seuls les éléments en bleu dans la brochure permettent une bonification."
+    ],
+    "POUTRE": [
+      "Enchaînement libre de 1 minute maximum.",
+      "Retrait du tremplin juste après l’entrée (sinon 0,50).",
+      "Le chronométreur prévient la gymnaste à 50 secondes.",
+      "Bonus artistique : 0,10 par critère, 0,30 au maximum."
+    ],
+    "SOL": [
+      "Enchaînement libre sur praticable de 12 × 12 m, en musique (paroles autorisées).",
+      "Durée maximum : 1 minute.",
+      "Une ligne acrobatique comporte au minimum un élément acrobatique avec envol.",
+      "Bonus artistique : 0,10 par critère, 0,30 au maximum."
+    ]
+  },
+  "lexique": [
+    { "terme": "BI", "definition": "Barre inférieure" },
+    { "terme": "BS", "definition": "Barre supérieure" },
+    { "terme": "ATR", "definition": "Appui tendu renversé" },
+    { "terme": "VD", "definition": "Valeur de difficulté de l’élément" },
+    { "terme": "Note D", "definition": "Note de difficulté : éléments retenus et bonifications" },
+    { "terme": "Note E", "definition": "Note d’exécution : 10 points moins les déductions" },
+    { "terme": "Ligne acrobatique", "definition": "Au moins un élément acrobatique avec envol" }
+  ]
+}

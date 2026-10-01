@@ -1,0 +1,816 @@
+{
+ "source": "Contacts régionaux et départementaux (CRIFGYM) 2026/2027",
+ "pas": "PAS : Parcours d’Accession Sportif (vers le haut niveau)",
+ "regionaux": [
+  {
+   "groupe": "Coordination",
+   "lignes": [
+    {
+     "role": "Coordonnateur d’ETR",
+     "noms": [
+      "Thomas THIBEDORE"
+     ],
+     "tels": [
+      "06.50.33.46.63"
+     ],
+     "emails": [
+      "thomas-thibedore@orange.fr"
+     ]
+    }
+   ]
+  },
+  {
+   "groupe": "Membres élus",
+   "lignes": [
+    {
+     "role": "Représentant Technique GAF",
+     "noms": [
+      "Sonia ESPIRE"
+     ],
+     "tels": [
+      "06.33.77.98.44"
+     ],
+     "emails": [
+      "sonia.espire@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Technique Général",
+     "noms": [
+      "Jean Yves CALLON"
+     ],
+     "tels": [
+      "06.59.88.00.60"
+     ],
+     "emails": [
+      "jean.yves-callon@crif-ffgym.fr"
+     ]
+    },
+    {
+     "role": "Membre élu",
+     "noms": [
+      "Cédric JAVARD"
+     ],
+     "tels": [
+      "06.09.13.05.00"
+     ],
+     "emails": [
+      "cedric.javard@gmail.com"
+     ]
+    },
+    {
+     "role": "Membre élu",
+     "noms": [
+      "Quentin BOURDIN"
+     ],
+     "tels": [
+      "06.82.47.41.99"
+     ],
+     "emails": [
+      "bourdin.q@gmail.com"
+     ]
+    },
+    {
+     "role": "Membre élue",
+     "noms": [
+      "Gaelle LEFEUVRE"
+     ],
+     "tels": [
+      "06.73.30.14.77"
+     ],
+     "emails": [
+      "galou-g@wanadoo.fr"
+     ]
+    },
+    {
+     "role": "Membre élue",
+     "noms": [
+      "Bénédicte BRIN"
+     ],
+     "tels": [
+      "06.60.26.19.10"
+     ],
+     "emails": [
+      "benedictebrinpro@gmail.com"
+     ]
+    },
+    {
+     "role": "Membre élue",
+     "noms": [
+      "Maryline HEMERY"
+     ],
+     "tels": [
+      "06.64.29.58.39"
+     ],
+     "emails": [
+      "marylinehemery@yahoo.fr"
+     ]
+    }
+   ]
+  },
+  {
+   "groupe": "Responsables des juges",
+   "lignes": [
+    {
+     "role": "Secteur 1",
+     "noms": [
+      "Stéphanie ROY"
+     ],
+     "tels": [
+      "06.16.18.31.36"
+     ],
+     "emails": [
+      "stefdavy77@gmail.com"
+     ]
+    },
+    {
+     "role": "Secteur 2",
+     "noms": [
+      "Sophie BIGNON",
+      "Julie MOUGIN"
+     ],
+     "tels": [
+      "06.84.69.55.54",
+      "06.86.56.34.88"
+     ],
+     "emails": [
+      "Jugesgaf.interdep2@gmail.com"
+     ]
+    },
+    {
+     "role": "Région",
+     "noms": [
+      "Maryline HEMERY"
+     ],
+     "tels": [
+      "06.64.29.58.39"
+     ],
+     "emails": [
+      "marylinehemery@yahoo.fr"
+     ]
+    }
+   ]
+  },
+  {
+   "groupe": "Salariés référents GAF",
+   "lignes": [
+    {
+     "role": "Salarié Technique Régional",
+     "noms": [
+      "Valentin FURET",
+      "Gaelle LEFEUVRE"
+     ],
+     "tels": [
+      "06.26.31.28.82"
+     ],
+     "emails": [
+      "valentin-furet@crif-ffgym.fr"
+     ],
+     "note": "Gaelle LEFEUVRE : de novembre 2026 à mai 2027"
+    },
+    {
+     "role": "Administratif",
+     "noms": [
+      "Carine POYAU"
+     ],
+     "tels": [
+      "01.72.67.40.05",
+      "06.07.16.29.09"
+     ],
+     "emails": [
+      "carine-poyau@crif-ffgym.fr"
+     ]
+    },
+    {
+     "role": "Référent Technique PAS",
+     "noms": [
+      "Coralie CLARENN",
+      "Valentin FURET"
+     ],
+     "tels": [
+      "06.26.14.38.57",
+      "06.26.31.28.82"
+     ],
+     "emails": [
+      "coralie_clarenn@hotmail.com",
+      "valentin-furet@crif-ffgym.fr"
+     ]
+    },
+    {
+     "role": "Référent Administratif PAS",
+     "noms": [
+      "Céline BODIN"
+     ],
+     "tels": [
+      "01.72.67.40.06",
+      "06.82.48.65.99"
+     ],
+     "emails": [
+      "celine-bodin@crif-ffgym.fr"
+     ]
+    }
+   ]
+  }
+ ],
+ "departements": [
+  {
+   "nom": "Paris – 75",
+   "lignes": [
+    {
+     "role": "Représentant Technique",
+     "noms": [
+      "Pietro BAIOCCO"
+     ],
+     "tels": [
+      "07 87 51 17 76"
+     ],
+     "emails": [
+      "pietro.baiocco22@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Capucine BEGAUD"
+     ],
+     "tels": [
+      "07 67 80 82 93"
+     ],
+     "emails": [
+      "capbegaud@hotmail.fr"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Pietro BAIOCCO"
+     ],
+     "tels": [
+      "07 87 51 17 76"
+     ],
+     "emails": [
+      "pietro.baiocco22@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Pietro BAIOCCO"
+     ],
+     "tels": [
+      "07 87 51 17 76"
+     ],
+     "emails": [
+      "pietro.baiocco22@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [
+      "Léa DELIN"
+     ],
+     "tels": [
+      "06 79 91 37 83"
+     ],
+     "emails": [
+      "lea.dlin@ffgym.fr"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Seine-et-Marne – 77",
+   "lignes": [
+    {
+     "role": "Représentante Technique",
+     "noms": [
+      "Stéphanie BOULANGER"
+     ],
+     "tels": [
+      "06 81 64 02 52"
+     ],
+     "emails": [
+      "boulangersteph22@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Anaelle AIMÉ",
+      "Audrey FROLOIS",
+      "Hugo LAVENTURIER",
+      "Maily VASCONCELOS"
+     ],
+     "tels": [
+      "07 63 41 64 07"
+     ],
+     "emails": [
+      "cdgym77.jugementgaf@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Elodie MONTROCHE"
+     ],
+     "tels": [
+      "06 67 87 45 42"
+     ],
+     "emails": [
+      "montroches.e@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Stéphanie BOULANGER"
+     ],
+     "tels": [
+      "06 81 64 02 52"
+     ],
+     "emails": [
+      "boulangersteph22@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Davy ROY"
+     ],
+     "tels": [
+      "06 16 18 31 42"
+     ],
+     "emails": [
+      "davyprepaphy@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [],
+     "tels": [],
+     "emails": []
+    }
+   ]
+  },
+  {
+   "nom": "Yvelines – 78",
+   "lignes": [
+    {
+     "role": "Représentante Technique",
+     "noms": [
+      "Marine LEMIERE"
+     ],
+     "tels": [
+      "06 58 73 56 79"
+     ],
+     "emails": [
+      "marine.jouette@icloud.com"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Laëtitia DORIER"
+     ],
+     "tels": [
+      "06 71 44 81 41"
+     ],
+     "emails": [
+      "jugesgaf.cdygym@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Gwenaëlle DELORIE"
+     ],
+     "tels": [
+      "06 95 12 31 80"
+     ],
+     "emails": [
+      "rp.cgmgym@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Marine LEMIERE"
+     ],
+     "tels": [
+      "06 58 73 56 79"
+     ],
+     "emails": [
+      "marine.jouette@icloud.com"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Jérôme GIANNETTI"
+     ],
+     "tels": [
+      "06 13 75 01 67"
+     ],
+     "emails": [
+      "jeromegym@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [
+      "Marie-Pierre MARCHAND"
+     ],
+     "tels": [
+      "06 81 55 36 04"
+     ],
+     "emails": [
+      "marchandmariepierre@orange.fr"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Essonne – 91",
+   "lignes": [
+    {
+     "role": "Représentante Technique",
+     "noms": [
+      "Lucie DIDIER"
+     ],
+     "tels": [
+      "06 74 42 45 93"
+     ],
+     "emails": [
+      "lucie.didier.ignygym@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Mathilde ARPIN",
+      "Maelle MOUZARD"
+     ],
+     "tels": [
+      "06 50 16 84 43",
+      "06 25 89 04 46"
+     ],
+     "emails": [
+      "mathilde.arpin@gmail.com",
+      "maelle.mouzard@outlook.fr"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Lucie DIDIER",
+      "Laurence BOURE"
+     ],
+     "tels": [
+      "06 74 42 45 93"
+     ],
+     "emails": [
+      "lucie.didier.ignygym@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Lucie DIDIER"
+     ],
+     "tels": [
+      "06 74 42 45 93"
+     ],
+     "emails": [
+      "lucie.didier.ignygym@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Lucie DIDIER"
+     ],
+     "tels": [
+      "06 74 42 45 93"
+     ],
+     "emails": [
+      "lucie.didier.ignygym@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [
+      "Cédric JAVARD"
+     ],
+     "tels": [
+      "06 09 13 05 00"
+     ],
+     "emails": [
+      "cedric.javard@gmail.com"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Hauts-de-Seine – 92",
+   "lignes": [
+    {
+     "role": "Représentante Technique",
+     "noms": [
+      "Clotilde MAKOWSKI"
+     ],
+     "tels": [
+      "06 99 65 73 76"
+     ],
+     "emails": [
+      "Clotilde.makowski@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Bénédicte CHAUME"
+     ],
+     "tels": [
+      "06 71 91 54 08"
+     ],
+     "emails": [
+      "Benedicte.chaume@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Valentin FURET"
+     ],
+     "tels": [
+      "06 26 31 28 82"
+     ],
+     "emails": [
+      "Valentin.furet@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Philippe PORCHE"
+     ],
+     "tels": [
+      "06 62 11 51 29"
+     ],
+     "emails": [
+      "Ph78porche@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Wissem BERHILI"
+     ],
+     "tels": [
+      "06 77 93 44 48"
+     ],
+     "emails": [
+      "wberhili@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [
+      "Morgane JOB"
+     ],
+     "tels": [
+      "06 79 39 41 57"
+     ],
+     "emails": [
+      "Morgane.resptech.egr@gmail.com"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Seine-Saint-Denis – 93",
+   "lignes": [
+    {
+     "role": "Représentant Technique",
+     "noms": [
+      "Ludovic CLAVIER"
+     ],
+     "tels": [
+      "06 70 06 06 18"
+     ],
+     "emails": [
+      "Ludovic.clavier2@wanadoo.fr"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Ramata SOW"
+     ],
+     "tels": [
+      "06 69 11 96 67"
+     ],
+     "emails": [
+      "ramata.sow.rs@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Ludovic CLAVIER"
+     ],
+     "tels": [
+      "06 70 06 06 18"
+     ],
+     "emails": [
+      "Ludovic.clavier2@wanadoo.fr"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Séverine BORTOLAMEOLLI"
+     ],
+     "tels": [
+      "06 10 20 32 58"
+     ],
+     "emails": [
+      "severine.lescauwier@wanadoo.fr"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Ludovic CLAVIER"
+     ],
+     "tels": [
+      "06 70 06 06 18"
+     ],
+     "emails": [
+      "Ludovic.clavier2@wanadoo.fr"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [],
+     "tels": [],
+     "emails": []
+    }
+   ]
+  },
+  {
+   "nom": "Val-de-Marne – 94",
+   "lignes": [
+    {
+     "role": "Représentante Technique",
+     "noms": [
+      "Jennifer BOYER"
+     ],
+     "tels": [
+      "06 73 19 98 79"
+     ],
+     "emails": [
+      "jenny@passion-gym.fr"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Sandrine DUCASTELLE"
+     ],
+     "tels": [
+      "06 76 82 15 82"
+     ],
+     "emails": [
+      "ducastelle.sandrine@neuf.fr"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Séverine ONEPHANDARA"
+     ],
+     "tels": [
+      "06 86 63 07 07"
+     ],
+     "emails": [
+      "sevonef@hotmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Séverine ONEPHANDARA"
+     ],
+     "tels": [
+      "06 86 63 07 07"
+     ],
+     "emails": [
+      "sevonef@hotmail.com"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Manon HESLOUIN"
+     ],
+     "tels": [
+      "06 15 67 87 93"
+     ],
+     "emails": [
+      "Manon_h_94700@hotmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [
+      "Séverine ONEPHANDARA"
+     ],
+     "tels": [
+      "06 86 63 07 07"
+     ],
+     "emails": [
+      "sevonef@hotmail.com"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Val-d’Oise – 95",
+   "lignes": [
+    {
+     "role": "Représentante Technique",
+     "noms": [
+      "Vanessa LEIBNITZ"
+     ],
+     "tels": [
+      "06 21 43 69 15"
+     ],
+     "emails": [
+      "melle.leibnitz@hotmail.fr"
+     ]
+    },
+    {
+     "role": "Responsables des Juges",
+     "noms": [
+      "Elsie LEBACH"
+     ],
+     "tels": [
+      "06 71 87 15 23"
+     ],
+     "emails": [
+      "elb.gymnastique@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable PAS",
+     "noms": [
+      "Vanessa MONY"
+     ],
+     "tels": [
+      "06 69 55 41 34"
+     ],
+     "emails": [
+      "vanemony@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable Compétitions",
+     "noms": [
+      "Vanessa MONY"
+     ],
+     "tels": [
+      "06 69 55 41 34"
+     ],
+     "emails": [
+      "vanemony@gmail.com"
+     ]
+    },
+    {
+     "role": "Responsable des Cadres",
+     "noms": [
+      "Vanessa MONY"
+     ],
+     "tels": [
+      "06 69 55 41 34"
+     ],
+     "emails": [
+      "vanemony@gmail.com"
+     ]
+    },
+    {
+     "role": "Délégué Administratif",
+     "noms": [
+      "Corinne FEIX"
+     ],
+     "tels": [
+      "06 62 95 97 17"
+     ],
+     "emails": [
+      "corinne.ermontgym@gmail.com"
+     ]
+    }
+   ]
+  }
+ ]
+}

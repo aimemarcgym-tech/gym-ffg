@@ -1,0 +1,1200 @@
+[
+  {
+    "id": "FA-BR-001",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Sauter bras tendus pour arriver à l’appui facial sur BI",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-002",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Bascule en engageant 1 jambe à la BI,en entrée ou dans le mouvement",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-003",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Oscillation engagée 1 jambe tendue, en entrée ou dans le mouvement",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-004",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Bascule BI, en entrée ou dans le mouvement",
+    "valeur": 1.0,
+    "bonifFamille": "BASCULE",
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-005",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Bascule BS, En entrée ou dans le mouvement",
+    "valeur": 1.0,
+    "bonifFamille": "BASCULE",
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-006",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Bascule fixe BI ou BS",
+    "valeur": 1.0,
+    "bonifFamille": "BASCULE",
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-007",
+    "agres": "BARRES",
+    "famille": "BASCULES",
+    "nom": "Bascule coupée écart BI uniquement",
+    "valeur": 1.0,
+    "bonifFamille": "BASCULE",
+    "verified": true,
+    "sourcePage": 7
+  },
+  {
+    "id": "FA-BR-008",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "De l’appui facial, rotation avant, descente contrôlée avec passage par les 3 positions (chandelle renversée, fermeture pieds barre et équerre serrée) (Si réalisé avec sortie comptabiliser 1 élément)",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-009",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Renversement arrière du lancé de jambe",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-010",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "De l’appui facial, rotation avant, descente contrôlée avec maintien 2 secondes des 3 positions (chandelle renversée, fermeture pieds barre et équerre serrée) (Si réalisé avec sortie comptabiliser 1 élément)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-011",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Traction renversement",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-012",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Tour d’appui arrière jambes tendues et corps aligné",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-013",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "De l’appui cavalier, tour en avant (Prises libres)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-014",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Sortie filée sans rotation longitudinale sous toutes ses formes (Pieds barre jambes serrées ou écartées ou de l’appui) Barre Inférieure",
+    "valeur": 0.6,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-015",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "De l’appui facial, filé avant corps proche de l’horizontale et balancé arrière",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-016",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Sortie filée sans rotation longitudinale sous toutes ses formes (pieds barre jambes serrées ou écartées ou de l’appui) Barre Supérieure",
+    "valeur": 0.8,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-017",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Tour d’appui arrière libre à l’horizontale",
+    "valeur": 1.0,
+    "bonifFamille": "TOUR_PROCHE",
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-018",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Tour d’appui avant jambes tendues",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-019",
+    "agres": "BARRES",
+    "famille": "PROCHES",
+    "nom": "Sortie filée avec ½ tour (180°) sous toutes ses formes (Pieds barre jambes serrées ou écartées ou de l’appui) BI ou BS",
+    "valeur": 1.0,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 8
+  },
+  {
+    "id": "FA-BR-020",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "De l’appui facial, engager une jambe entre les bras pour arriver à l’appui cavalier",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-021",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "De l’appui facial BI, pose de pieds alternative et attraper BS",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-022",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "De l’appui cavalier, ½ tour en changeant les prises et dégager la jambe par-dessus la barre",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-023",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "Prise d’élan à l’horizontale aussi en sortie (comptabilisé qu’une seule fois)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-024",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "De l’appui facial BI, pose de pieds simultanée jambes fléchies (serrées ou écartées) et attraper BS",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-025",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "Pose de pieds, élan circulaire en arrière jambes serrées (Tendues ou fléchies)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-026",
+    "agres": "BARRES",
+    "famille": "AUTRES",
+    "nom": "Pose de pieds, élan circulaire en avant jambes serrées (Tendues ou fléchies)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-027",
+    "agres": "BARRES",
+    "famille": "ELANS",
+    "nom": "2 balancés - jambes tendues, corps minimum à l’oblique basse, aussi en sortie (Si réalisé avec sortie lâché derrière comptabiliser 1 élément)",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-028",
+    "agres": "BARRES",
+    "famille": "ELANS",
+    "nom": "Renversement arrière du balancé (Petite culbute)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-029",
+    "agres": "BARRES",
+    "famille": "ELANS",
+    "nom": "Balancé, contre volée à l’oblique basse en sortie",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-030",
+    "agres": "BARRES",
+    "famille": "ELANS",
+    "nom": "Grande culbute reprise d’appui simultanée bras tendus avant le contact des cuisses sur la barre",
+    "valeur": 1.0,
+    "bonifFamille": "ELAN",
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-BR-031",
+    "agres": "BARRES",
+    "famille": "ELANS",
+    "nom": "Balancé arrière et rétablissement à l’appui",
+    "valeur": 1.0,
+    "bonifFamille": "ELAN",
+    "verified": true,
+    "sourcePage": 9
+  },
+  {
+    "id": "FA-PO-001",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "De la station faciale en bout de poutre, sauter à l’appui manuel pour s’établir au siège",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-002",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "De la station faciale latérale, sauter à l’appui, passage d’une jambe tendue sur le côté pour s’établir au siège transversal",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-003",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "Saut avec appui des mains au grand écart latéral appel 2 pieds ou saut au grand écart transversal appel 1 pied, élan oblique par rapport à la poutre",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-004",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "En bout de poutre ou sur le côté : entrée par saut vertical à la station debout ou accroupi. Appel et réception 2 pieds",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-005",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "Saut appel 1 pied réception en arabesque jambe à l’horizontale",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-006",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "De la station faciale, franchissement groupé ou carpé à l’appui dorsal",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-007",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "Saut – roulade avant en bout de poutre (retour libre)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-008",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "Renversement avant avec appel des mains sur le tremplin à l’appui dorsal ou avec ¼ de tour (90°) au siège transversal sur les cuisses - élan 90° par rapport à la poutre",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-009",
+    "agres": "POUTRE",
+    "famille": "ENTREES",
+    "nom": "Roue en attrapant la poutre par en dessous à l’appui facial - débuter à 90° de la poutre",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 11
+  },
+  {
+    "id": "FA-PO-010",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut vertical",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-011",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut vertical avec ½ tour (180°)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-012",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut groupé",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-013",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut de chat",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-014",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Cabriole avec réception jambe libre maintenue 2 secondes à l’oblique basse minimum",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-015",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut ciseaux avant battements à l’horizontale",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-016",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut cosaque appel un ou deux pieds",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 12
+  },
+  {
+    "id": "FA-PO-017",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut sissonne",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-018",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut groupé avec ½ tour (180°)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-019",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut de chat avec ½ tour (180°)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-020",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut écart antéro-postérieur",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-PO-021",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut grand jeté ou saut enjambé par développé",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-PO-022",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut changement de jambe",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "UN"
+  },
+  {
+    "id": "FA-PO-023",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut carpé serré",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-PO-024",
+    "agres": "POUTRE",
+    "famille": "SAUTS_GYMNIQUES",
+    "nom": "Saut carpé écarté",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 12,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-PO-025",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "ATR passager sous toutes ses formes",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-026",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "ATR maintenu (sous toutes ses formes) 2 secondes",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-027",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Roulade avant départ libre : pose des mains sur la poutre, arrivée libre",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-028",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Roue",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-029",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "ATR maintenu en latéral (sous toutes ses formes) 2 secondes",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-030",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Souplesse avant",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-031",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Rondade (Interdit en sortie)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-032",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Tic-tac",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-033",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "ATR ½ valse (180°)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-034",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Roulade avant sans appui des mains, arrivée libre",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-035",
+    "agres": "POUTRE",
+    "famille": "ACRO_AVANT",
+    "nom": "Saut de mains",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-036",
+    "agres": "POUTRE",
+    "famille": "TOURS",
+    "nom": "Demi-pivot",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-037",
+    "agres": "POUTRE",
+    "famille": "TOURS",
+    "nom": "½ tour (180°) à la station groupée sur une jambe, jambe libre tendue",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-038",
+    "agres": "POUTRE",
+    "famille": "TOURS",
+    "nom": "Demi-pivot + détourné",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-039",
+    "agres": "POUTRE",
+    "famille": "TOURS",
+    "nom": "Pivot",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-040",
+    "agres": "POUTRE",
+    "famille": "TOURS",
+    "nom": "1 tour (360°) à la station groupée sur une jambe, jambe libre tendue",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 13
+  },
+  {
+    "id": "FA-PO-041",
+    "agres": "POUTRE",
+    "famille": "ACRO_ARRIERE",
+    "nom": "Chandelle corps tendu (départ et retour libres) maintenue 2 secondes",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-042",
+    "agres": "POUTRE",
+    "famille": "ACRO_ARRIERE",
+    "nom": "Roulade arrière : pose des mains sur ou sous la poutre, arrivée libre",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-043",
+    "agres": "POUTRE",
+    "famille": "ACRO_ARRIERE",
+    "nom": "Equerre renversée, jambes serrées, maintenue 2 secondes",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-044",
+    "agres": "POUTRE",
+    "famille": "ACRO_ARRIERE",
+    "nom": "Souplesse arrière",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-045",
+    "agres": "POUTRE",
+    "famille": "ACRO_ARRIERE",
+    "nom": "Flic flac jambes décalées ou serrées (comptabilisé une seule fois)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-046",
+    "agres": "POUTRE",
+    "famille": "ACRO_ARRIERE",
+    "nom": "Roulade arrière piquée à l’ATR",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-047",
+    "agres": "POUTRE",
+    "famille": "SORTIES",
+    "nom": "Sortie rondade",
+    "valeur": 0.6,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-048",
+    "agres": "POUTRE",
+    "famille": "SORTIES",
+    "nom": "Sortie saut de mains",
+    "valeur": 0.6,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-049",
+    "agres": "POUTRE",
+    "famille": "SORTIES",
+    "nom": "Sortie salto costal",
+    "valeur": 0.8,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-050",
+    "agres": "POUTRE",
+    "famille": "SORTIES",
+    "nom": "Salto avant groupé",
+    "valeur": 1.0,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-PO-051",
+    "agres": "POUTRE",
+    "famille": "SORTIES",
+    "nom": "Salto arrière groupé",
+    "valeur": 1.0,
+    "sortie": true,
+    "verified": true,
+    "sourcePage": 14
+  },
+  {
+    "id": "FA-SO-001",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut vertical avec ½ tour (180°)",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-002",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut groupé",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-003",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut ciseaux avec battements à l’horizontale",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-SO-004",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut vertical avec 1/1 tour (360°)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-005",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut groupé ½ tour (180°)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-006",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut cosaque appel deux pieds",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-007",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut carpé écarté",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-008",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut enjambé par développé ou battement",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-SO-009",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut groupé 1/1 tour (360°)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-010",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut cosaque appel deux pieds ½ tour (180°)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-011",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut changement de jambe",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "UN"
+  },
+  {
+    "id": "FA-SO-012",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut cosaque appel deux pieds 1/1 tour (360°)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-013",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut carpé écarté ½ tour (180°)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 16,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-014",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut de chat",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 17,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-SO-015",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut sissonne",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 17,
+    "appel": "DEUX",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-SO-016",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut écart antéropostérieur",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 17,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-017",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut de chat ½ tour (180°)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 17,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-SO-018",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut écart antéropostérieur ½ tour (180°)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 17,
+    "appel": "DEUX"
+  },
+  {
+    "id": "FA-SO-019",
+    "agres": "SOL",
+    "famille": "SAUTS",
+    "nom": "Saut de chat 1/1 tour (360°)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 17,
+    "appel": "UN",
+    "appelAConfirmer": true
+  },
+  {
+    "id": "FA-SO-020",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "Demi-pivot (180°)",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-021",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "Pivot 1/1 tour (360°)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-022",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "Pivot 3/2 tour (540°)",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-023",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "Demi-pivot (180°) jambe à l’horizontale",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-024",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "Pivot 2/2 tours (720°)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-025",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "Pivot (360°) jambe à l’horizontale",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-026",
+    "agres": "SOL",
+    "famille": "TOURS",
+    "nom": "1 tour (360°) à la station groupée sur une jambe, jambe libre tendue",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 17
+  },
+  {
+    "id": "FA-SO-027",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Roue sous toute ses formes",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-028",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Rondade avec rebond",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-029",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "ATR pont avant ou souplesse avant",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-030",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Tic-tac",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-031",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "ATR ½ valse (180°)",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-032",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Souplesse arrière",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-033",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Roulade arrière, bras et jambes tendues",
+    "valeur": 0.4,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-034",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Saut de main 1 pied",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-035",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Saut de mains 2 pieds avec rebond",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-036",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "ATR 1/1 valse (360°)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-037",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Flic flac arrière jambes décalées ou serrées (comptabilisé une seule fois)",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-038",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Roulade arrière à l’ATR retour libre",
+    "valeur": 0.6,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-039",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Salto costal",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-040",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Souplesse arrière demi-tour souplesse avant",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-041",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Salto arrière groupé ou carpé",
+    "valeur": 0.8,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-042",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Salto avant groupé (Réception 2 pieds)",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-043",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Salto facial",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 18
+  },
+  {
+    "id": "FA-SO-044",
+    "agres": "SOL",
+    "famille": "ACROBATIES",
+    "nom": "Salto arrière tendu",
+    "valeur": 1.0,
+    "verified": true,
+    "sourcePage": 18
+  }
+]

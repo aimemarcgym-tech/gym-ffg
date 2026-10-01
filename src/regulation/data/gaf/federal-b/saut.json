@@ -1,0 +1,95 @@
+{
+ "verified": true,
+ "sourcePage": 15,
+ "regle": "2 sauts identiques ou différents, le meilleur est pris en compte. B1 et B2 : table de saut 1,15 m, trampo-tremp ET/OU tremplin (au choix, même note D), course de 25 m maximum. B3 : sans table, 1 trampo-tremp en position basse, 2 tapis superposés de 6 m x 2 m x 20 cm et un sur-tapis de 10 cm, course de 10 m.",
+ "sauts": [
+  {
+   "id": "FB-SA-001",
+   "nom": "Saut de lapin et saut extension",
+   "niveaux": [
+    "B1",
+    "B2"
+   ],
+   "valeurs": {
+    "B1": 3.5,
+    "B2": 2.5
+   }
+  },
+  {
+   "id": "FB-SA-002",
+   "nom": "Saut extension sur table de saut et saut extension",
+   "niveaux": [
+    "B1",
+    "B2"
+   ],
+   "valeurs": {
+    "B1": 4,
+    "B2": 3
+   }
+  },
+  {
+   "id": "FB-SA-003",
+   "nom": "Rondade (180° dans le 1er envol)",
+   "niveaux": [
+    "B1",
+    "B2"
+   ],
+   "valeurs": {
+    "B1": 5.5,
+    "B2": 3.5
+   }
+  },
+  {
+   "id": "FB-SA-004",
+   "nom": "Lune",
+   "niveaux": [
+    "B1",
+    "B2"
+   ],
+   "valeurs": {
+    "B1": 6,
+    "B2": 4
+   }
+  },
+  {
+   "id": "FB-SA-005",
+   "nom": "Saut droit (vertical)",
+   "niveaux": [
+    "B3"
+   ],
+   "valeurs": {
+    "B3": 1.5
+   }
+  },
+  {
+   "id": "FB-SA-006",
+   "nom": "Saut droit (vertical), réception stabilisée puis fente ATR, tomber plat dos",
+   "niveaux": [
+    "B3"
+   ],
+   "valeurs": {
+    "B3": 2.5
+   }
+  },
+  {
+   "id": "FB-SA-007",
+   "nom": "Lune, tomber plat dos",
+   "niveaux": [
+    "B3"
+   ],
+   "valeurs": {
+    "B3": 3.5
+   }
+  },
+  {
+   "id": "FB-SA-008",
+   "nom": "Lune impulsion bras (1 rebond autorisé), tomber plat dos",
+   "niveaux": [
+    "B3"
+   ],
+   "valeurs": {
+    "B3": 4
+   }
+  }
+ ]
+}

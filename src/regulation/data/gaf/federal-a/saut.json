@@ -1,0 +1,76 @@
+{
+  "verified": true,
+  "sourcePage": 6,
+  "regle": "2 sauts identiques ou différents, le meilleur est pris en compte. Saut exécuté non répertorié, aide ou appui de la tête = saut nul.",
+  "sauts": [
+    {
+      "id": "FA-SA-001",
+      "nom": "Saut avec pose des mains puis des pieds sur la table de saut puis saut vertical",
+      "valeurTrampoTremp": 5,
+      "valeurTremplin": 6,
+      "niveaux": [
+        "A",
+        "A2"
+      ]
+    },
+    {
+      "id": "FA-SA-002",
+      "nom": "Renversement avant avec ½ tour (180°) dans le 1er envol",
+      "valeurTrampoTremp": 6,
+      "valeurTremplin": 7,
+      "niveaux": [
+        "A",
+        "A2"
+      ]
+    },
+    {
+      "id": "FA-SA-003",
+      "nom": "Renversement avant",
+      "valeurTrampoTremp": 7,
+      "valeurTremplin": 8,
+      "niveaux": [
+        "A",
+        "A2"
+      ]
+    },
+    {
+      "id": "FA-SA-004",
+      "nom": "Renversement avant avec ½ tour (180°) dans le 1er envol et ½ tour (180°) dans le 2e envol",
+      "valeurTrampoTremp": 7.5,
+      "valeurTremplin": 8.5,
+      "niveaux": [
+        "A",
+        "A2"
+      ]
+    },
+    {
+      "id": "FA-SA-A3-001",
+      "nom": "Saut avec pose des mains puis des pieds sur la table de saut puis saut vertical",
+      "valeurTrampoTremp": 3.5,
+      "valeurTremplin": 4.0,
+      "niveaux": [
+        "A3"
+      ],
+      "valeur79": 3.5
+    },
+    {
+      "id": "FA-SA-A3-002",
+      "nom": "Renversement avant avec ½ tour (180°) dans le 1er envol",
+      "valeurTrampoTremp": 4.5,
+      "valeurTremplin": 5.0,
+      "niveaux": [
+        "A3"
+      ]
+    },
+    {
+      "id": "FA-SA-A3-003",
+      "nom": "Renversement avant",
+      "valeurTrampoTremp": 5.0,
+      "valeurTremplin": 5.5,
+      "niveaux": [
+        "A3"
+      ],
+      "valeur79": 5.0
+    }
+  ]
+}

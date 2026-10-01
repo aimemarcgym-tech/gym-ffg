@@ -1,0 +1,13 @@
+{
+  "saison": "2026-2027",
+  "verified": true,
+  "source": "Lettre FFGym GAF 2026-2027, p.1",
+  "competitionsNationales": [
+    { "nom": "Championnat de France individuel", "debut": "2027-04-30", "fin": "2027-05-02" },
+    { "nom": "Trophée Fédéral", "debut": "2027-05-07", "fin": "2027-05-09" },
+    { "nom": "Championnat de France par équipes A", "debut": "2027-05-15", "fin": "2027-05-17", "note": "Finale TOP 12" },
+    { "nom": "Championnat de France Élite", "debut": "2027-05-27", "fin": "2027-05-30" },
+    { "nom": "Championnat de France par équipes B", "debut": "2027-06-04", "fin": "2027-06-06", "note": "Match de barrage TOP 12" }
+  ],
+  "dateLimiteEngagementNominatif": "2026-12-20"
+}

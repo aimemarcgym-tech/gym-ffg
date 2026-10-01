@@ -1,0 +1,1941 @@
+[
+ {
+  "id": "FB-BR-001",
+  "agres": "BARRES",
+  "famille": "B_ENTREE",
+  "nom": "Sauter bras tendus pour arriver à l’appui BI",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-002",
+  "agres": "BARRES",
+  "famille": "B_ENTREE",
+  "nom": "Avec un tremplin : sauter à la suspension BS",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-003",
+  "agres": "BARRES",
+  "famille": "B_ENTREE",
+  "nom": "BI : Entrée renversement (lancer la jambe ou traction)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-004",
+  "agres": "BARRES",
+  "famille": "B_ENTREE",
+  "nom": "Entrée oscillation 1 jambe OU oscillation 2 jambes",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-005",
+  "agres": "BARRES",
+  "famille": "B_ENTREE",
+  "nom": "BS : Traction renversement",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-006",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Maintien en appui facial 2\" (cuisses à la barre)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-007",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "De l’appui facial à la BI ou BS, passage d’une jambe sur le côté pour arriver à l’appui cavalier",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-008",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "De l’appui facial à la BI ou BS, passage d’une jambe sur le côté pour arriver à l’appui cavalier par le coupé (en sautant)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-009",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "De l’appui facial, prise d’élan, engager une jambe en position cavalier",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-010",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Du siège BI ou BS, ½ tour à l’appui facial avec déplacement latéral autour du bras d’appui",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-011",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Suspension BS, 1 pied sur BI, puis renversement BS",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16,
+  "interditB3": true
+ },
+ {
+  "id": "FB-BR-012",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Tour d’appui arrière jambes tendues en BI (identique à BS : comptabilisé une seule fois)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-013",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "De la position cavalier BS ou BI, ½ tour à l’appui en changeant les prises et en dégageant la jambe par-dessus la barre",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-014",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Montée à l’appui de BI à BS",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16,
+  "interditB3": true
+ },
+ {
+  "id": "FB-BR-015",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Prise d’élan (bassin décollé)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-016",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Monter un pied après l’autre sur BI pour attraper BS",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16,
+  "interditB3": true
+ },
+ {
+  "id": "FB-BR-017",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "De l’appui facial BI, prise d’élan, pose de pieds jambes fléchies serrées ou tendues serrées ou écartées pour attraper BS",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-018",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Oscillation 1 jambe OU oscillation 2 jambes",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-019",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Tour cavalier avant (prise en supination)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-020",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Tour d’appui arrière jambes tendues en BS (identique à BI : comptabilisé une seule fois)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16,
+  "identiqueA": "FB-BR-012"
+ },
+ {
+  "id": "FB-BR-021",
+  "agres": "BARRES",
+  "famille": "B_APPUI",
+  "nom": "Tour d’appui avant jambes fléchies ou tendues",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 16
+ },
+ {
+  "id": "FB-BR-022",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Suspension en pronation, passer en supination (en alternatif), puis retour pronation (en alternatif), sans déplacement",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-023",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Descente contrôlée retour libre (sans maintien), bras pliés / jambes tendues, sous toutes ses formes jusqu’à la suspension",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-024",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "½ tour à la suspension (180°)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-025",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Descente contrôlée avec équerre groupée (jambes fléchies, genoux au-dessus de l’horizontale) maintenue 2\"",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-026",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Fo - Fa (dynamique ou statique) — statique : courbe arrière puis courbe avant maintenues 2\" (ou inversement) ; dynamique : courbes enchaînées",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-027",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "De la suspension, renversement arrière jambes fléchies, toucher la barre avec les pointes de pieds, retour à la suspension",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-028",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "De l’appui, descente contrôlée position équerre maintenue 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-029",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Descente contrôlée position fermeture maintenue 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-030",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Descente contrôlée et maintien en traction 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-031",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Équerre jambes tendues maintenue 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-032",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Tour complet en suspension 1/1 (360°)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-033",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Descente contrôlée position chandelle maintenue 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-034",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Traction sans maintien",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-035",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Renversement arrière du balancé (petite culbute)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-036",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Traction renversement BS",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-037",
+  "agres": "BARRES",
+  "famille": "B_SUSPENSION",
+  "nom": "Descente contrôlée, les 3 positions maintenues 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17
+ },
+ {
+  "id": "FB-BR-038",
+  "agres": "BARRES",
+  "famille": "B_SORTIE",
+  "nom": "Prise d’élan, repoussé et réception à la station debout",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17,
+  "sortie": true
+ },
+ {
+  "id": "FB-BR-039",
+  "agres": "BARRES",
+  "famille": "B_SORTIE",
+  "nom": "BI ou BS : sortie en suspension sans élan",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17,
+  "sortie": true
+ },
+ {
+  "id": "FB-BR-040",
+  "agres": "BARRES",
+  "famille": "B_SORTIE",
+  "nom": "BI : enroulé (engager les jambes entre les bras jusqu’à la position de rétro), lâcher la barre pour un retour à la station debout",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17,
+  "sortie": true
+ },
+ {
+  "id": "FB-BR-041",
+  "agres": "BARRES",
+  "famille": "B_SORTIE",
+  "nom": "BI : sortie filée départ de l’appui",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17,
+  "sortie": true
+ },
+ {
+  "id": "FB-BR-042",
+  "agres": "BARRES",
+  "famille": "B_SORTIE",
+  "nom": "BS : sortie filée de l’appui OU du pied barre",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17,
+  "sortie": true
+ },
+ {
+  "id": "FB-BR-043",
+  "agres": "BARRES",
+  "famille": "B_SORTIE",
+  "nom": "De l’appui pédestre BI mains sur BS, sortie filée du pied barre",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 17,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-001",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station debout (sur caisse), entrée en bout de poutre",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-002",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station faciale latérale, sauter puis passer une jambe tendue latéralement et s’établir au siège transversal",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-003",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station faciale en bout de poutre, sauter à l’appui manuel pour s’établir au siège",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-004",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station faciale latérale, sauter à l’appui manuel et pédestre jambes écartées et tendues",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-005",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station faciale latérale, sauter à l’appui et sans arrêt passer une jambe tendue latéralement et s’établir au siège transversal",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-006",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station faciale latérale, sauter à l’appui manuel et pédestre jambes groupées",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-007",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "En bout de poutre ou sur le côté : entrée par saut vertical à la station debout ou accroupie, appel et réception 2 pieds",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-008",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "En bout de poutre : équerre transversale ou latérale maintenue 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-009",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "Saut appel 1 pied, réception en arabesque jambe à l’horizontale",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-010",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "Entrée renversement arrière",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-011",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "Sauter en écrasement facial",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-012",
+  "agres": "POUTRE",
+  "famille": "B_ENTREE",
+  "nom": "De la station faciale, franchissement groupé ou carpé à l’appui dorsal",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-013",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "S’allonger sur le dos, jambes tendues (départ et retour libres)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-014",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "De l’appui manuel et sur 1 genou, élancer la jambe libre d’AV en AR, placement du corps pour arriver au siège",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-015",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "S’allonger sur le dos, jambes tendues à 90°, retour libre au siège",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-016",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Fente, « I », retour en fente, jambe arrière en dessous de l’horizontale",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-017",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "De l’appui manuel et sur 1 genou, élancer la jambe libre d’AV en AR, placement du corps dans l’alignement des bras et arriver en fente",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-018",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Petite chandelle jambes fléchies, départ et retour libres (culbuto groupé)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-019",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "De la position accroupie, placement du dos jambes fléchies",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-020",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Fente, « I », retour en fente, au-dessus de l’horizontale",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-021",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "ATR 1 jambe dans les 10°",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-022",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Basculer en AR jambes tendues, pose des pieds, départ libre et retour au siège (culbuto carpé)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-023",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Chandelle maintenue 2\", jambes tendues, retour libre",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-024",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "De la position accroupie, placement du dos jambes fléchies à 90°, alignement bras / tronc",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-025",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "ATR passagé, jambes tendues, serrées ou écartées",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-026",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Roue",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-027",
+  "agres": "POUTRE",
+  "famille": "B_ACRO",
+  "nom": "Chandelle maintenue 2\", jambes tendues, retour debout",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 18
+ },
+ {
+  "id": "FB-PO-028",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Préparation au saut droit",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-029",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Préparation pivot",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-030",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut droit OU saut droit avec changement de pied",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-031",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Assemblé",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-032",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Pas chassé droite puis gauche ou gauche puis droite",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-033",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Détourné",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-034",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut groupé",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-035",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Cabriole jambe à l’oblique basse",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-036",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut de chat",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-037",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Relevé sur ½ pointe au retiré et détourné — préparation pivot détourné",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-038",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "½ pivot (180°)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-039",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Détourné accroupi",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-040",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Entre-chat 4",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-041",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut cosaque (départ et arrivée sur 2 pieds)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-042",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Cabriole jambe à l’horizontale minimum",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-043",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut antéropostérieur",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-044",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut demi-tour",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-045",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Saut ciseaux",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-046",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Demi-pivot détourné",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-047",
+  "agres": "POUTRE",
+  "famille": "B_GYM",
+  "nom": "Pivot",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-048",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Battements D - G ou inversement, à l’oblique avant basse",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-049",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Maintien sur pied plat au retiré 2\"",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-050",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Battements D - G ou inversement, à l’horizontale minimum",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-051",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Arabesque maintenue 2\", jambe libre à l’oblique basse minimum",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-052",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Maintien sur ½ pointe au retiré 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-053",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Planche maintenue 2\", jambe libre à l’horizontale",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-054",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Grand écart avec l’aide des mains maintenu 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-055",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Chapeau chinois, pointes de pieds retournées, maintenu 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-056",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Équerre latérale jambes fléchies maintenue 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-057",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Équerre en position latérale, jambes écartées, maintenue 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-058",
+  "agres": "POUTRE",
+  "famille": "B_MAINTIENS",
+  "nom": "Grand écart sans les mains maintenu 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 19
+ },
+ {
+  "id": "FB-PO-059",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie saut droit appel 1 pied",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-060",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie saut d’extension, appel 2 pieds",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-061",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie saut groupé, appel 2 pieds",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-062",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie saut carpé écart, appel 2 pieds",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-063",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie rondade",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-064",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie ATR latéral (passage par l’ATR)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-065",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie assemblé saut droit",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-066",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie saut de main",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-PO-067",
+  "agres": "POUTRE",
+  "famille": "B_SORTIE",
+  "nom": "Sortie sursaut rondade",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 20,
+  "sortie": true
+ },
+ {
+  "id": "FB-SO-001",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Roulade avant, arrivée libre (assise, allongée, jambes tendues ou fléchies…)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-002",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "« Chapeau chinois » tenu 2\"",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-003",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Fente I fente (pas d’exigence d’amplitude, alignement bras-tronc)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-004",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "3 sauts de lapin enchaînés",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-005",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Roulade avant (départ et retour sur les pieds) groupée OU écartée",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-006",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Placement du dos bras tendus (alignement bras-tronc)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-007",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR passagé, au moins une jambe et le dos à la verticale (1 ou 2 jambes)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-008",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR pont, descente 2 jambes en simultané OU 1 pied après l’autre type tic-tac",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-009",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR impulsion bras (1 rebond), sans passage par l’ATR",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-010",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Roulade avant en passant par la chandelle",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-011",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR roulade",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-012",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR tenu 2\" (départ libre, arrivée en fente)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-013",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR demi-valse",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-014",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Souplesse avant ou saut de mains 1 pied",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-015",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Sursaut : ATR impulsion bras (1 rebond), roulade avant (course non autorisée)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-016",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Tic-tac",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-017",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Roulade avant passant par l’écart facial, arrivée plat ventre (sans aide des mains)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-018",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Roulade avant jambes tendues serrées",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-019",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "Saut de mains (arrivée 2 pieds)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-020",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR valse",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-021",
+  "agres": "SOL",
+  "famille": "B_ACRO_AVANT",
+  "nom": "ATR pont et retour à la station debout",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 21
+ },
+ {
+  "id": "FB-SO-022",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Pont tenu 2\"",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-023",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Roulade arrière, arrivée à genoux",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-024",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Chandelle tenue 2\" (avec aide des mains ou bras au sol) ou corps groupé, dos à la verticale, bras aux oreilles",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-025",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Descente de pont tenue 2\"",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-026",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Pont + retour en fente",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-027",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Roulade arrière sur les pieds (position groupée serrée ou tendue écartée)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-028",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Roulade arrière poisson (passage sur l’épaule)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-029",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Chandelle 2\", bras aux oreilles",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-030",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Souplesse arrière",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-031",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Roulade arrière jambes tendues serrées, arrivée en fermeture",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-032",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Roulade arrière arrivée en quadrupédie, position de gainage (planche)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-033",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Souplesse arrière départ jambe à l’horizontale (ou pied décollé) et retour arabesque",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-034",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Souplesse arrière départ assis",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-035",
+  "agres": "SOL",
+  "famille": "B_ACRO_ARRIERE",
+  "nom": "Roulade arrière piquée à l’ATR",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-036",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Tour en gainage (départ et arrivée identiques : planche ventrale ou planche dorsale)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-037",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Rouleau 360° en gainage (jambes tendues et serrées)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-038",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Roue",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-039",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Roue ATR marqué + descente en fente",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-040",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Roue 1 main",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-041",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Roue pied-pied",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-042",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Roue latérale liée avec roue",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-043",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Sursaut roue (course non autorisée)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-044",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Rondade",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-045",
+  "agres": "SOL",
+  "famille": "B_ACRO_LATERAL",
+  "nom": "Sursaut roue latérale liée avec roue pied-pied (course non autorisée)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 22
+ },
+ {
+  "id": "FB-SO-046",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Maintien 2\" pied à plat (sous toutes ses formes)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-047",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Détourné ou détourné en position accroupie",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-048",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Battement avant D + G ou inversement (oblique basse minimum)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-049",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut extension",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-050",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Pas chassé (1 jambe)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-051",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Assemblé",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-052",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut ciseaux jambes tendues (sous l’horizontale)",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-053",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut appel 2 pieds et réception 1 pied",
+  "valeur": 0,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-054",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Relevé : départ fente à genoux, se relever pied à plat jambe libre au retiré tenu 2\" OU départ fente, relevé sur demi-pointe jambe libre au retiré tenu 2\"",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-055",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Pas chassés D + G liés ou inversement",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-056",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Écrasement facial tenu 2\"",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-057",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Grand écart tenu 2\" (facial ou antéropostérieur)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-058",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut demi-tour 180°",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-059",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut de chat",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-060",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut ciseaux jambes tendues (minimum à l’horizontale)",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-061",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut groupé",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-062",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut de biche",
+  "valeur": 0.4,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-063",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Planche pied à plat tenue 2\" à l’horizontale ou au-dessus",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-064",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Demi-pivot + détourné (sans pose des talons ou pas intermédiaire) OU demi-tour accroupi sur une jambe",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-065",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Équerre tenue 2\"",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-066",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Grand jeté",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-067",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Cabriole (maintenue 2\")",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-068",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Cabriole ½ tour",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-069",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Cabriole changement de jambe, arrivée arabesque",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-070",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut antéropostérieur (appel et réception 2 pieds)",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-071",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut sissonne",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-072",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut cosaque appel 1 pied",
+  "valeur": 0.6,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-073",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Y tenu 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-074",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Pivot",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-075",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Grand jeté arrivée arabesque maintenue 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-076",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut tour 360°",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-077",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut groupé demi-tour OU saut de chat demi-tour",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-078",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Cabriole maintenue 2\" proche de l’horizontale, finir en arabesque sans pose de pied intermédiaire de la jambe libre",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-079",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Cosaque 2 pieds",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-080",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut carpé écarté",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-081",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut sissonne et maintien arabesque 2\"",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ },
+ {
+  "id": "FB-SO-082",
+  "agres": "SOL",
+  "famille": "B_GYM",
+  "nom": "Saut fouetté avec demi-tour changement de jambe (départ et arrivée sur 1 pied)",
+  "valeur": 0.8,
+  "grille": "B",
+  "verified": true,
+  "sourcePage": 23
+ }
+]

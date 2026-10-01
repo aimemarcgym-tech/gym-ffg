@@ -1,0 +1,276 @@
+{
+  "saison": "2026-2027",
+  "anneeSaison": 2027,
+  "source": "Programme GAF FED A Île-de-France 2026-2027 (pages 2-3) et Brochure technique régionale CRIFGYM (pages 19-20)",
+  "verified": true,
+  "niveaux": [
+    {
+      "id": "A",
+      "label": "Fédéral A",
+      "detail": "Programme national",
+      "plafondD": 8.5,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 4,
+        "notesComptees": 3
+      },
+      "categories": [
+        {
+          "id": "10-11",
+          "label": "10-11 ans",
+          "ageMin": 10,
+          "ageMax": 11
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-15",
+          "label": "10-15 ans",
+          "ageMin": 10,
+          "ageMax": 15
+        },
+        {
+          "id": "14+",
+          "label": "14 ans et plus",
+          "ageMin": 14
+        },
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        }
+      ],
+      "programme": "A"
+    },
+    {
+      "id": "A2",
+      "label": "Fédéral A2",
+      "detail": "Régional IDF, ancien TR1",
+      "plafondD": 7,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 4,
+        "notesComptees": 3
+      },
+      "note": "5/4/3 au Département 1, 5/5/3 à partir du Département 2. Double engagement A et A2 maintenu.",
+      "categories": [
+        {
+          "id": "10-11",
+          "label": "10-11 ans",
+          "ageMin": 10,
+          "ageMax": 11
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-15",
+          "label": "10-15 ans",
+          "ageMin": 10,
+          "ageMax": 15
+        },
+        {
+          "id": "14+",
+          "label": "14 ans et plus",
+          "ageMin": 14
+        },
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        }
+      ],
+      "programme": "A"
+    },
+    {
+      "id": "A3",
+      "label": "Fédéral A3",
+      "detail": "Régional IDF, ancien TR2",
+      "plafondD": 5.5,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "categories": [
+        {
+          "id": "7-9",
+          "label": "7-9 ans",
+          "ageMin": 7,
+          "ageMax": 9
+        },
+        {
+          "id": "9-11",
+          "label": "9-11 ans",
+          "ageMin": 9,
+          "ageMax": 11
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-15",
+          "label": "10-15 ans",
+          "ageMin": 10,
+          "ageMax": 15
+        },
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        }
+      ],
+      "programme": "A"
+    },
+    {
+      "id": "B1",
+      "label": "Fédéral B1",
+      "detail": "Régional IDF, ancien TID",
+      "programme": "B",
+      "plafondD": 5.8,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "regles": {
+        "nbElementsMax": 6,
+        "nbElementsMin": 5,
+        "penaliteMin": -2,
+        "maxBonifications": 2,
+        "pointsParBonification": 0.5
+      },
+      "categories": [
+        {
+          "id": "9-11",
+          "label": "9-11 ans",
+          "ageMin": 9,
+          "ageMax": 11
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-15",
+          "label": "10-15 ans",
+          "ageMin": 10,
+          "ageMax": 15
+        },
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        }
+      ]
+    },
+    {
+      "id": "B2",
+      "label": "Fédéral B2",
+      "detail": "Régional IDF, ancien Fédéral B dès 9 ans",
+      "programme": "B",
+      "plafondD": 4.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "regles": {
+        "nbElementsMax": 5,
+        "nbElementsMin": 4,
+        "penaliteMin": -2,
+        "maxBonifications": 2,
+        "pointsParBonification": 0.5
+      },
+      "categories": [
+        {
+          "id": "9-11",
+          "label": "9-11 ans",
+          "ageMin": 9,
+          "ageMax": 11
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-15",
+          "label": "10-15 ans",
+          "ageMin": 10,
+          "ageMax": 15
+        },
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        }
+      ]
+    },
+    {
+      "id": "B3",
+      "label": "Fédéral B3",
+      "detail": "Régional IDF, ancien Fédéral B dès 7 ans",
+      "programme": "B",
+      "plafondD": 4.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "regles": {
+        "nbElementsMax": 5,
+        "nbElementsMin": 4,
+        "penaliteMin": -2,
+        "maxBonifications": 2,
+        "pointsParBonification": 0.5
+      },
+      "categories": [
+        {
+          "id": "7",
+          "label": "7 ans",
+          "ageMin": 7,
+          "ageMax": 7
+        },
+        {
+          "id": "7-8",
+          "label": "7-8 ans",
+          "ageMin": 7,
+          "ageMax": 8
+        },
+        {
+          "id": "7-9",
+          "label": "7-9 ans",
+          "ageMin": 7,
+          "ageMax": 9
+        },
+        {
+          "id": "8-10",
+          "label": "8-10 ans",
+          "ageMin": 8,
+          "ageMax": 10
+        }
+      ]
+    }
+  ],
+  "sourceB": "Brochure des Programmes Régionaux 2026-2027, Fédéral B - IDF (pages 6 à 24)"
+}

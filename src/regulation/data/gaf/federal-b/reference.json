@@ -1,0 +1,59 @@
+{
+  "verified": true,
+  "source": "Brochure des Programmes Régionaux 2026-2027, Fédéral B - IDF, pages 6 à 15",
+  "temps": [
+    { "agres": "POUTRE", "label": "Poutre : durée maximum", "valeur": "50 s", "page": 10 },
+    { "agres": "SOL", "label": "Sol : durée maximum", "valeur": "50 s", "page": 10 }
+  ],
+  "infos": {
+    "COMMUN": [
+      "Une seule grille d’éléments (grille IDF) pour B1, B2 et B3 : éléments sans valeur (sauf aux barres), A : 0,40, B : 0,60, C : 0,80.",
+      "Seuls les éléments de la grille Fédéral B IDF sont autorisés. Un élément hors grille, non reconnu, réalisé avec aide ou en rotation incomplète n’est pas compté.",
+      "Un élément répété n’est compté qu’une fois (les pénalités d’exécution restent appliquées). Des éléments dans la même case de la grille sont identiques.",
+      "2 bonifications de 0,50 chacune, accordées sans chute (ou sans s’accrocher à l’agrès à la poutre), ajoutées à la note D.",
+      "La note de départ est plafonnée, bonifications comprises."
+    ],
+    "B1": [
+      "6 éléments maximum comptés (5 minimum) : pénalité de 2,00 points si 4 éléments ou moins.",
+      "Éléments C (0,80) autorisés.",
+      "Les éléments sans valeur ne peuvent pas valider les bonifications.",
+      "Note de départ plafonnée à 5,80 points."
+    ],
+    "B2": [
+      "5 éléments maximum comptés : pénalité de 2,00 points si 3 éléments ou moins.",
+      "Les éléments C ne sont pas autorisés.",
+      "Les éléments sans valeur peuvent valider les bonifications.",
+      "Note de départ plafonnée à 4,00 points."
+    ],
+    "B3": [
+      "5 éléments maximum comptés : pénalité de 2,00 points si 3 éléments ou moins.",
+      "Les éléments C ne sont pas autorisés.",
+      "Les éléments sans valeur peuvent valider les bonifications.",
+      "Note de départ plafonnée à 4,00 points."
+    ],
+    "SAUT": [
+      "2 sauts identiques ou différents : le meilleur est pris en compte.",
+      "Une 3e course d’élan est autorisée si la gymnaste n’a touché ni le tremplin, ni le trampo-tremp, ni la table de saut (ni le tapis en B3).",
+      "B1 et B2 : table de saut à 1,15 m, tremplin ou trampo-tremp au choix (même note D), course de 25 m maximum.",
+      "B3 : pas de table de saut, 1 trampo-tremp en position basse, 2 tapis de réception superposés de 6 m x 2 m x 20 cm, 1 sur-tapis de 10 cm, course de 10 m."
+    ],
+    "BARRES": [
+      "Mouvement en 1 partie, ou en 2 parties (une partie à la BI, une partie à la BS). À la BS, l’entraîneur peut placer la gymnaste en suspension ou en appui.",
+      "Présence obligatoire de l’entraîneur sous les barres : sans lui, la gymnaste n’est pas autorisée à passer ; s’il part en cours de mouvement, le mouvement est noté zéro.",
+      "En B3 : interdiction de passer de la BI à la BS, mouvement possible sur une seule barre ; les éléments signalés « non autorisé en B3 » ne comptent pas."
+    ],
+    "POUTRE": ["Durée maximum : 50 secondes."],
+    "SOL": [
+      "Durée maximum : 50 secondes.",
+      "B1 : musique obligatoire. B2 : avec ou sans musique, au choix. B3 : mouvement sans musique."
+    ]
+  },
+  "lexique": [
+    { "terme": "BI", "definition": "Barre inférieure" },
+    { "terme": "BS", "definition": "Barre supérieure" },
+    { "terme": "ATR", "definition": "Appui tendu renversé" },
+    { "terme": "Note D", "definition": "Note de difficulté : éléments retenus et bonifications" },
+    { "terme": "Note E", "definition": "Note d’exécution : 10 points moins les déductions" },
+    { "terme": "Élément sans valeur", "definition": "Élément de la grille qui compte comme élément mais ne rapporte aucun point" }
+  ]
+}

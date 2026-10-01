@@ -1,0 +1,37 @@
+{
+  "saison": "2026-2027",
+  "verified": true,
+  "source": "Lettre FFGym GAF 2026-2027, pages 1 à 3",
+  "droitsEngagement": [
+    { "competition": "Élite : Championnat de France", "individuel": "62,50 €", "equipe": "" },
+    { "competition": "Performance : Championnat de France", "individuel": "47 €", "equipe": "52 €" },
+    { "competition": "Fédéral : Trophée Fédéral", "individuel": "23 €", "equipe": "46 €" },
+    { "competition": "TOP 12", "individuel": "", "equipe": "260 €" }
+  ],
+  "notesEngagement": [
+    "Les autres compétitions : les assemblées générales des comités départementaux et régionaux fixent les droits d’engagement.",
+    "Compétitions interrégionales : 80 % des droits des finales nationales, 65 % pour les niveaux Élite et Performance."
+  ],
+  "documents": [
+    "Règlement technique GAM GAF 2026-2027",
+    "Lettre FFGym GAF 2026-2027",
+    "Brochure des programmes GAF, édition septembre 2026",
+    "Lettres FFGym publiées en cours de saison sportive",
+    "Code de pointage FIG 2025-2028",
+    "Newsletters FIG"
+  ],
+  "regleContradiction": "En cas de contradiction entre le code de pointage FIG et la réglementation technique FFGym, c’est cette dernière qui prévaut pour les compétitions françaises.",
+  "ordresPassage": [
+    "Pour les finales nationales, la répartition dans les subdivisions suit le classement vertical des compétitions qualificatives : les plus petits totaux passent dans la première subdivision.",
+    "En individuel, la répartition sur les agrès au sein d’une subdivision se fait par tirage au sort, en privilégiant le regroupement par clubs.",
+    "En équipes, l’équipe avec le meilleur total débute au saut."
+  ],
+  "echauffements": {
+    "FEDERAL_A": [
+      "Temps de 3 minutes pour toutes les catégories.",
+      "35 secondes par gymnaste en individuel.",
+      "Au saut, 2 essais maximum par gymnaste, en équipe ou en individuel."
+    ]
+  },
+  "monteeAgres": "Montée possible des 2 porte-mains de 5 cm si la gymnaste touche le sol avec les pieds (barre supérieure) ou le bassin (barre inférieure)."
+}

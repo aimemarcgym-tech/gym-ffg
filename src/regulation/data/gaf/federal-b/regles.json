@@ -1,0 +1,369 @@
+{
+ "programme": "FEDERAL_B",
+ "verified": true,
+ "sourcePage": 6,
+ "dureeMaxSecondes": {
+  "POUTRE": 50,
+  "SOL": 50
+ },
+ "bonifications": {
+  "B1": {
+   "BARRES": [
+    {
+     "id": "FB1-BR-B1",
+     "label": "1 élément de valeur C (appui ou suspension)",
+     "court": "C appui/susp.",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.8,
+      "min": 1,
+      "familles": [
+       "B_APPUI",
+       "B_SUSPENSION"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.8,
+      "familles": [
+       "B_APPUI",
+       "B_SUSPENSION"
+      ]
+     }
+    },
+    {
+     "id": "FB1-BR-B2",
+     "label": "1 autre élément de valeur C, différent du premier (appui ou suspension)",
+     "court": "2e C appui/susp.",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.8,
+      "min": 2,
+      "familles": [
+       "B_APPUI",
+       "B_SUSPENSION"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.8,
+      "familles": [
+       "B_APPUI",
+       "B_SUSPENSION"
+      ]
+     }
+    }
+   ],
+   "POUTRE": [
+    {
+     "id": "FB1-PO-B1",
+     "label": "1 élément acrobatique sur la poutre de valeur C",
+     "court": "Acro C",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.8,
+      "min": 1,
+      "familles": [
+       "B_ACRO"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.8,
+      "familles": [
+       "B_ACRO"
+      ]
+     }
+    },
+    {
+     "id": "FB1-PO-B2",
+     "label": "1 élément gymnique de valeur C",
+     "court": "Gym C",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.8,
+      "min": 1,
+      "familles": [
+       "B_GYM"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.8,
+      "familles": [
+       "B_GYM"
+      ]
+     }
+    }
+   ],
+   "SOL": [
+    {
+     "id": "FB1-SO-B1",
+     "label": "1 élément acrobatique de valeur C",
+     "court": "Acro C",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.8,
+      "min": 1,
+      "familles": [
+       "B_ACRO_AVANT",
+       "B_ACRO_ARRIERE",
+       "B_ACRO_LATERAL"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.8,
+      "familles": [
+       "B_ACRO_AVANT",
+       "B_ACRO_ARRIERE",
+       "B_ACRO_LATERAL"
+      ]
+     }
+    },
+    {
+     "id": "FB1-SO-B2",
+     "label": "1 série OU un passage gymnique dont un élément de valeur C",
+     "court": "Gym C",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.8,
+      "min": 1,
+      "familles": [
+       "B_GYM"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.8,
+      "familles": [
+       "B_GYM"
+      ]
+     }
+    }
+   ]
+  },
+  "B2": {
+   "BARRES": [
+    {
+     "id": "FB2-BR-B1",
+     "label": "1 élément de valeur B",
+     "court": "Élément B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1
+     },
+     "contribue": {
+      "valeur": 0.6
+     }
+    },
+    {
+     "id": "FB2-BR-B2",
+     "label": "1 élément de valeur B différent de la 1re bonification",
+     "court": "2e élément B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 2
+     },
+     "contribue": {
+      "valeur": 0.6
+     }
+    }
+   ],
+   "POUTRE": [
+    {
+     "id": "FB2-PO-B1",
+     "label": "1 élément acrobatique sur la poutre de valeur B",
+     "court": "Acro B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_ACRO"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_ACRO"
+      ]
+     }
+    },
+    {
+     "id": "FB2-PO-B2",
+     "label": "1 élément gymnique de valeur B",
+     "court": "Gym B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_GYM"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_GYM"
+      ]
+     }
+    }
+   ],
+   "SOL": [
+    {
+     "id": "FB2-SO-B1",
+     "label": "1 élément acrobatique de valeur B",
+     "court": "Acro B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_ACRO_AVANT",
+       "B_ACRO_ARRIERE",
+       "B_ACRO_LATERAL"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_ACRO_AVANT",
+       "B_ACRO_ARRIERE",
+       "B_ACRO_LATERAL"
+      ]
+     }
+    },
+    {
+     "id": "FB2-SO-B2",
+     "label": "1 élément gymnique de valeur B",
+     "court": "Gym B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_GYM"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_GYM"
+      ]
+     }
+    }
+   ]
+  },
+  "B3": {
+   "BARRES": [
+    {
+     "id": "FB3-BR-B1",
+     "label": "1 élément de valeur B",
+     "court": "Élément B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1
+     },
+     "contribue": {
+      "valeur": 0.6
+     }
+    },
+    {
+     "id": "FB3-BR-B2",
+     "label": "1 élément de valeur B différent de la 1re bonification",
+     "court": "2e élément B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 2
+     },
+     "contribue": {
+      "valeur": 0.6
+     }
+    }
+   ],
+   "POUTRE": [
+    {
+     "id": "FB3-PO-B1",
+     "label": "1 élément acrobatique sur la poutre de valeur B",
+     "court": "Acro B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_ACRO"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_ACRO"
+      ]
+     }
+    },
+    {
+     "id": "FB3-PO-B2",
+     "label": "1 élément gymnique de valeur B",
+     "court": "Gym B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_GYM"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_GYM"
+      ]
+     }
+    }
+   ],
+   "SOL": [
+    {
+     "id": "FB3-SO-B1",
+     "label": "1 élément acrobatique de valeur B",
+     "court": "Acro B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_ACRO_AVANT",
+       "B_ACRO_ARRIERE",
+       "B_ACRO_LATERAL"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_ACRO_AVANT",
+       "B_ACRO_ARRIERE",
+       "B_ACRO_LATERAL"
+      ]
+     }
+    },
+    {
+     "id": "FB3-SO-B2",
+     "label": "1 élément gymnique de valeur B",
+     "court": "Gym B",
+     "check": {
+      "type": "VALEUR_FAMILLES",
+      "valeur": 0.6,
+      "min": 1,
+      "familles": [
+       "B_GYM"
+      ]
+     },
+     "contribue": {
+      "valeur": 0.6,
+      "familles": [
+       "B_GYM"
+      ]
+     }
+    }
+   ]
+  }
+ }
+}

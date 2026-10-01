@@ -1,0 +1,50 @@
+name: Déployer sur GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx next build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /gym-ffg
+          # Clés publiques de l'application Web Firebase (pas des secrets).
+          NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyCBIdXnfZL5RuNPGHkMcrlqW3snND-3zck
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: gym-ffg.firebaseapp.com
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: gym-ffg
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: gym-ffg.firebasestorage.app
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "900125357485"
+          NEXT_PUBLIC_FIREBASE_APP_ID: 1:900125357485:web:162652f7e4657db72f1d24
+      - run: touch out/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

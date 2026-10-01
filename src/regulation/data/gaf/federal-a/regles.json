@@ -1,0 +1,474 @@
+{
+  "programme": "FEDERAL_A",
+  "verified": true,
+  "sourcePage": 5,
+  "noteD": {
+    "nbElementsMax": 7,
+    "maxBonifications": 3,
+    "pointsParBonification": 0.5,
+    "maxTotal": 8.5
+  },
+  "dureeMaxSecondes": {
+    "POUTRE": 60,
+    "SOL": 60
+  },
+  "bonifications": {
+    "BARRES": [
+      {
+        "id": "FA-BR-B1",
+        "label": "1 bascule",
+        "check": {
+          "type": "BONIF_FAMILLE",
+          "famille": "BASCULE"
+        },
+        "court": "Bascule",
+        "contribue": {
+          "bonifFamille": "BASCULE"
+        }
+      },
+      {
+        "id": "FA-BR-B2",
+        "label": "1 tour proche",
+        "check": {
+          "type": "BONIF_FAMILLE",
+          "famille": "TOUR_PROCHE"
+        },
+        "court": "Tour proche",
+        "contribue": {
+          "bonifFamille": "TOUR_PROCHE"
+        }
+      },
+      {
+        "id": "FA-BR-B3",
+        "label": "1 élan",
+        "check": {
+          "type": "BONIF_FAMILLE",
+          "famille": "ELAN"
+        },
+        "court": "Élan",
+        "contribue": {
+          "bonifFamille": "ELAN"
+        }
+      }
+    ],
+    "POUTRE": [
+      {
+        "id": "FA-PO-B1",
+        "label": "1 série de deux éléments gymniques dont au moins un saut",
+        "check": {
+          "type": "MANUAL"
+        },
+        "court": "Série gym",
+        "contribue": {
+          "familles": [
+            "SAUTS_GYMNIQUES"
+          ]
+        }
+      },
+      {
+        "id": "FA-PO-B2",
+        "label": "1 série acrobatique ou 1 série mixte (gym/acro ou acro/gym), possible avec l’entrée",
+        "check": {
+          "type": "MANUAL"
+        },
+        "court": "Série acro ou mixte",
+        "contribue": {
+          "familles": [
+            "ACRO_AVANT",
+            "ACRO_ARRIERE",
+            "SAUTS_GYMNIQUES"
+          ]
+        }
+      },
+      {
+        "id": "FA-PO-B3",
+        "label": "1 élément acrobatique avant ou latéral et 1 élément acrobatique arrière",
+        "check": {
+          "type": "ALL_OF",
+          "checks": [
+            {
+              "type": "FAMILLE_MIN",
+              "famille": "ACRO_AVANT",
+              "min": 1
+            },
+            {
+              "type": "FAMILLE_MIN",
+              "famille": "ACRO_ARRIERE",
+              "min": 1
+            }
+          ]
+        },
+        "court": "Acro avant + arrière",
+        "contribue": {
+          "familles": [
+            "ACRO_AVANT",
+            "ACRO_ARRIERE"
+          ]
+        }
+      }
+    ],
+    "SOL": [
+      {
+        "id": "FA-SO-B1",
+        "label": "2 lignes acrobatiques",
+        "court": "Lignes acro",
+        "check": {
+          "type": "MANUAL"
+        },
+        "contribue": {
+          "familles": [
+            "ACROBATIES"
+          ]
+        }
+      },
+      {
+        "id": "FA-SO-B2",
+        "label": "1 ligne acrobatique de 3 éléments dont 1 salto",
+        "court": "Ligne 3 éléments",
+        "check": {
+          "type": "FAMILLE_MIN",
+          "famille": "ACROBATIES",
+          "min": 3
+        },
+        "contribue": {
+          "familles": [
+            "ACROBATIES"
+          ]
+        }
+      },
+      {
+        "id": "FA-SO-B3",
+        "label": "1 série ou passage gymnique de 2 sauts différents",
+        "check": {
+          "type": "FAMILLE_MIN",
+          "famille": "SAUTS",
+          "min": 2
+        },
+        "court": "2 sauts",
+        "contribue": {
+          "familles": [
+            "SAUTS"
+          ]
+        }
+      }
+    ]
+  },
+  "bonificationsParNiveau": {
+    "A2": {
+      "BARRES": [
+        {
+          "id": "FA2-BR-B1",
+          "label": "1 élément du groupe des bascules, de valeur 0,80 minimum",
+          "court": "Bascule 0,80+",
+          "check": {
+            "type": "VALEUR_FAMILLES",
+            "valeurMin": 0.8,
+            "familles": [
+              "BASCULES"
+            ],
+            "min": 1
+          },
+          "contribue": {
+            "familles": [
+              "BASCULES"
+            ],
+            "valeurMin": 0.8
+          }
+        },
+        {
+          "id": "FA2-BR-B2",
+          "label": "1 élément du groupe des tours proches, de valeur 0,80 minimum, sauf sortie",
+          "court": "Tour proche 0,80+",
+          "check": {
+            "type": "VALEUR_FAMILLES",
+            "valeurMin": 0.8,
+            "familles": [
+              "PROCHES"
+            ],
+            "min": 1,
+            "sansSortie": true
+          },
+          "contribue": {
+            "familles": [
+              "PROCHES"
+            ],
+            "valeurMin": 0.8,
+            "sansSortie": true
+          }
+        },
+        {
+          "id": "FA2-BR-B3",
+          "label": "1 élément du groupe des élans, de valeur 0,80 minimum",
+          "court": "Élan 0,80+",
+          "check": {
+            "type": "VALEUR_FAMILLES",
+            "valeurMin": 0.8,
+            "familles": [
+              "ELANS"
+            ],
+            "min": 1
+          },
+          "contribue": {
+            "familles": [
+              "ELANS"
+            ],
+            "valeurMin": 0.8
+          }
+        }
+      ],
+      "POUTRE": [
+        {
+          "id": "FA2-PO-B1",
+          "label": "1 série de deux éléments gymniques dont au moins un saut",
+          "check": {
+            "type": "MANUAL"
+          },
+          "court": "Série gym",
+          "contribue": {
+            "familles": [
+              "SAUTS_GYMNIQUES"
+            ]
+          }
+        },
+        {
+          "id": "FA2-PO-B2",
+          "label": "1 série acrobatique ou 1 série mixte (gym/acro ou acro/gym), possible avec l’entrée",
+          "check": {
+            "type": "MANUAL"
+          },
+          "court": "Série acro ou mixte",
+          "contribue": {
+            "familles": [
+              "ACRO_AVANT",
+              "ACRO_ARRIERE",
+              "SAUTS_GYMNIQUES"
+            ]
+          }
+        },
+        {
+          "id": "FA2-PO-B3",
+          "label": "1 élément acrobatique avant ou latéral et 1 élément acrobatique arrière",
+          "check": {
+            "type": "ALL_OF",
+            "checks": [
+              {
+                "type": "FAMILLE_MIN",
+                "famille": "ACRO_AVANT",
+                "min": 1
+              },
+              {
+                "type": "FAMILLE_MIN",
+                "famille": "ACRO_ARRIERE",
+                "min": 1
+              }
+            ]
+          },
+          "court": "Acro avant + arrière",
+          "contribue": {
+            "familles": [
+              "ACRO_AVANT",
+              "ACRO_ARRIERE"
+            ]
+          }
+        }
+      ],
+      "SOL": [
+        {
+          "id": "FA2-SO-B1",
+          "label": "1 ligne acrobatique de 2 éléments différents avec envol",
+          "court": "Ligne acro",
+          "check": {
+            "type": "FAMILLE_MIN",
+            "famille": "ACROBATIES",
+            "min": 2
+          },
+          "contribue": {
+            "familles": [
+              "ACROBATIES"
+            ]
+          }
+        },
+        {
+          "id": "FA2-SO-B2",
+          "label": "Un salto",
+          "court": "Salto",
+          "check": {
+            "type": "FAMILLE_MIN",
+            "famille": "ACROBATIES",
+            "min": 1
+          },
+          "contribue": {
+            "familles": [
+              "ACROBATIES"
+            ]
+          }
+        },
+        {
+          "id": "FA2-SO-B3",
+          "label": "1 série ou passage gymnique de 2 sauts différents",
+          "court": "2 sauts",
+          "check": {
+            "type": "FAMILLE_MIN",
+            "famille": "SAUTS",
+            "min": 2
+          },
+          "contribue": {
+            "familles": [
+              "SAUTS"
+            ]
+          }
+        }
+      ]
+    },
+    "A3": {
+      "BARRES": [
+        {
+          "id": "FA3-BR-B1",
+          "label": "1 élément du groupe des bascules ou des élans",
+          "court": "Bascule ou élan",
+          "check": {
+            "type": "ANY_OF",
+            "checks": [
+              {
+                "type": "FAMILLE_MIN",
+                "famille": "BASCULES",
+                "min": 1
+              },
+              {
+                "type": "FAMILLE_MIN",
+                "famille": "ELANS",
+                "min": 1
+              }
+            ]
+          },
+          "contribue": {
+            "familles": [
+              "BASCULES",
+              "ELANS"
+            ]
+          }
+        },
+        {
+          "id": "FA3-BR-B2",
+          "label": "1 élément du groupe des éléments proches de la barre",
+          "court": "Proche de la barre",
+          "check": {
+            "type": "FAMILLE_MIN",
+            "famille": "PROCHES",
+            "min": 1
+          },
+          "contribue": {
+            "familles": [
+              "PROCHES"
+            ]
+          }
+        },
+        {
+          "id": "FA3-BR-B3",
+          "label": "7 éléments",
+          "court": "7 éléments",
+          "check": {
+            "type": "NB_ELEMENTS",
+            "min": 7
+          },
+          "contribue": {}
+        }
+      ],
+      "POUTRE": [
+        {
+          "id": "FA3-PO-B1",
+          "label": "1 série de 2 éléments gymniques OU série mixte (A/G ou G/A) OU série acrobatique de 2 éléments (possible avec l’entrée)",
+          "court": "Série",
+          "check": {
+            "type": "MANUAL"
+          },
+          "contribue": {
+            "familles": [
+              "SAUTS_GYMNIQUES",
+              "ACRO_AVANT",
+              "ACRO_ARRIERE"
+            ]
+          }
+        },
+        {
+          "id": "FA3-PO-B2",
+          "label": "1 élément acrobatique avant ou latéral et 1 élément acrobatique arrière",
+          "check": {
+            "type": "ALL_OF",
+            "checks": [
+              {
+                "type": "FAMILLE_MIN",
+                "famille": "ACRO_AVANT",
+                "min": 1
+              },
+              {
+                "type": "FAMILLE_MIN",
+                "famille": "ACRO_ARRIERE",
+                "min": 1
+              }
+            ]
+          },
+          "court": "Acro avant + arrière",
+          "contribue": {
+            "familles": [
+              "ACRO_AVANT",
+              "ACRO_ARRIERE"
+            ]
+          }
+        },
+        {
+          "id": "FA3-PO-B3",
+          "label": "7 éléments",
+          "court": "7 éléments",
+          "check": {
+            "type": "NB_ELEMENTS",
+            "min": 7
+          },
+          "contribue": {}
+        }
+      ],
+      "SOL": [
+        {
+          "id": "FA3-SO-B1",
+          "label": "1 élément acrobatique avant/latéral et 1 élément acrobatique arrière, dont 1 avec envol",
+          "court": "2 acrobaties",
+          "check": {
+            "type": "FAMILLE_MIN",
+            "famille": "ACROBATIES",
+            "min": 2
+          },
+          "contribue": {
+            "familles": [
+              "ACROBATIES"
+            ]
+          }
+        },
+        {
+          "id": "FA3-SO-B2",
+          "label": "1 série ou passage gymnique de 2 sauts différents",
+          "court": "2 sauts",
+          "check": {
+            "type": "FAMILLE_MIN",
+            "famille": "SAUTS",
+            "min": 2
+          },
+          "contribue": {
+            "familles": [
+              "SAUTS"
+            ]
+          }
+        },
+        {
+          "id": "FA3-SO-B3",
+          "label": "7 éléments",
+          "court": "7 éléments",
+          "check": {
+            "type": "NB_ELEMENTS",
+            "min": 7
+          },
+          "contribue": {}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* Tokens et utilitaires repris à l'identique du site UFOLEP (son :root et ses classes accent-gradient). */
+@theme {
+  --color-background: #0a0a10;
+  --color-surface: #14141d;
+  --color-surface-alt: #1b1b27;
+  --color-border-subtle: #27272f;
+  --color-border-strong: #35354a;
+  --color-foreground: #f5f5f7;
+  --color-muted: #9a9aab;
+  --color-accent-from: #8b5cf6;
+  --color-accent-to: #ec4899;
+  --color-accent-solid: #a855f7;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% -10%, #8b5cf61f, transparent 45%),
+    radial-gradient(circle at 90% 0%, #ec48991a, transparent 40%),
+    var(--color-background);
+  color: var(--color-foreground);
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Accueil en Fédéral B : fond teinté bleu-turquoise pour le distinguer du Fédéral A (violet-rose). */
+body[data-filiere="FEDERAL_B"] {
+  background:
+    radial-gradient(circle at 20% -10%, #06b6d42e, transparent 50%),
+    radial-gradient(circle at 90% 0%, #3b82f628, transparent 45%),
+    #08121a;
+}
+
+@utility accent-gradient {
+  background-image: linear-gradient(90deg, var(--color-accent-from), var(--color-accent-to));
+}
+
+@utility accent-gradient-text {
+  background-image: linear-gradient(90deg, var(--color-accent-from), var(--color-accent-to));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Barres de défilement fines et sombres, qui ne recouvrent plus le contenu. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 8px;
+}
+
+/* Curseurs du lecteur audio, identiques à .accent-gradient-range du site UFOLEP. */
+.accent-gradient-range {
+  appearance: none;
+  background: linear-gradient(90deg, var(--color-accent-from), var(--color-accent-to));
+  border-radius: 9999px;
+  outline: none;
+  height: 6px;
+}
+.accent-gradient-range::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, var(--color-accent-from), var(--color-accent-to));
+  border-radius: 9999px;
+  height: 6px;
+}
+.accent-gradient-range::-webkit-slider-thumb {
+  appearance: none;
+  border: 2px solid var(--color-accent-to);
+  cursor: pointer;
+  background: #fff;
+  border-radius: 9999px;
+  width: 14px;
+  height: 14px;
+  margin-top: -4px;
+}
+.accent-gradient-range::-moz-range-thumb {
+  border: 2px solid var(--color-accent-to);
+  cursor: pointer;
+  background: #fff;
+  border-radius: 9999px;
+  width: 10px;
+  height: 10px;
+}
+
+/* Accueil en Performance : fond teinté rouge carmin. */
+body[data-filiere="PERFORMANCE"] {
+  background:
+    radial-gradient(circle at 20% -10%, #e11d483d, transparent 50%),
+    radial-gradient(circle at 90% 0%, #f43f5e30, transparent 45%),
+    #12080e;
+}
