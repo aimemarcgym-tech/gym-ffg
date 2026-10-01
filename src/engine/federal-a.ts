@@ -148,6 +148,12 @@ export function sautsValides(niveau: NiveauId, sauts: SautChoisi[]): SautChoisi[
   return sauts.filter((x) => ids.has(x.idSaut));
 }
 
+// Note D maximale possible : le plafond du niveau (éléments + bonifications) ou, au saut, la valeur du meilleur saut du niveau.
+export function noteDMax(niveau: NiveauId, agres: Agres): number {
+  if (agres === "SAUT") return Math.max(0, ...getSautsNiveau(niveau).flatMap((s) => [s.valeurTrampoTremp, s.valeurTremplin, s.valeur79 ?? 0]));
+  return getNiveau(niveau).plafondD;
+}
+
 export function noteDMouvement(m: {
   agres: Agres;
   niveau: NiveauId;

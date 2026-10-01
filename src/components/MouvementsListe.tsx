@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getGymnastes, getMouvements, type Gymnaste, type Mouvement } from "@/lib/data";
-import { noteDMouvement } from "@/engine/federal-a";
+import { noteDMax, noteDMouvement } from "@/engine/federal-a";
 import { getNiveau } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
 import { carteLigne, lienDegrade, titreSection, vide } from "@/lib/styles";
@@ -45,7 +45,7 @@ export default function MouvementsListe() {
                   <div className="font-medium text-foreground">{m.nom}</div>
                   <div className="text-xs text-muted">
                     {g ? `${g.prenom} ${g.nom} · ` : ""}
-                    {AGRES.find((a) => a.id === m.agres)?.label} · {getNiveau(m.niveau).label} · note D {fmt(noteDMouvement(m))}
+                    {AGRES.find((a) => a.id === m.agres)?.label} · {getNiveau(m.niveau).label} · note D {fmt(noteDMouvement(m))} / {fmt(noteDMax(m.niveau, m.agres))}
                   </div>
                 </Link>
                 <Link href={`/mouvement/?m=${m.id}`} className={lienDegrade}>

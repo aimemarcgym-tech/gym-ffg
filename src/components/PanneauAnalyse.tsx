@@ -50,6 +50,7 @@ interface Props {
   onBonif: (id: string) => void;
   nbSauts: number;
   d: number;
+  dMax: number;
 }
 
 export default function PanneauAnalyse(p: Props) {
@@ -142,10 +143,16 @@ export default function PanneauAnalyse(p: Props) {
             {fmt(p.noteD.totalElements)} éléments + {fmt(p.noteD.totalBonifications)} bonifications
           </div>
         )}
+        <div className="mt-0.5 text-sm font-semibold text-white">
+          {fmt(p.d)} / {fmt(p.dMax)} maximum
+        </div>
         <div className="text-xs text-white/70">
           {p.noteD?.plafonne
             ? `${fmt(p.noteD.totalElements + p.noteD.totalBonifications)} plafonné à ${fmt(p.niveau.plafondD)} en ${p.niveau.label}`
             : `Plafond ${p.niveau.label} : ${fmt(p.niveau.plafondD)}`}
+        </div>
+        <div className="text-xs text-white/70">
+          Note finale maximale possible : {fmt(p.dMax + 10)} (D {fmt(p.dMax)} + exécution 10,00)
         </div>
         {grille && (
           <>

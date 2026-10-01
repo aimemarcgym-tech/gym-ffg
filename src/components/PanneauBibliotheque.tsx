@@ -137,7 +137,8 @@ export default function PanneauBibliotheque(p: Props) {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {((s.unique ? ["TRAMPO_TREMP"] : s.valeur79 !== undefined && age7a9 ? ["TRAMPO_TREMP", "TREMPLIN", "ANS79"] : ["TRAMPO_TREMP", "TREMPLIN"]) as Appareil[]).map((app) => {
-                    const actif = p.sauts.some((x) => x.idSaut === s.id && x.appareil === app);
+                    const nb = p.sauts.filter((x) => x.idSaut === s.id && x.appareil === app).length;
+                    const actif = nb > 0;
                     const v = app === "ANS79" ? (s.valeur79 ?? 0) : app === "TRAMPO_TREMP" ? s.valeurTrampoTremp : s.valeurTremplin;
                     return (
                       <button
@@ -145,7 +146,7 @@ export default function PanneauBibliotheque(p: Props) {
                         onClick={() => p.onBasculerSaut(s.id, app)}
                         className="flex-1 rounded border border-border-strong px-2 py-1.5 text-xs text-foreground hover:border-accent-solid/60"
                       >
-                        {actif && <span className="text-success">✓ </span>}
+                        {actif && <span className="text-success">✓{nb > 1 ? ` ×${nb}` : ""} </span>}
                         {s.unique ? "Note D" : app === "ANS79" ? "7/9 ans (saut 1,00 m)" : app === "TRAMPO_TREMP" ? "Trampo-tremp" : "1 tremplin"} · {fmt(v)}
                       </button>
                     );

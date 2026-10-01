@@ -22,6 +22,7 @@ import {
   calculerNoteD,
   calculerNoteDSaut,
   etatBonifications,
+  noteDMax,
   sautsValides,
   type SautChoisi,
 } from "@/engine/federal-a";
@@ -101,11 +102,8 @@ export default function MouvementEditeur() {
   }
 
   function basculerSaut(idSaut: string, appareil: Appareil) {
-    setSauts((s) => {
-      const existe = s.find((x) => x.idSaut === idSaut && x.appareil === appareil);
-      if (existe) return s.filter((x) => x !== existe);
-      return s.length >= 2 ? [s[1], { idSaut, appareil }] : [...s, { idSaut, appareil }];
-    });
+    // Deux sauts identiques ou différents sont autorisés : un clic ajoute le saut (même s'il est déjà choisi), la croix du saut le retire.
+    setSauts((s) => (s.length >= 2 ? [s[1], { idSaut, appareil }] : [...s, { idSaut, appareil }]));
   }
 
   function flash(t: string) {
@@ -252,6 +250,7 @@ export default function MouvementEditeur() {
             onBonif={(id) => setBonifs((l) => bascule(l, id))}
             nbSauts={sautsNiveau.length}
             d={d}
+            dMax={noteDMax(niveauId, agres)}
           />
 
           <PanneauBibliotheque
