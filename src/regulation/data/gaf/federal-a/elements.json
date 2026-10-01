@@ -123,12 +123,15 @@
   {
     "id": "FA-BR-014",
     "agres": "BARRES",
-    "famille": "PROCHES",
+    "famille": "SORTIES",
     "nom": "Sortie filée sans rotation longitudinale sous toutes ses formes (Pieds barre jambes serrées ou écartées ou de l’appui) Barre Inférieure",
     "valeur": 0.6,
     "sortie": true,
     "verified": true,
-    "sourcePage": 8
+    "sourcePage": 8,
+    "extraFamilles": [
+      "PROCHES"
+    ]
   },
   {
     "id": "FA-BR-015",
@@ -142,12 +145,15 @@
   {
     "id": "FA-BR-016",
     "agres": "BARRES",
-    "famille": "PROCHES",
+    "famille": "SORTIES",
     "nom": "Sortie filée sans rotation longitudinale sous toutes ses formes (pieds barre jambes serrées ou écartées ou de l’appui) Barre Supérieure",
     "valeur": 0.8,
     "sortie": true,
     "verified": true,
-    "sourcePage": 8
+    "sourcePage": 8,
+    "extraFamilles": [
+      "PROCHES"
+    ]
   },
   {
     "id": "FA-BR-017",
@@ -172,12 +178,15 @@
   {
     "id": "FA-BR-019",
     "agres": "BARRES",
-    "famille": "PROCHES",
+    "famille": "SORTIES",
     "nom": "Sortie filée avec ½ tour (180°) sous toutes ses formes (Pieds barre jambes serrées ou écartées ou de l’appui) BI ou BS",
     "valeur": 1.0,
     "sortie": true,
     "verified": true,
-    "sourcePage": 8
+    "sourcePage": 8,
+    "extraFamilles": [
+      "PROCHES"
+    ]
   },
   {
     "id": "FA-BR-020",
