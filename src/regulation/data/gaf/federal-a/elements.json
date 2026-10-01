@@ -272,11 +272,15 @@
   {
     "id": "FA-BR-029",
     "agres": "BARRES",
-    "famille": "ELANS",
+    "famille": "SORTIES",
     "nom": "Balancé, contre volée à l’oblique basse en sortie",
     "valeur": 0.8,
     "verified": true,
-    "sourcePage": 9
+    "sourcePage": 9,
+    "extraFamilles": [
+      "ELANS"
+    ],
+    "sortie": true
   },
   {
     "id": "FA-BR-030",
