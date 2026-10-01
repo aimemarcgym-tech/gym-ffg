@@ -55,7 +55,7 @@ export default function Connexion() {
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex w-full shrink-0 items-center justify-center gap-1.5 border-b border-border-subtle bg-surface-alt/60 px-6 py-3">
-        <div className="accent-gradient flex h-10 w-10 shrink-0 -translate-x-4 items-center sm:-translate-x-12 justify-center rounded-lg text-sm font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">GAF</div>
+        <div className="accent-gradient flex h-10 w-10 shrink-0 -translate-x-3 items-center sm:-translate-x-7 justify-center rounded-lg text-sm font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">GAF</div>
         <div className="leading-tight">
           <div className="text-base font-bold tracking-wide text-foreground uppercase">FFGym</div>
           <div className="text-sm font-medium text-muted">Gymnastique Artistique Féminine</div>
