@@ -175,7 +175,7 @@ export default function OrdresPassage() {
   const cellule = "px-2 py-1.5 text-right tabular-nums";
 
   return (
-    <div className="grid w-full items-start gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+    <main className="mx-auto grid w-full max-w-[1400px] items-start gap-8 px-6 py-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
       <div className="w-full min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
         <h2 className="mb-3 text-sm font-semibold text-foreground">
           Ordres de passage par équipe
@@ -330,6 +330,6 @@ export default function OrdresPassage() {
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }
