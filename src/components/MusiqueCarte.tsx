@@ -7,23 +7,35 @@ import { deleteMusique, saveMusique } from "@/lib/musique";
 import { formatTaille } from "@/lib/format";
 import { partagerFichiers } from "@/lib/share";
 import type { MusiqueStockee } from "@/lib/idb";
-import type { Gymnaste } from "@/lib/data";
+import { updateGymnaste, type Gymnaste } from "@/lib/data";
+import { RenommerEnLigne } from "@/components/EnLigne";
 import { useDialogues } from "@/components/Dialogues";
 
 interface Props {
   gymnaste: Gymnaste;
   musique: MusiqueStockee | undefined;
   onChange: () => void;
+  // Après un renommage : recharge la liste des gymnastes.
+  onRenomme: () => void;
   onExportOne: (g: Gymnaste, m: MusiqueStockee) => void;
   poignee: HTMLAttributes<HTMLSpanElement>;
 }
 
-const bouton = "rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50";
+const bouton =
+  "rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50";
 
 // Une gymnaste, sa musique, son lecteur et ses actions : mêmes boutons que sur le site UFOLEP.
-export default function MusiqueCarte({ gymnaste, musique, onChange, onExportOne, poignee }: Props) {
+export default function MusiqueCarte({
+  gymnaste,
+  musique,
+  onChange,
+  onRenomme,
+  onExportOne,
+  poignee,
+}: Props) {
   const { informer } = useDialogues();
   const [occupe, setOccupe] = useState(false);
+  const [renomme, setRenomme] = useState(false);
   const champ = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string | null>(null);
 
@@ -60,9 +72,16 @@ export default function MusiqueCarte({ gymnaste, musique, onChange, onExportOne,
 
   async function partager() {
     if (!musique) return;
-    const f = new File([musique.blob], musique.fileName, { type: musique.mimeType });
-    if ((await partagerFichiers([f], { title: musique.fileName })) === "unsupported") {
-      await informer("Le partage n’est pas disponible sur ce navigateur. Utilisez « Envoyer sur clé USB » ou téléchargez le fichier.");
+    const f = new File([musique.blob], musique.fileName, {
+      type: musique.mimeType,
+    });
+    if (
+      (await partagerFichiers([f], { title: musique.fileName })) ===
+      "unsupported"
+    ) {
+      await informer(
+        "Le partage n’est pas disponible sur ce navigateur. Utilisez « Envoyer sur clé USB » ou téléchargez le fichier.",
+      );
     }
   }
 
@@ -71,7 +90,24 @@ export default function MusiqueCarte({ gymnaste, musique, onChange, onExportOne,
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-2 text-sm font-medium text-foreground">
           <DragHandle {...poignee} />
-          {gymnaste.prenom} {gymnaste.nom}
+          {renomme ? (
+            <RenommerEnLigne
+              valeur={`${gymnaste.prenom} ${gymnaste.nom}`}
+              onAnnuler={() => setRenomme(false)}
+              onOk={async (v) => {
+                // Le premier mot est le prénom, le reste le nom (« Sarah Le Palud »).
+                const [prenom, ...reste] = v.split(/\s+/);
+                await updateGymnaste(gymnaste.id, {
+                  prenom,
+                  nom: reste.join(" "),
+                });
+                setRenomme(false);
+                onRenomme();
+              }}
+            />
+          ) : (
+            gymnaste.prenom + " " + gymnaste.nom
+          )}
         </span>
         <div className="flex items-center gap-2">
           <input
@@ -85,15 +121,37 @@ export default function MusiqueCarte({ gymnaste, musique, onChange, onExportOne,
               e.target.value = "";
             }}
           />
-          <button type="button" disabled={occupe} onClick={() => champ.current?.click()} className={`${bouton} bg-surface`}>
+          <button
+            type="button"
+            onClick={() => setRenomme(true)}
+            className={bouton}
+          >
+            Renommer
+          </button>
+          <button
+            type="button"
+            disabled={occupe}
+            onClick={() => champ.current?.click()}
+            className={`${bouton} bg-surface`}
+          >
             {musique ? "Remplacer" : "Importer"}
           </button>
           {musique && (
             <>
-              <button type="button" disabled={occupe} onClick={partager} className={bouton}>
+              <button
+                type="button"
+                disabled={occupe}
+                onClick={partager}
+                className={bouton}
+              >
                 Partager
               </button>
-              <button type="button" disabled={occupe} onClick={() => onExportOne(gymnaste, musique)} className={bouton}>
+              <button
+                type="button"
+                disabled={occupe}
+                onClick={() => onExportOne(gymnaste, musique)}
+                className={bouton}
+              >
                 Envoyer sur clé USB
               </button>
               <button

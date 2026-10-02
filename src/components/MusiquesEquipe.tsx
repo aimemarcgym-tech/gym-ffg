@@ -169,7 +169,7 @@ export default function MusiquesEquipe() {
           <div className="space-y-2">
             {membres.map((g) => (
               <div key={g.id} ref={dnd.registre(g.id)} style={dnd.style(g.id)} className="rounded-lg transition">
-                <MusiqueCarte gymnaste={g} musique={musiques[g.id]} onChange={chargerMusiques} onExportOne={exporterUne} poignee={dnd.poignee(g.id)} />
+                <MusiqueCarte gymnaste={g} musique={musiques[g.id]} onChange={chargerMusiques} onRenomme={charger} onExportOne={exporterUne} poignee={dnd.poignee(g.id)} />
               </div>
             ))}
             {membres.length === 0 && <p className="text-sm text-muted">Cette équipe n’a pas encore de gymnaste.</p>}
