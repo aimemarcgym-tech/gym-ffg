@@ -167,8 +167,20 @@ export default function OrdresPassage() {
       .map((m) => noteDMouvement(m));
     return notes.length ? Math.max(...notes) : null;
   };
-  const totalAgres = (a: Agres) =>
-    membres.reduce((t, g) => t + (noteDe(g, a) ?? 0), 0);
+  // Total d'équipe : à chaque agrès, les 3 meilleures notes de départ comptent.
+  const retenues = (a: Agres) =>
+    new Set(
+      membres
+        .map((g) => ({ id: g.id, n: noteDe(g, a) }))
+        .filter((x): x is { id: string; n: number } => x.n !== null)
+        .sort((x, y) => y.n - x.n)
+        .slice(0, 3)
+        .map((x) => x.id),
+    );
+  const totalAgres = (a: Agres) => {
+    const ids = retenues(a);
+    return membres.reduce((t, g) => t + (ids.has(g.id) ? (noteDe(g, a) ?? 0) : 0), 0);
+  };
   const totalGym = (g: Gymnaste) =>
     AGRES.reduce((t, a) => t + (noteDe(g, a.id) ?? 0), 0);
   const totalEquipe = AGRES.reduce((t, a) => t + totalAgres(a.id), 0);
@@ -294,10 +306,11 @@ export default function OrdresPassage() {
                     </td>
                     {AGRES.map((a) => {
                       const n = noteDe(g, a.id);
+                      const compte = n !== null && retenues(a.id).has(g.id);
                       return (
                         <td
                           key={a.id}
-                          className={`${cellule} ${n === null ? "text-muted" : "text-foreground"}`}
+                          className={`${cellule} ${compte ? "font-semibold text-foreground" : "text-muted"}`}
                         >
                           {n === null ? "—" : fmt(n)}
                         </td>
@@ -324,8 +337,7 @@ export default function OrdresPassage() {
               </tfoot>
             </table>
             <p className="mt-2 text-[11px] text-muted">
-              Note D du meilleur mouvement de chaque gymnaste à chaque agrès ; «
-              — » : aucun mouvement créé.
+              Note D du meilleur mouvement de chaque gymnaste à chaque agrès ; « — » : aucun mouvement créé. Total équipe : les 3 meilleures notes de chaque agrès (en gras), les autres sont en gris.
             </p>
           </div>
         )}
