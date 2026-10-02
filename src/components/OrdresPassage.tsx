@@ -289,7 +289,7 @@ export default function OrdresPassage() {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <thead>
                 <tr className="text-muted">
                   <th className="px-2 py-1.5 text-left font-semibold">
@@ -363,7 +363,7 @@ export default function OrdresPassage() {
                 </tr>
               </tfoot>
             </table>
-            <p className="mt-2 text-[11px] text-muted">
+            <p className="mt-2 text-xs text-muted">
               Note D du meilleur mouvement de chaque gymnaste à chaque agrès ; «
               — » : aucun mouvement créé. Total équipe : les {nbCompte}{" "}
               meilleures notes de chaque agrès (en gras), les autres sont en
