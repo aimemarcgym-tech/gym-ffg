@@ -203,7 +203,7 @@ export default function FicheGymnaste() {
         <section>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-semibold text-foreground">Mouvements</h2>
-            {mouvements.length > 0 && <PartageBouton label="Partager les 4 agrès" onCreate={partagerMouvements} />}
+            {mouvements.length > 0 && <PartageBouton label="Partager les 4 agrès" onCreate={partagerMouvements} className={btnDegrade} />}
           </div>
 
           {mouvements.length > 0 && (
