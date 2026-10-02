@@ -368,7 +368,8 @@ export default function OrdresPassage() {
               — » : aucun mouvement créé. Total équipe : les {nbCompte}{" "}
               meilleures notes de chaque agrès (en gras), les autres sont en
               gris. Total max : {nbCompte} × la note D maximale du niveau à
-              chaque agrès.
+              chaque agrès. Le Total max ne prend pas en compte le bonus
+              artistique.
             </p>
           </div>
         )}
