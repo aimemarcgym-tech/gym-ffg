@@ -7,6 +7,7 @@ import { calculerNoteD, calculerNoteDSaut, etatBonifications, noteDMax, sautsVal
 import { elementAutorise, getElementFedA, getNiveau } from "@/regulation/loader";
 import { AGRES } from "@/regulation/libelles";
 import { getShare } from "@/lib/shares";
+import { onglets, ongletBouton } from "@/lib/styles";
 import type { Agres, AgresAvecGrille, ElementFedA, NiveauId } from "@/regulation/types";
 
 export interface MouvementPartage {
@@ -22,6 +23,8 @@ export interface DonneesMouvements {
   gymnaste: string;
   mouvements: MouvementPartage[];
 }
+
+const LIBELLE_LONG: Record<Agres, string> = { SAUT: "Saut", BARRES: "Barres asymétriques", POUTRE: "Poutre", SOL: "Sol" };
 
 // Même présentation que dans le constructeur : « Mon mouvement » et « Analyse », en lecture seule.
 function Vue({ m }: { m: MouvementPartage }) {
@@ -67,6 +70,7 @@ function Vue({ m }: { m: MouvementPartage }) {
 // Page publique des mouvements d'une gymnaste (les quatre agrès), en lecture seule et sans compte.
 export default function PartageMouvements() {
   const [d, setD] = useState<DonneesMouvements | "introuvable" | null>(null);
+  const [actif, setActif] = useState(0);
 
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("id") ?? "";
@@ -90,7 +94,20 @@ export default function PartageMouvements() {
         </div>
       </header>
       <main className="mx-auto max-w-5xl space-y-10 px-6 py-8">
-        {d.mouvements.length === 0 ? <p className="text-sm text-muted">Aucun mouvement.</p> : d.mouvements.map((m, i) => <Vue key={i} m={m} />)}
+        {d.mouvements.length === 0 ? (
+          <p className="text-sm text-muted">Aucun mouvement.</p>
+        ) : (
+          <>
+            <div className={onglets}>
+              {d.mouvements.map((m, i) => (
+                <button key={i} onClick={() => setActif(i)} className={ongletBouton(i === actif, "flex-1 px-2 py-2.5")}>
+                  {LIBELLE_LONG[m.agres]} — {m.niveau}
+                </button>
+              ))}
+            </div>
+            <Vue key={actif} m={d.mouvements[Math.min(actif, d.mouvements.length - 1)]} />
+          </>
+        )}
         <p className="text-center text-xs text-muted">Lien de partage en lecture seule, généré depuis l’application Gestion Compétitions &amp; Entraînements.</p>
       </main>
     </div>
