@@ -22,7 +22,7 @@ import {
 } from "@/regulation/loader";
 import PartageBouton from "@/components/PartageBouton";
 import { createShare } from "@/lib/shares";
-import { STYLE_NIVEAU, champ, titreSection } from "@/lib/styles";
+import { STYLE_NIVEAU, btnDegrade, champ, titreSection } from "@/lib/styles";
 
 const tag = "rounded-lg border px-2.5 py-1.5 text-xs font-medium";
 
@@ -203,7 +203,7 @@ export default function CategoriesAge() {
                           )}
                         </div>
                         <div className="mt-3">
-                          <PartageBouton onCreate={partager} />
+                          <PartageBouton onCreate={partager} className={btnDegrade} />
                         </div>
                         <p className="mt-2 text-xs text-muted">
                           Une catégorie est proposée quand toutes les gymnastes
