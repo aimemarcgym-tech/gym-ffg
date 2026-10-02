@@ -254,7 +254,7 @@ export default function OrdresPassage() {
 
       <div className="w-full min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
         <h2 className="mb-3 text-sm font-semibold text-foreground">
-          Notes de départ{selection ? ` · ${selection.equipe.nom}` : ""}
+          Notes de départ
         </h2>
         {!selection ? (
           <p className="text-sm text-muted">
