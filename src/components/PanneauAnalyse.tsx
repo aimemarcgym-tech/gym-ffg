@@ -47,7 +47,7 @@ interface Props {
   noteD: NoteD | null;
   etats: BonifEtat[];
   bonifsRetenues: string[];
-  onBonif: (id: string) => void;
+  onBonif?: (id: string) => void;
   nbSauts: number;
   d: number;
   dMax: number;
@@ -98,7 +98,7 @@ export default function PanneauAnalyse(p: Props) {
                 const validee = p.bonifsRetenues.includes(def.id);
                 if (validee) {
                   return (
-                    <Ligne key={def.id} etat="ok" droite={`+${fmt(nbPoints)}`} onConfirmer={eligible ? undefined : () => p.onBonif(def.id)} confirme>
+                    <Ligne key={def.id} etat="ok" droite={`+${fmt(nbPoints)}`} onConfirmer={eligible || !p.onBonif ? undefined : () => p.onBonif!(def.id)} confirme>
                       {def.label}
                     </Ligne>
                   );
@@ -112,7 +112,7 @@ export default function PanneauAnalyse(p: Props) {
                 }
                 if (manuelle) {
                   return (
-                    <Ligne key={def.id} etat="confirmer" onConfirmer={() => p.onBonif(def.id)}>
+                    <Ligne key={def.id} etat="confirmer" onConfirmer={p.onBonif ? () => p.onBonif!(def.id) : undefined}>
                       {def.label}
                     </Ligne>
                   );

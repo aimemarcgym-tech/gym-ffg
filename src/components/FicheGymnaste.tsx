@@ -27,9 +27,11 @@ import {
 import { noteDMax, noteDMouvement } from "@/engine/federal-a";
 import { ageEnSaison, getNiveau, niveauxFed } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
-import { btnDanger, btnDegrade, carteLigne, champLibre, etiquette, lienDegrade, titreSection } from "@/lib/styles";
+import { btnDanger, btnDegrade, carteLigne, champLibre, etiquette, lienDegrade } from "@/lib/styles";
 import type { Agres, NiveauId } from "@/regulation/types";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
+import PartageBouton from "@/components/PartageBouton";
+import { createShare } from "@/lib/shares";
 
 export default function FicheGymnaste() {
   const [supprId, setSupprId] = useState<string | null>(null);
@@ -95,6 +97,18 @@ export default function FicheGymnaste() {
     e.preventDefault();
     const m = await createMouvement({ gymnasteId: gymnaste!.id, nom: nom.trim() || nomParDefaut, agres, niveau });
     router.push(`/mouvement/?m=${m.id}`);
+  }
+
+  // Lien public en lecture seule : les mouvements de la gymnaste, dans l'ordre Saut, Barres, Poutre, Sol.
+  async function partagerMouvements() {
+    const g = gymnaste!;
+    const ordre = AGRES.map((a) => a.id);
+    const liste = [...mouvements].sort((a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres));
+    const id = await createShare("mouvements", {
+      gymnaste: `${g.prenom} ${g.nom}`,
+      mouvements: liste.map((m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts })),
+    });
+    return `/partage/mouvements/?id=${id}`;
   }
 
   async function enregistrerProfil(v: ProfilModifie) {
@@ -187,7 +201,10 @@ export default function FicheGymnaste() {
 
       <main className="mx-auto max-w-5xl space-y-10 px-6 py-10">
         <section>
-          <h2 className={titreSection}>Mouvements</h2>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-lg font-semibold text-foreground">Mouvements</h2>
+            {mouvements.length > 0 && <PartageBouton label="Partager les 4 agrès" onCreate={partagerMouvements} />}
+          </div>
 
           {mouvements.length > 0 && (
             <ul className="mb-4 space-y-2">

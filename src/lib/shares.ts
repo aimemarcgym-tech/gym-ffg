@@ -1,6 +1,6 @@
 // Partage par lien public : un instantané figé (jamais une référence vivante) est encodé dans le lien lui-même,
 // ce qui marche sans serveur. Avec Firebase, seules ces deux fonctions passeront à la collection publique « shares ».
-export type TypePartage = "ordrePassage" | "ordresPassage" | "programme";
+export type TypePartage = "ordrePassage" | "ordresPassage" | "programme" | "mouvements";
 
 export interface Partage<T = unknown> {
   type: TypePartage;
