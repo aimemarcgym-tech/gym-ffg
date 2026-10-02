@@ -92,12 +92,16 @@ export function calculerNoteD(
   const elementsRetenus = [...distincts].sort((a, b) => b.valeur - a.valeur).slice(0, nbElementsMax);
   const totalElements = round2(elementsRetenus.reduce((s, e) => s + e.valeur, 0));
 
-  const possibles = new Set(
-    etatBonifications(agres, distincts, niveau)
-      .filter((b) => b.eligible || b.manuelle)
-      .map((b) => b.def.id),
-  );
-  const bonifsRetenues = [...new Set(idsBonifsValidees)].filter((id) => possibles.has(id)).slice(0, maxBonifications);
+  // Les bonifications que les éléments prouvent (eligible) sont retenues d'office, dans l'ordre du règlement, jusqu'au maximum ;
+  // seules celles qui ne se vérifient pas toutes seules (manuelles) demandent une confirmation.
+  const etats = etatBonifications(agres, distincts, niveau);
+  const manuellesConfirmees = new Set(idsBonifsValidees);
+  const bonifsRetenues = [
+    ...etats.filter((b) => !b.eligible && b.manuelle && manuellesConfirmees.has(b.def.id)),
+    ...etats.filter((b) => b.eligible),
+  ]
+    .map((b) => b.def.id)
+    .slice(0, maxBonifications);
   const nbBonifications = bonifsRetenues.length;
   const totalBonifications = round2(nbBonifications * pointsParBonification);
 

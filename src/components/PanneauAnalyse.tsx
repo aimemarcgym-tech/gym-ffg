@@ -98,12 +98,19 @@ export default function PanneauAnalyse(p: Props) {
                 const validee = p.bonifsRetenues.includes(def.id);
                 if (validee) {
                   return (
-                    <Ligne key={def.id} etat="ok" droite={`+${fmt(nbPoints)}`} onConfirmer={() => p.onBonif(def.id)} confirme>
+                    <Ligne key={def.id} etat="ok" droite={`+${fmt(nbPoints)}`} onConfirmer={eligible ? undefined : () => p.onBonif(def.id)} confirme>
                       {def.label}
                     </Ligne>
                   );
                 }
-                if (manuelle || eligible) {
+                if (eligible) {
+                  return (
+                    <Ligne key={def.id} etat="ok" droite="maximum atteint">
+                      {def.label}
+                    </Ligne>
+                  );
+                }
+                if (manuelle) {
                   return (
                     <Ligne key={def.id} etat="confirmer" onConfirmer={() => p.onBonif(def.id)}>
                       {def.label}
