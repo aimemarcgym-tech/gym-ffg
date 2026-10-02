@@ -49,6 +49,8 @@ export interface CategorieAge {
   label: string;
   ageMin: number;
   ageMax?: number;
+  // Nombre de notes qui comptent par agrès pour cette catégorie, si elle diffère de celui du programme.
+  notesComptees?: number;
 }
 
 export interface NiveauFed {

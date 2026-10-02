@@ -56,6 +56,12 @@ export function ageEnSaison(anneeNaissance: number): number {
   return anneeSaison - anneeNaissance;
 }
 
+// Nombre de notes de départ qui comptent par agrès dans un total d'équipe : celui de la catégorie s'il est précisé, sinon celui du programme.
+export function getNotesComptees(niveau: NiveauId, categorieId?: string): number {
+  const n = getNiveau(niveau);
+  return (categorieId ? n.categories.find((c) => c.id === categorieId)?.notesComptees : undefined) ?? n.format.notesComptees;
+}
+
 export function getCategorie(niveau: NiveauId, categorieId: string): CategorieAge | undefined {
   return getNiveau(niveau).categories.find((c) => c.id === categorieId);
 }

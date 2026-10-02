@@ -16,9 +16,9 @@ import {
   type Mouvement,
 } from "@/lib/data";
 import { createShare } from "@/lib/shares";
-import { noteDMouvement } from "@/engine/federal-a";
+import { noteDMax, noteDMouvement } from "@/engine/federal-a";
 import { fmt } from "@/regulation/libelles";
-import { getNiveau } from "@/regulation/loader";
+import { getNiveau, getNotesComptees } from "@/regulation/loader";
 import { champ } from "@/lib/styles";
 import type { Agres } from "@/regulation/types";
 
@@ -167,23 +167,33 @@ export default function OrdresPassage() {
       .map((m) => noteDMouvement(m));
     return notes.length ? Math.max(...notes) : null;
   };
-  // Total d'équipe : à chaque agrès, les 3 meilleures notes de départ comptent.
+  // Total d'équipe : à chaque agrès, les meilleures notes de départ comptent (leur nombre dépend du programme ou de la catégorie).
+  const nbCompte = selection
+    ? getNotesComptees(selection.equipe.niveau, selection.equipe.categorieId)
+    : 3;
   const retenues = (a: Agres) =>
     new Set(
       membres
         .map((g) => ({ id: g.id, n: noteDe(g, a) }))
         .filter((x): x is { id: string; n: number } => x.n !== null)
         .sort((x, y) => y.n - x.n)
-        .slice(0, 3)
+        .slice(0, nbCompte)
         .map((x) => x.id),
     );
   const totalAgres = (a: Agres) => {
     const ids = retenues(a);
-    return membres.reduce((t, g) => t + (ids.has(g.id) ? (noteDe(g, a) ?? 0) : 0), 0);
+    return membres.reduce(
+      (t, g) => t + (ids.has(g.id) ? (noteDe(g, a) ?? 0) : 0),
+      0,
+    );
   };
   const totalGym = (g: Gymnaste) =>
     AGRES.reduce((t, a) => t + (noteDe(g, a.id) ?? 0), 0);
   const totalEquipe = AGRES.reduce((t, a) => t + totalAgres(a.id), 0);
+  // Maximum théorique : le nombre de notes retenues multiplié par la note D maximale du niveau, à chaque agrès.
+  const maxAgres = (a: Agres) =>
+    selection ? nbCompte * noteDMax(selection.equipe.niveau, a) : 0;
+  const maxEquipe = AGRES.reduce((t, a) => t + maxAgres(a.id), 0);
   const cellule = "px-2 py-1.5 text-right tabular-nums";
 
   return (
@@ -334,10 +344,31 @@ export default function OrdresPassage() {
                     {fmt(totalEquipe)}
                   </td>
                 </tr>
+                <tr className="text-muted">
+                  <td className="px-2 py-1.5">Total max</td>
+                  {AGRES.map((a) => (
+                    <td key={a.id} className={cellule}>
+                      {fmt(maxAgres(a.id))}
+                    </td>
+                  ))}
+                  <td className={cellule}>{fmt(maxEquipe)}</td>
+                </tr>
+                <tr className="text-foreground">
+                  <td className="px-2 py-1.5" colSpan={5}>
+                    Total / total max
+                  </td>
+                  <td className={`${cellule} font-semibold`}>
+                    {fmt(totalEquipe)} / {fmt(maxEquipe)}
+                  </td>
+                </tr>
               </tfoot>
             </table>
             <p className="mt-2 text-[11px] text-muted">
-              Note D du meilleur mouvement de chaque gymnaste à chaque agrès ; « — » : aucun mouvement créé. Total équipe : les 3 meilleures notes de chaque agrès (en gras), les autres sont en gris.
+              Note D du meilleur mouvement de chaque gymnaste à chaque agrès ; «
+              — » : aucun mouvement créé. Total équipe : les {nbCompte}{" "}
+              meilleures notes de chaque agrès (en gras), les autres sont en
+              gris. Total max : {nbCompte} × la note D maximale du niveau à
+              chaque agrès.
             </p>
           </div>
         )}
