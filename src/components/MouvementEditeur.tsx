@@ -17,7 +17,8 @@ import {
   type Instantane,
   type Mouvement,
 } from "@/lib/data";
-import { partagerTexte } from "@/lib/share";
+import PartageBouton from "@/components/PartageBouton";
+import { createShare } from "@/lib/shares";
 import {
   calculerNoteD,
   calculerNoteDSaut,
@@ -27,7 +28,7 @@ import {
   type SautChoisi,
 } from "@/engine/federal-a";
 import { elementAutorise, getElementFedA, getElementsNiveau, getNiveau, niveauxFed } from "@/regulation/loader";
-import { AGRES, fmt, fmtValeur } from "@/regulation/libelles";
+import { AGRES, fmt } from "@/regulation/libelles";
 import { btnContour, lienDegrade, panneau, titrePanneau } from "@/lib/styles";
 import type { Appareil, AgresAvecGrille, ElementFedA, NiveauId } from "@/regulation/types";
 import { RenommerEnLigne } from "@/components/EnLigne";
@@ -117,11 +118,13 @@ export default function MouvementEditeur() {
     flash("Instantané enregistré");
   }
 
-  async function partager() {
-    const lignes = grille ? choisis.map((x, i) => `${i + 1}. ${x.nom} (${fmtValeur(x)})`) : [];
-    const texte = `${gymnaste ? `${gymnaste.prenom} ${gymnaste.nom} · ` : ""}${nom}\nNote D : ${fmt(d)}${lignes.length ? `\n${lignes.join("\n")}` : ""}`;
-    const r = await partagerTexte(nom, texte);
-    flash(r === "copie" ? "Résumé copié dans le presse-papiers" : r === "echec" ? "Partage impossible" : "Partagé");
+  // Lien public en lecture seule, présenté comme pour les 4 agrès (panneaux Mon mouvement et Analyse).
+  async function creerLien() {
+    const id = await createShare("mouvements", {
+      gymnaste: gymnaste ? `${gymnaste.prenom} ${gymnaste.nom}` : "",
+      mouvements: [{ nom, agres, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts }],
+    });
+    return `/partage/mouvements/?id=${id}`;
   }
 
   const retenus = new Set(noteD?.elementsRetenus.map((x) => x.id));
@@ -184,9 +187,7 @@ export default function MouvementEditeur() {
             {message && <span className="ml-3 text-xs text-accent-solid">{message}</span>}
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={partager} className={btnContour}>
-              Partager
-            </button>
+            <PartageBouton onCreate={creerLien} className={btnContour} />
             <button onClick={instantane} className={btnContour} title="Enregistre une version datée dans l’historique de progression (la séquence, elle, est déjà sauvegardée automatiquement)">
               Enregistrer un instantané (historique)
             </button>
