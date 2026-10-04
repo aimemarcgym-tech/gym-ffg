@@ -3,6 +3,7 @@
 //
 // Lancement : npm run aide-musique   (ou double-clic sur Lancer-aide-musique.bat). Arrêt : Ctrl+C.
 import { createServer } from "node:http";
+import { randomUUID } from "node:crypto";
 import { spawn, spawnSync } from "node:child_process";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -51,7 +52,7 @@ function lire(req) {
 }
 
 function lancer(url, kbps, playlist) {
-  const id = crypto.randomUUID();
+  const id = randomUUID();
   const dossier = mkdtempSync(join(tmpdir(), "aide-musique-"));
   const travail = { id, statut: "encours", progression: 0, message: "Démarrage…", dossier, fichier: null, nom: null, creeLe: Date.now() };
   travaux.set(id, travail);
