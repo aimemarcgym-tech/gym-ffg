@@ -33,6 +33,12 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
   const champFichiers = useRef<HTMLInputElement>(null);
   const [aide, setAide] = useState<EtatAide | null | "verification">("verification");
   const [aideVisible, setAideVisible] = useState(false);
+  // Linux de bureau (pas Android) : on propose le fichier d'installation de l'aide.
+  const [enLinux, setEnLinux] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEnLinux(/Linux|X11/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent));
+  }, []);
 
   async function verifierAide() {
     setAide("verification");
@@ -98,8 +104,8 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
       if (!etat?.ok) {
         setMessageLien(
           etat
-            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (Windows : winget install yt-dlp, winget install ffmpeg ; Linux : relancez le script d’installation de l’aide) puis cliquez de nouveau sur Convertir."
-            : "L’aide ne démarre pas toute seule. Installez-la une fois. Windows : double-cliquez sur « Installer-aide-musique.bat » (dans le dossier de l’appli). Linux : dans un terminal, lancez curl -fsSL https://raw.githubusercontent.com/aimemarcgym-tech/gym-ffg/main/tools/installer-aide-musique-linux.sh | bash. Elle se lancera ensuite automatiquement à l’ouverture de session, puis cliquez de nouveau sur Convertir.",
+            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (Windows : winget install yt-dlp, winget install ffmpeg ; Linux : relancez l’installateur de l’aide) puis cliquez de nouveau sur Convertir."
+            : "L’aide ne démarre pas toute seule. Installez-la une fois avec le bouton « Télécharger l’installateur » ci-dessous (Windows : double-cliquez sur « Installer-aide-musique.bat » dans le dossier de l’appli). Elle se lancera ensuite automatiquement, puis cliquez de nouveau sur Convertir.",
         );
         return;
       }
@@ -227,6 +233,15 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
             </div>
           )}
           {messageLien && <p className="rounded border border-border-strong bg-surface-alt p-2 text-xs text-foreground">{messageLien}</p>}
+          {aide !== "verification" && !aide?.ok && enLinux && (
+            <a
+              href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/Installer-aide-musique-linux.sh`}
+              download
+              className="accent-gradient inline-block rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+            >
+              Télécharger l’installateur de l’aide (Linux)
+            </a>
+          )}
         </div>
       )}
 

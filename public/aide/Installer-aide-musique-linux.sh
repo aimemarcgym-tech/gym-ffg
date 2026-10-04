@@ -3,7 +3,7 @@
 #   1. copie l'aide dans ~/.local/share/ffg-aide ;
 #   2. la lance automatiquement à l'ouverture de session ;
 #   3. enregistre le lien ffg-aide:// utilisé par l'appli pour la démarrer toute seule.
-# Elle a besoin de Node.js et de ffmpeg (à installer avec le gestionnaire de paquets) ; yt-dlp est téléchargé ici s'il manque.
+# Node.js et ffmpeg sont installés automatiquement s'ils manquent (une fenêtre demande le mot de passe) ; yt-dlp est téléchargé ici.
 set -euo pipefail
 
 DEPOT="https://raw.githubusercontent.com/aimemarcgym-tech/gym-ffg/main/tools/aide-musique.mjs"
@@ -14,12 +14,15 @@ manque=()
 command -v node >/dev/null || manque+=("nodejs")
 command -v ffmpeg >/dev/null || manque+=("ffmpeg")
 if [ ${#manque[@]} -gt 0 ]; then
-  echo "Il manque : ${manque[*]}"
-  echo "Sur Ubuntu/Debian/Mint :  sudo apt install ${manque[*]}"
-  echo "Sur Fedora :              sudo dnf install ${manque[*]}"
-  echo "Sur Arch/Manjaro :        sudo pacman -S ${manque[*]}"
-  echo "Relancez ensuite ce script."
-  exit 1
+  # Installation automatique : une fenêtre demande le mot de passe de la session (pkexec), rien à taper.
+  if command -v apt-get >/dev/null; then pkexec apt-get install -y "${manque[@]}" || true
+  elif command -v dnf >/dev/null; then pkexec dnf install -y "${manque[@]}" || true
+  elif command -v pacman >/dev/null; then pkexec pacman -S --noconfirm "${manque[@]}" || true
+  fi
+  if ! command -v node >/dev/null || ! command -v ffmpeg >/dev/null; then
+    echo "Impossible d'installer automatiquement : ${manque[*]}. Installez-les avec le gestionnaire de logiciels de votre système, puis relancez ce fichier."
+    exit 1
+  fi
 fi
 
 mkdir -p "$DOSSIER" "$BIN" "$HOME/.config/autostart" "$HOME/.local/share/applications"
@@ -79,7 +82,7 @@ command -v xdg-mime >/dev/null && xdg-mime default ffg-aide.desktop x-scheme-han
 nohup "$DOSSIER/lancer.sh" >/dev/null 2>&1 &
 sleep 2
 if curl -fs http://127.0.0.1:47615/etat >/dev/null; then
-  echo "Terminé : l'aide est lancée et démarrera toute seule à l'ouverture de session."
+  echo "Terminé : l'aide est lancée et démarrera toute seule à l'ouverture de session. Vous pouvez fermer cette fenêtre et retourner dans l'appli."
 else
   echo "Installée, mais elle ne répond pas encore : regardez $DOSSIER/aide-musique.log"
 fi
