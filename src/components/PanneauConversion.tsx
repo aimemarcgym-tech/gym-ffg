@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type DragEvent } from "react";
 import SortieMp3 from "@/components/SortieMp3";
 import { QUALITES, decoderFichier, encoderMp3, nomMp3 } from "@/lib/audio";
 import {
+  aideDejaInstallee,
   convertirLien,
   demarrerAide,
   etatAide,
@@ -78,7 +79,8 @@ export default function PanneauConversion({
   useEffect(() => {
     let vivant = true;
     (async () => {
-      const etat = (await etatAide()) ?? (await demarrerAide());
+      // Lancement automatique seulement si l'aide est déjà installée ici : sinon le système affiche une fenêtre « aucune application ».
+      const etat = (await etatAide()) ?? (aideDejaInstallee() ? await demarrerAide() : null);
       if (vivant) setAide(etat);
     })();
     return () => {
