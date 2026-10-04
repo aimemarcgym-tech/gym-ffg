@@ -1,5 +1,7 @@
-// Partage par lien public : un instantané figé (jamais une référence vivante) est encodé dans le lien lui-même,
-// ce qui marche sans serveur. Avec Firebase, seules ces deux fonctions passeront à la collection publique « shares ».
+// Partage par lien public : un instantané figé (jamais une référence vivante).
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db, firebaseConfigure } from "@/lib/firebase";
+
 export type TypePartage = "ordrePassage" | "ordresPassage" | "programme" | "mouvements" | "categories";
 
 export interface Partage<T = unknown> {
@@ -20,13 +22,37 @@ function decoder(code: string): string {
   return new TextDecoder().decode(Uint8Array.from(binaire, (c) => c.charCodeAt(0)));
 }
 
+const ALPHABET = "abcdefghijkmnpqrstuvwxyz23456789";
+
+function idCourt(): string {
+  const octets = crypto.getRandomValues(new Uint8Array(10));
+  return Array.from(octets, (o) => ALPHABET[o % ALPHABET.length]).join("");
+}
+
+// Avec Firebase : l'instantané est enregistré dans la collection publique « shares » et le lien ne contient qu'un code court.
+// Sans connexion ou si l'enregistrement échoue (document trop gros…), on garde l'ancien lien qui contient les données.
 export async function createShare<T>(type: TypePartage, data: T): Promise<string> {
-  return encoder(JSON.stringify({ type, data }));
+  const json = JSON.stringify({ type, data });
+  if (firebaseConfigure && auth.currentUser) {
+    try {
+      if (json.length < 900_000) {
+        const id = idCourt();
+        await setDoc(doc(db, "shares", id), { ownerUid: auth.currentUser.uid, json, createdAt: Date.now() });
+        return id;
+      }
+    } catch {
+      // repli sur le lien long
+    }
+  }
+  return encoder(json);
 }
 
 export async function getShare<T = unknown>(id: string): Promise<Partage<T> | null> {
   try {
-    const p = JSON.parse(decoder(id)) as Partage<T>;
+    // Un code court (10 caractères) désigne un document ; un lien plus long contient directement les données.
+    const brut = id.length <= 20 ? ((await getDoc(doc(db, "shares", id))).data()?.json as string | undefined) : decoder(id);
+    if (!brut) return null;
+    const p = JSON.parse(brut) as Partage<T>;
     return p && typeof p === "object" && p.type ? p : null;
   } catch {
     return null;
