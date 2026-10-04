@@ -98,8 +98,8 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
       if (!etat?.ok) {
         setMessageLien(
           etat
-            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (winget install yt-dlp, winget install ffmpeg) puis cliquez de nouveau sur Convertir."
-            : "L’aide ne démarre pas toute seule. Installez-la une fois : double-cliquez sur « Installer-aide-musique.bat » (dans le dossier de l’appli). Elle se lancera ensuite automatiquement avec Windows, puis cliquez de nouveau sur Convertir.",
+            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (Windows : winget install yt-dlp, winget install ffmpeg ; Linux : relancez le script d’installation de l’aide) puis cliquez de nouveau sur Convertir."
+            : "L’aide ne démarre pas toute seule. Installez-la une fois. Windows : double-cliquez sur « Installer-aide-musique.bat » (dans le dossier de l’appli). Linux : dans un terminal, lancez curl -fsSL https://raw.githubusercontent.com/aimemarcgym-tech/gym-ffg/main/tools/installer-aide-musique-linux.sh | bash. Elle se lancera ensuite automatiquement à l’ouverture de session, puis cliquez de nouveau sur Convertir.",
         );
         return;
       }
