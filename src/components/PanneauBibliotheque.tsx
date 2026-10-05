@@ -38,7 +38,7 @@ export default function PanneauBibliotheque(p: Props) {
   const familles = useMemo(() => [...new Set(p.elements.map((e) => e.famille))], [p.elements]);
   const q = recherche.trim().toLowerCase();
   const visibles = p.elements
-    .filter((e) => (!famille || e.famille === famille) && (!q || e.nom.toLowerCase().includes(q) || e.id.toLowerCase().includes(q)))
+    .filter((e) => (!famille || e.famille === famille || !!e.extraFamilles?.includes(famille)) && (!q || e.nom.toLowerCase().includes(q) || e.id.toLowerCase().includes(q)))
     .filter((e) => !maitrisesSeules || comp[e.id] === "MAITRISE")
     .sort((a, b) => a.valeur - b.valeur);
 
