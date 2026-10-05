@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import PanneauAnalyse from "@/components/PanneauAnalyse";
 import PanneauMouvement from "@/components/PanneauMouvement";
 import { calculerNoteD, calculerNoteDSaut, etatBonifications, noteDMax, sautsValides, type SautChoisi } from "@/engine/federal-a";
-import { elementAutorise, getElementFedA, getNiveau } from "@/regulation/loader";
+import { elementsChoisis, getNiveau } from "@/regulation/loader";
 import { AGRES } from "@/regulation/libelles";
 import { getShare } from "@/lib/shares";
 import { onglets, ongletBouton } from "@/lib/styles";
-import type { Agres, AgresAvecGrille, ElementFedA, NiveauId } from "@/regulation/types";
+import type { Agres, AgresAvecGrille, NiveauId } from "@/regulation/types";
 
 export interface MouvementPartage {
   nom: string;
@@ -32,7 +32,7 @@ function Vue({ m }: { m: MouvementPartage }) {
   const ag = m.agres as AgresAvecGrille;
   const niveau = getNiveau(m.niveau);
   const choisis = useMemo(
-    () => m.elementIds.map(getElementFedA).filter((e): e is ElementFedA => !!e && e.agres === ag && elementAutorise(e, m.niveau)),
+    () => elementsChoisis(m.elementIds, ag, m.niveau),
     [m, ag],
   );
   const sauts = useMemo(() => sautsValides(m.niveau, m.sauts), [m]);

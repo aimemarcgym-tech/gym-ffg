@@ -9,7 +9,7 @@ import type { SautChoisi } from "@/engine/federal-a";
 import type { ElementFedA } from "@/regulation/types";
 
 interface Props {
-  elements: ElementFedA[];
+  elements: (ElementFedA & { cle?: string })[];
   retenus: Set<string>;
   sauts: SautChoisi[];
   onRetirer?: (id: string) => void;
@@ -31,7 +31,7 @@ export default function PanneauMouvement({
   onReordonner = () => undefined,
   lectureSeule,
 }: Props) {
-  const ids = elements.map((e) => e.id);
+  const ids = elements.map((e) => e.cle ?? e.id);
   const dnd = useDragReorder(ids, onReordonner);
   const vide = elements.length === 0 && sauts.length === 0;
 
@@ -56,14 +56,14 @@ export default function PanneauMouvement({
       <ol className="space-y-2">
         {elements.map((e, i) => (
           <li
-            key={e.id}
-            ref={dnd.registre(e.id)}
-            style={dnd.style(e.id)}
+            key={(e.cle ?? e.id)}
+            ref={dnd.registre((e.cle ?? e.id))}
+            style={dnd.style((e.cle ?? e.id))}
             className="rounded border border-border-subtle bg-surface-alt p-2 transition"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-start gap-2">
-                {!lectureSeule && <DragHandle {...dnd.poignee(e.id)} />}
+                {!lectureSeule && <DragHandle {...dnd.poignee((e.cle ?? e.id))} />}
                 <div>
                   <div className="text-xs text-muted">
                     {i + 1}. {LIBELLE_FAMILLE[e.famille] ?? e.famille} ·{" "}
@@ -97,7 +97,7 @@ export default function PanneauMouvement({
                     ↓
                   </button>
                   <button
-                    onClick={() => onRetirer?.(e.id)}
+                    onClick={() => onRetirer?.((e.cle ?? e.id))}
                     className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
                     aria-label="Retirer"
                   >

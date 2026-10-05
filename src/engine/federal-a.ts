@@ -78,10 +78,17 @@ export function calculerNoteD(
 
   // Un élément identique à un autre (même case de la grille) n'est compté qu'une fois ; un élément interdit dans le niveau ne compte pas.
   const vus = new Set<string>();
+  const occurrences = new Map<string, number>();
   const distincts = [...new Set(idsElements)]
     .map(getElementFedA)
     .filter((e): e is ElementFedA => !!e && e.agres === agres && elementAutorise(e, niveau))
     .filter((e) => {
+      // Un élément doublable peut compter deux fois ; les autres une seule.
+      if (e.doublable) {
+        const n = occurrences.get(e.id) ?? 0;
+        occurrences.set(e.id, n + 1);
+        return n < 2;
+      }
       const cle = e.identiqueA ?? e.id;
       const doublon = vus.has(cle) || vus.has(e.id);
       vus.add(cle);

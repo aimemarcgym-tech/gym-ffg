@@ -34,7 +34,8 @@
     "valeur": 1.0,
     "bonifFamille": "BASCULE",
     "verified": true,
-    "sourcePage": 7
+    "sourcePage": 7,
+    "doublable": true
   },
   {
     "id": "FA-BR-005",

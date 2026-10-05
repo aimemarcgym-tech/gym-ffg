@@ -20,6 +20,8 @@ export interface ElementFedA {
   grille?: "B";
   // Non autorisé en Fédéral B3.
   interditB3?: boolean;
+  // Peut figurer deux fois dans un mouvement (la seconde occurrence porte le suffixe « #2 » dans la liste d'identifiants).
+  doublable?: boolean;
   // Élément identique à un autre (même case de la grille) : compté une seule fois.
   identiqueA?: string;
   verified: boolean;

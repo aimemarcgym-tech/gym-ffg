@@ -27,10 +27,10 @@ import {
   sautsValides,
   type SautChoisi,
 } from "@/engine/federal-a";
-import { elementAutorise, getElementFedA, getElementsNiveau, getNiveau, niveauxFed } from "@/regulation/loader";
+import { elementsChoisis, getElementFedA, getElementsNiveau, getNiveau, niveauxFed } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
 import { btnContour, lienDegrade, panneau, titrePanneau } from "@/lib/styles";
-import type { Appareil, AgresAvecGrille, ElementFedA, NiveauId } from "@/regulation/types";
+import type { Appareil, AgresAvecGrille, NiveauId } from "@/regulation/types";
 import { RenommerEnLigne } from "@/components/EnLigne";
 
 const bascule = <T,>(liste: T[], x: T) => (liste.includes(x) ? liste.filter((y) => y !== x) : [...liste, x]);
@@ -82,7 +82,7 @@ export default function MouvementEditeur() {
 
   const tous = useMemo(() => (grille ? getElementsNiveau(ag, niveauId) : []), [grille, ag, niveauId]);
   const choisis = useMemo(
-    () => ids.map(getElementFedA).filter((e): e is ElementFedA => !!e && e.agres === ag && elementAutorise(e, niveauId)),
+    () => elementsChoisis(ids, ag, niveauId),
     [ids, ag, niveauId],
   );
   const sautsNiveau = useMemo(() => sautsValides(niveauId, sauts), [niveauId, sauts]);
@@ -200,7 +200,7 @@ export default function MouvementEditeur() {
               elements={choisis}
               retenus={retenus}
               sauts={sautsNiveau}
-              onRetirer={(id) => setIds((l) => l.filter((x) => x !== id))}
+              onRetirer={(cle) => setIds((l) => l.filter((x) => x !== cle))}
               onRetirerSaut={(s) => setSauts((l) => l.filter((x) => x !== s))}
               onReordonner={setIds}
             />
@@ -261,7 +261,16 @@ export default function MouvementEditeur() {
             gymnaste={gymnaste}
             niveauId={niveauId}
             sauts={sautsNiveau}
-            onBasculer={(id) => setIds((l) => bascule(l, id))}
+            onBasculer={(id) =>
+              setIds((l) => {
+                // Un élément doublable se choisit une fois, puis une seconde ; un troisième clic le retire.
+                if (!getElementFedA(id)?.doublable) return bascule(l, id);
+                const n = l.filter((x) => x.split("#")[0] === id).length;
+                if (n === 0) return [...l, id];
+                if (n === 1) return [...l, `${id}#2`];
+                return l.filter((x) => x.split("#")[0] !== id);
+              })
+            }
             onBasculerSaut={basculerSaut}
           />
 

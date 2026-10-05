@@ -47,6 +47,7 @@ export default function PanneauBibliotheque(p: Props) {
 
   const carte = (e: ElementFedA) => {
     const dedans = idsChoisis.has(e.id);
+    const nbFois = p.choisis.filter((x) => x.id === e.id).length;
     const bonus = bonifsElement(e, p.niveauId);
     return (
       <button
@@ -58,7 +59,7 @@ export default function PanneauBibliotheque(p: Props) {
         <div className="flex w-full items-center justify-between">
           <span className="flex flex-wrap items-center gap-1">
             <span className={`rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] ${dedans ? "text-success" : "text-muted"}`}>
-              {dedans ? "✓ " : ""}
+              {dedans ? (nbFois > 1 ? `✓ ×${nbFois} ` : "✓ ") : ""}
               {fmtValeur(e)}
             </span>
             {e.sortie && (

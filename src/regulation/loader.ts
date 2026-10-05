@@ -99,8 +99,21 @@ export function getElementsFedB(agres: AgresAvecGrille): ElementFedA[] {
   return elements.filter((e) => e.agres === agres && e.grille === "B");
 }
 
+// Un identifiant « XXX#2 » désigne la seconde occurrence d'un élément doublable.
 export function getElementFedA(id: string): ElementFedA | undefined {
-  return parId.get(id);
+  return parId.get(id.split("#")[0]);
+}
+
+export type ElementChoisi = ElementFedA & { cle: string };
+
+// Éléments d'un mouvement, avec une clé unique par occurrence (utile quand un élément est doublé).
+export function elementsChoisis(ids: string[], agres: string, niveau: NiveauId): ElementChoisi[] {
+  return ids
+    .map((cle) => {
+      const e = getElementFedA(cle);
+      return e ? { ...e, cle } : undefined;
+    })
+    .filter((e): e is ElementChoisi => !!e && e.agres === agres && elementAutorise(e, niveau));
 }
 
 export function getSautFedA(id: string): SautFedA | undefined {
