@@ -8,7 +8,6 @@ import NavBar from "@/components/NavBar";
 import { DialoguesProvider } from "@/components/Dialogues";
 import SyncCloud from "@/components/SyncCloud";
 import BandeauVerification from "@/components/BandeauVerification";
-import BoutonInstaller from "@/components/BoutonInstaller";
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -28,7 +27,6 @@ export default function AppShell({ children }: { children: ReactNode }) {
         <SyncCloud />
       {!sansNav && <NavBar />}
       {!sansNav && <BandeauVerification />}
-      <BoutonInstaller visible={!sansNav} />
       {pathname === "/" && (
         <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
           <div className="mx-auto max-w-5xl px-6 py-5">

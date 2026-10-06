@@ -1,4 +1,3 @@
-// Service worker minimal : aucune mise en cache, il laisse passer toutes les requêtes. Il sert uniquement à rendre l'application installable.
+// Ancien service worker minimal, retiré : il se désinscrit tout seul sur les appareils où il avait été installé.
 self.addEventListener("install", () => self.skipWaiting());
-self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
-self.addEventListener("fetch", () => {});
+self.addEventListener("activate", (e) => e.waitUntil(self.registration.unregister()));
