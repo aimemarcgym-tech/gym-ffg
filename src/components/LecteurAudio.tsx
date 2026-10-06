@@ -14,6 +14,8 @@ export default function LecteurAudio({ src }: { src: string }) {
   const [duree, setDuree] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muet, setMuet] = useState(false);
+  const barre = useRef<HTMLInputElement>(null);
+  const reglageVolume = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Nouvelle musique : on repart du début.
@@ -50,6 +52,46 @@ export default function LecteurAudio({ src }: { src: string }) {
     }
   }
 
+  // La molette sur la barre de progression ou sur le volume les modifie : vers le haut, on avance / on monte le son.
+  // Écouteurs natifs (non passifs) : sinon la page défile en même temps que la molette.
+  useEffect(() => {
+    const surPosition = (e: WheelEvent) => {
+      e.preventDefault();
+      const a = audio.current;
+      if (!a || !Number.isFinite(a.duration)) return;
+      a.currentTime = Math.min(
+        a.duration,
+        Math.max(0, a.currentTime + (e.deltaY < 0 ? 5 : -5)),
+      );
+    };
+    const surVolume = (e: WheelEvent) => {
+      e.preventDefault();
+      const a = audio.current;
+      if (!a) return;
+      const v = Math.min(
+        1,
+        Math.max(
+          0,
+          Math.round(
+            ((a.muted ? 0 : a.volume) + (e.deltaY < 0 ? 0.05 : -0.05)) * 100,
+          ) / 100,
+        ),
+      );
+      a.volume = v;
+      a.muted = v === 0;
+      setVolume(v);
+      setMuet(v === 0);
+    };
+    const b = barre.current;
+    const v = reglageVolume.current;
+    b?.addEventListener("wheel", surPosition, { passive: false });
+    v?.addEventListener("wheel", surVolume, { passive: false });
+    return () => {
+      b?.removeEventListener("wheel", surPosition);
+      v?.removeEventListener("wheel", surVolume);
+    };
+  }, []);
+
   return (
     <div className="flex items-center gap-2 rounded border border-border-strong bg-surface px-2 py-1.5">
       <audio
@@ -73,8 +115,11 @@ export default function LecteurAudio({ src }: { src: string }) {
       >
         {lecture ? "❚❚" : "▶"}
       </button>
-      <span className="w-8 shrink-0 text-right text-[10px] text-muted tabular-nums">{formatDuree(position)}</span>
+      <span className="w-8 shrink-0 text-right text-[10px] text-muted tabular-nums">
+        {formatDuree(position)}
+      </span>
       <input
+        ref={barre}
         type="range"
         min={0}
         max={duree || 0}
@@ -84,11 +129,19 @@ export default function LecteurAudio({ src }: { src: string }) {
         aria-label="Position"
         className="accent-gradient-range min-w-0 flex-1"
       />
-      <span className="w-8 shrink-0 text-[10px] text-muted tabular-nums">{formatDuree(duree)}</span>
-      <button type="button" onClick={basculerMuet} title={muet ? "Réactiver le son" : "Couper le son"} className="shrink-0 text-sm text-muted hover:text-foreground">
+      <span className="w-8 shrink-0 text-[10px] text-muted tabular-nums">
+        {formatDuree(duree)}
+      </span>
+      <button
+        type="button"
+        onClick={basculerMuet}
+        title={muet ? "Réactiver le son" : "Couper le son"}
+        className="shrink-0 text-sm text-muted hover:text-foreground"
+      >
         {muet || volume === 0 ? "🔇" : "🔊"}
       </button>
       <input
+        ref={reglageVolume}
         type="range"
         min={0}
         max={1}

@@ -305,6 +305,24 @@ export default function PanneauMontage({
       e.currentTarget.releasePointerCapture(e.pointerId);
   }
 
+  // La molette sur la forme d'onde déplace la position de lecture (vers le haut : on avance de 2 s).
+  useEffect(() => {
+    const c = canvas.current;
+    if (!c) return;
+    const f = (e: WheelEvent) => {
+      e.preventDefault();
+      const el = audio.current;
+      if (!el || !Number.isFinite(el.duration)) return;
+      el.currentTime = Math.min(
+        el.duration,
+        Math.max(0, el.currentTime + (e.deltaY < 0 ? 2 : -2)),
+      );
+      setPosition(el.currentTime);
+    };
+    c.addEventListener("wheel", f, { passive: false });
+    return () => c.removeEventListener("wheel", f);
+  }, [buffer, url]);
+
   function basculerLecture() {
     const el = audio.current;
     if (!el) return;
