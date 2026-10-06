@@ -88,37 +88,6 @@ export default function MusiqueCarte({
 
   return (
     <div className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
-      <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-        <DragHandle {...poignee} />
-        {renomme ? (
-          <RenommerEnLigne
-            valeur={`${gymnaste.prenom} ${gymnaste.nom}`}
-            onAnnuler={() => setRenomme(false)}
-            onOk={async (v) => {
-              // Le premier mot est le prénom, le reste le nom (« Sarah Le Palud »).
-              const [prenom, ...reste] = v.split(/\s+/);
-              await updateGymnaste(gymnaste.id, {
-                prenom,
-                nom: reste.join(" "),
-              });
-              setRenomme(false);
-              onRenomme();
-            }}
-          />
-        ) : (
-          // Un clic sur le nom affiche ou masque les actions.
-          <button
-            type="button"
-            onClick={() => setActions((a) => !a)}
-            aria-expanded={actions}
-            className="flex items-center gap-1.5 text-left hover:text-white"
-          >
-            {gymnaste.prenom} {gymnaste.nom}
-            <span className="text-xs text-muted">{actions ? "▴" : "▾"}</span>
-          </button>
-        )}
-      </div>
-
       <input
         ref={champ}
         type="file"
@@ -130,59 +99,90 @@ export default function MusiqueCarte({
           e.target.value = "";
         }}
       />
-      {actions && !renomme && (
-        <div className="mt-2 space-y-2">
-          <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <DragHandle {...poignee} />
+          {renomme ? (
+            <RenommerEnLigne
+              valeur={`${gymnaste.prenom} ${gymnaste.nom}`}
+              onAnnuler={() => setRenomme(false)}
+              onOk={async (v) => {
+                // Le premier mot est le prénom, le reste le nom (« Sarah Le Palud »).
+                const [prenom, ...reste] = v.split(/\s+/);
+                await updateGymnaste(gymnaste.id, {
+                  prenom,
+                  nom: reste.join(" "),
+                });
+                setRenomme(false);
+                onRenomme();
+              }}
+            />
+          ) : (
+            // Sur mobile, un clic sur le nom affiche ou masque les actions ; sur ordinateur elles restent toujours visibles.
             <button
               type="button"
-              onClick={() => setRenomme(true)}
-              className={bouton}
+              onClick={() => setActions((a) => !a)}
+              aria-expanded={actions}
+              className="flex items-center gap-1.5 text-left md:cursor-default"
             >
-              Renommer
+              {gymnaste.prenom} {gymnaste.nom}
+              <span className="text-xs text-muted md:hidden">
+                {actions ? "▴" : "▾"}
+              </span>
             </button>
-            <button
-              type="button"
-              disabled={occupe}
-              onClick={() => champ.current?.click()}
-              className={`${bouton} bg-surface`}
-            >
-              {musique ? "Remplacer" : "Importer"}
-            </button>
-            {musique && (
-              <>
-                <button
-                  type="button"
-                  disabled={occupe}
-                  onClick={partager}
-                  className={bouton}
-                >
-                  Partager
-                </button>
-                <button
-                  type="button"
-                  disabled={occupe}
-                  onClick={() => onExportOne(gymnaste, musique)}
-                  className={bouton}
-                >
-                  Envoyer sur clé USB
-                </button>
-              </>
-            )}
-          </div>
+          )}
+        </div>
+        <div
+          className={`${actions ? "flex" : "hidden"} w-full flex-wrap items-center gap-2 md:flex md:w-auto`}
+        >
+          <button
+            type="button"
+            onClick={() => setRenomme(true)}
+            className={bouton}
+          >
+            Renommer
+          </button>
+          <button
+            type="button"
+            disabled={occupe}
+            onClick={() => champ.current?.click()}
+            className={`${bouton} bg-surface`}
+          >
+            {musique ? "Remplacer" : "Importer"}
+          </button>
           {musique && (
-            <div className="border-t border-border-subtle pt-2">
+            <>
               <button
                 type="button"
                 disabled={occupe}
-                onClick={supprimer}
-                className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:border-red-400 hover:text-red-400 disabled:opacity-50"
+                onClick={partager}
+                className={bouton}
               >
-                Supprimer
+                Partager
               </button>
-            </div>
+              <button
+                type="button"
+                disabled={occupe}
+                onClick={() => onExportOne(gymnaste, musique)}
+                className={bouton}
+              >
+                Envoyer sur clé USB
+              </button>
+              {/* Mobile : Supprimer sur sa propre ligne, sous un trait ; ordinateur : à la suite des autres boutons. */}
+              <div className="w-full border-t border-border-subtle pt-2 md:w-auto md:border-0 md:pt-0">
+                <button
+                  type="button"
+                  disabled={occupe}
+                  onClick={supprimer}
+                  className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:border-red-400 hover:text-red-400 disabled:opacity-50"
+                >
+                  Supprimer
+                </button>
+              </div>
+            </>
           )}
         </div>
-      )}
+      </div>
 
       {musique && url ? (
         <div className="mt-2 space-y-1.5">
