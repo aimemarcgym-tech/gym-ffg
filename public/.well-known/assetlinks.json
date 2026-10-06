@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.web.gym_ffg.twa",
+      "sha256_cert_fingerprints": ["8D:5F:A0:B4:CD:1B:0F:D6:BA:4A:E7:14:29:01:9A:E8:61:3C:06:BE:F2:05:50:8B:C1:C8:47:A9:4C:75:D2:12"]
+    }
+  }
+]

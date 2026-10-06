@@ -45,3 +45,6 @@ next-env.d.ts
 /transfert-faire-musiques/
 /transfert-faire-musiques.zip
 /tools/aide-musique.log
+
+# application Android (clés de signature et sorties de compilation)
+/android/
