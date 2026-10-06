@@ -14,6 +14,7 @@ const CLE_MASQUE = "ffg:installer-masque";
 export default function BoutonInstaller() {
   const [evenement, setEvenement] = useState<EvenementInstallation | null>(null);
   const [ios, setIos] = useState<"safari" | "autre" | null>(null);
+  const [android, setAndroid] = useState(false);
   const [masque, setMasque] = useState(true);
   const [aide, setAide] = useState(false);
 
@@ -30,7 +31,13 @@ export default function BoutonInstaller() {
 
     const ua = navigator.userAgent;
     const appleMobile = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setAndroid(/Android/.test(ua));
     if (appleMobile) setIos(/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua) ? "autre" : "safari");
+
+    // Service worker sans cache : certains navigateurs mobiles ne proposent l'installation qu'avec lui.
+    const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    navigator.serviceWorker?.register(`${base}/installable-sw.js`, { scope: `${base}/` }).catch(() => undefined);
 
     const avant = (e: Event) => {
       e.preventDefault();
@@ -45,7 +52,7 @@ export default function BoutonInstaller() {
     };
   }, []);
 
-  if (masque || (!evenement && !ios)) return null;
+  if (masque || (!evenement && !ios && !android)) return null;
 
   function cacher() {
     setMasque(true);
@@ -86,6 +93,16 @@ export default function BoutonInstaller() {
               <p className="text-muted">
                 Sur iPhone et iPad, l’installation se fait depuis <strong className="text-foreground">Safari</strong>. Ouvrez cette page dans Safari, puis suivez les étapes.
               </p>
+            ) : android ? (
+              <ol className="list-decimal space-y-2 pl-5 text-muted">
+                <li>
+                  Ouvrez le menu <strong className="text-foreground">⋮</strong> de votre navigateur (en haut à droite).
+                </li>
+                <li>
+                  Touchez <strong className="text-foreground">« Installer l’application »</strong> ou <strong className="text-foreground">« Ajouter à l’écran d’accueil »</strong>.
+                </li>
+                <li>Confirmez : l’icône apparaît sur votre écran d’accueil.</li>
+              </ol>
             ) : (
               <ol className="list-decimal space-y-2 pl-5 text-muted">
                 <li>
