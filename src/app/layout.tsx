@@ -5,6 +5,8 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Gestion Compétitions & Entraînements",
   description: "Suivi des gymnastes, mouvements et compétitions FFG",
+  icons: { icon: "/favicon.ico", apple: "/icons/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "FFG Gestion", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = { themeColor: "#0a0a10" };
