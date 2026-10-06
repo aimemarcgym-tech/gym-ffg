@@ -36,6 +36,7 @@ export default function MusiqueCarte({
   const { informer } = useDialogues();
   const [occupe, setOccupe] = useState(false);
   const [renomme, setRenomme] = useState(false);
+  const [actions, setActions] = useState(false);
   const champ = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState<string | null>(null);
 
@@ -87,73 +88,89 @@ export default function MusiqueCarte({
 
   return (
     <div className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-          <DragHandle {...poignee} />
-          {renomme ? (
-            <RenommerEnLigne
-              valeur={`${gymnaste.prenom} ${gymnaste.nom}`}
-              onAnnuler={() => setRenomme(false)}
-              onOk={async (v) => {
-                // Le premier mot est le prénom, le reste le nom (« Sarah Le Palud »).
-                const [prenom, ...reste] = v.split(/\s+/);
-                await updateGymnaste(gymnaste.id, {
-                  prenom,
-                  nom: reste.join(" "),
-                });
-                setRenomme(false);
-                onRenomme();
-              }}
-            />
-          ) : (
-            gymnaste.prenom + " " + gymnaste.nom
-          )}
-        </span>
-        <div className="flex items-center gap-2">
-          <input
-            ref={champ}
-            type="file"
-            accept="audio/*"
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) importer(f);
-              e.target.value = "";
+      <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+        <DragHandle {...poignee} />
+        {renomme ? (
+          <RenommerEnLigne
+            valeur={`${gymnaste.prenom} ${gymnaste.nom}`}
+            onAnnuler={() => setRenomme(false)}
+            onOk={async (v) => {
+              // Le premier mot est le prénom, le reste le nom (« Sarah Le Palud »).
+              const [prenom, ...reste] = v.split(/\s+/);
+              await updateGymnaste(gymnaste.id, {
+                prenom,
+                nom: reste.join(" "),
+              });
+              setRenomme(false);
+              onRenomme();
             }}
           />
+        ) : (
+          // Un clic sur le nom affiche ou masque les actions.
           <button
             type="button"
-            onClick={() => setRenomme(true)}
-            className={bouton}
+            onClick={() => setActions((a) => !a)}
+            aria-expanded={actions}
+            className="flex items-center gap-1.5 text-left hover:text-white"
           >
-            Renommer
+            {gymnaste.prenom} {gymnaste.nom}
+            <span className="text-xs text-muted">{actions ? "▴" : "▾"}</span>
           </button>
-          <button
-            type="button"
-            disabled={occupe}
-            onClick={() => champ.current?.click()}
-            className={`${bouton} bg-surface`}
-          >
-            {musique ? "Remplacer" : "Importer"}
-          </button>
+        )}
+      </div>
+
+      <input
+        ref={champ}
+        type="file"
+        accept="audio/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) importer(f);
+          e.target.value = "";
+        }}
+      />
+      {actions && !renomme && (
+        <div className="mt-2 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setRenomme(true)}
+              className={bouton}
+            >
+              Renommer
+            </button>
+            <button
+              type="button"
+              disabled={occupe}
+              onClick={() => champ.current?.click()}
+              className={`${bouton} bg-surface`}
+            >
+              {musique ? "Remplacer" : "Importer"}
+            </button>
+            {musique && (
+              <>
+                <button
+                  type="button"
+                  disabled={occupe}
+                  onClick={partager}
+                  className={bouton}
+                >
+                  Partager
+                </button>
+                <button
+                  type="button"
+                  disabled={occupe}
+                  onClick={() => onExportOne(gymnaste, musique)}
+                  className={bouton}
+                >
+                  Envoyer sur clé USB
+                </button>
+              </>
+            )}
+          </div>
           {musique && (
-            <>
-              <button
-                type="button"
-                disabled={occupe}
-                onClick={partager}
-                className={bouton}
-              >
-                Partager
-              </button>
-              <button
-                type="button"
-                disabled={occupe}
-                onClick={() => onExportOne(gymnaste, musique)}
-                className={bouton}
-              >
-                Envoyer sur clé USB
-              </button>
+            <div className="border-t border-border-subtle pt-2">
               <button
                 type="button"
                 disabled={occupe}
@@ -162,10 +179,10 @@ export default function MusiqueCarte({
               >
                 Supprimer
               </button>
-            </>
+            </div>
           )}
         </div>
-      </div>
+      )}
 
       {musique && url ? (
         <div className="mt-2 space-y-1.5">
