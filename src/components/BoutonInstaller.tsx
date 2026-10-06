@@ -11,7 +11,8 @@ const CLE_MASQUE = "ffg:installer-masque";
 
 // Propose d'installer l'application sur l'écran d'accueil : bouton direct sur Android / Chrome / Edge, explications sur iPhone et iPad
 // (Safari n'a pas de bouton d'installation programmable : il faut passer par « Partager » puis « Sur l'écran d'accueil »).
-export default function BoutonInstaller() {
+// Toujours montée (même sur la page de connexion) pour ne pas rater l'invite d'installation du navigateur ; `visible` ne règle que l'affichage.
+export default function BoutonInstaller({ visible = true }: { visible?: boolean }) {
   const [evenement, setEvenement] = useState<EvenementInstallation | null>(null);
   const [ios, setIos] = useState<"safari" | "autre" | null>(null);
   const [android, setAndroid] = useState(false);
@@ -52,7 +53,7 @@ export default function BoutonInstaller() {
     };
   }, []);
 
-  if (masque || (!evenement && !ios && !android)) return null;
+  if (!visible || masque || (!evenement && !ios && !android)) return null;
 
   function cacher() {
     setMasque(true);

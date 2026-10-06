@@ -28,7 +28,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         <SyncCloud />
       {!sansNav && <NavBar />}
       {!sansNav && <BandeauVerification />}
-      {!sansNav && <BoutonInstaller />}
+      <BoutonInstaller visible={!sansNav} />
       {pathname === "/" && (
         <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
           <div className="mx-auto max-w-5xl px-6 py-5">
