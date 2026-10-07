@@ -156,7 +156,7 @@ export default function PanneauMouvement({
                   (lectureSeule ||
                     ouvert === (e.cle ?? e.id) ||
                     !!series[e.cle ?? e.id]) && (
-                    <div className="-mr-3 -mb-3 flex items-center">
+                    <div className="-mr-[18px] -mb-[18px] flex items-center">
                       {SERIES.filter((t) => {
                         const choisie = series[e.cle ?? e.id];
                         return lectureSeule
@@ -171,7 +171,7 @@ export default function PanneauMouvement({
                           >
                             <span
                               style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
-                              className={`inline-block h-2 w-2 rounded-full ${t.plein}`}
+                              className={`inline-block h-[7px] w-[7px] rounded-full ${t.plein}`}
                             />
                             {t.label}
                           </span>
@@ -182,7 +182,7 @@ export default function PanneauMouvement({
                             onClick={() =>
                               onSerie?.(e.cle ?? e.id, actif ? null : t.id)
                             }
-                            className="p-4"
+                            className="p-[18px]"
                             title={
                               actif
                                 ? `Retirer de la ${t.label.toLowerCase()}`
@@ -196,7 +196,7 @@ export default function PanneauMouvement({
                                   ? `0 0 12px 3px ${t.lueur}`
                                   : `0 0 5px 1px ${t.lueur}`,
                               }}
-                              className={`block h-2 w-2 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-1 ring-white" : "opacity-50"}`}
+                              className={`block h-[7px] w-[7px] rounded-full transition ${t.plein} ${actif ? "scale-125 ring-1 ring-white" : "opacity-50"}`}
                             />
                           </button>
                         );
