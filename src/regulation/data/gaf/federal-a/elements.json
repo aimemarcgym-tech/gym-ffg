@@ -393,7 +393,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "DEUX",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-011",
@@ -404,7 +407,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "DEUX",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-012",
@@ -415,7 +421,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "DEUX",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-013",
@@ -426,7 +435,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "UN",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-014",
@@ -437,7 +449,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "UN",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-015",
@@ -448,7 +463,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "UN",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-016",
@@ -457,7 +475,10 @@
     "nom": "Saut cosaque appel un ou deux pieds",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 12
+    "sourcePage": 12,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-017",
@@ -550,7 +571,10 @@
     "nom": "ATR passager sous toutes ses formes",
     "valeur": 0.4,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-026",
@@ -559,7 +583,10 @@
     "nom": "ATR maintenu (sous toutes ses formes) 2 secondes",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-027",

@@ -9,6 +9,7 @@ export const AGRES: { id: Agres; label: string }[] = [
 
 export const LIBELLE_FAMILLE: Record<string, string> = {
   BASCULES: "Bascules",
+  ELEMENTS_SERIE: "Éléments en série",
   PROCHES: "Éléments proches de la barre",
   ELANS: "Élans",
   AUTRES: "Autres",

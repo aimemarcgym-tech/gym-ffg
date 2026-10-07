@@ -35,7 +35,8 @@ export default function PanneauBibliotheque(p: Props) {
   const age7a9 = age !== null && age >= 7 && age <= 9;
   const idsChoisis = new Set(p.choisis.map((e) => e.id));
 
-  const familles = useMemo(() => [...new Set(p.elements.map((e) => e.famille))], [p.elements]);
+  // Catégories principales, puis catégories secondaires (un élément peut figurer dans plusieurs, comme les sorties ou les éléments en série).
+  const familles = useMemo(() => [...new Set([...p.elements.map((e) => e.famille), ...p.elements.flatMap((e) => e.extraFamilles ?? [])])], [p.elements]);
   const q = recherche.trim().toLowerCase();
   const visibles = p.elements
     .filter((e) => (!famille || e.famille === famille || !!e.extraFamilles?.includes(famille)) && (!q || e.nom.toLowerCase().includes(q) || e.id.toLowerCase().includes(q)))
