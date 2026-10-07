@@ -8,6 +8,7 @@ import { champPetit, couleurEquipe } from "@/lib/styles";
 import type { Equipe, Gymnaste } from "@/lib/data";
 import type { NiveauId } from "@/regulation/types";
 import { ConfirmerEnLigne, RenommerEnLigne } from "@/components/EnLigne";
+import PartageBouton from "@/components/PartageBouton";
 
 interface Props {
   // null = gymnastes du club qui ne sont dans aucune équipe.
@@ -22,6 +23,8 @@ interface Props {
   onReordonner?: (ids: string[]) => void;
   onSupprimerGymnaste: (g: Gymnaste) => void;
   onSupprimer?: () => void;
+  // Crée le lien de partage de l'équipe (ordre de passage, catégorie d'âge, mouvements) et renvoie son chemin.
+  onPartager?: () => Promise<string>;
   onModifier?: (patch: { nom?: string; niveau?: NiveauId; categorieId?: string }) => void;
 }
 
@@ -107,6 +110,12 @@ export default function EquipeGroupe(p: Props) {
               >
                 Supprimer
               </button>
+            )}
+            {p.onPartager && (
+              <PartageBouton
+                onCreate={p.onPartager}
+                className="accent-gradient rounded px-1.5 py-0.5 text-[10px] font-medium text-white hover:opacity-90 disabled:opacity-50"
+              />
             )}
           </>
         ))}

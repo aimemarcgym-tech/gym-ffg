@@ -22,10 +22,12 @@ import {
   type Gymnaste,
   type Mouvement,
 } from "@/lib/data";
-import { anneeSaison, getNiveau, niveauxDuProgramme, niveauxFed, programmeDe } from "@/regulation/loader";
+import { anneeSaison, anneesCategorie, getCategorie, getNiveau, niveauxDuProgramme, niveauxFed, programmeDe } from "@/regulation/loader";
 import { btnDegrade, btnRenommer, champ, etiquette, titreSection, vide } from "@/lib/styles";
-import type { NiveauId } from "@/regulation/types";
+import type { Agres, NiveauId } from "@/regulation/types";
 import { ConfirmerEnLigne, RenommerEnLigne } from "@/components/EnLigne";
+import { createShare } from "@/lib/shares";
+import { AGRES } from "@/regulation/libelles";
 
 export default function Accueil() {
   const [renommage, setRenommage] = useState<string | null>(null);
@@ -53,6 +55,34 @@ export default function Accueil() {
     setMouvements(await getMouvements());
     setPret(true);
   }, []);
+
+  // Lien public d'une équipe : ordre de passage des 4 agrès, catégorie d'âge et mouvements de chaque gymnaste.
+  async function partagerEquipe(eq: Equipe, clubNom: string): Promise<string> {
+    const membres = eq.gymnasteIds.map((id) => gymnastes.find((g) => g.id === id)).filter((g): g is Gymnaste => !!g);
+    const niveau = getNiveau(eq.niveau);
+    const cat = getCategorie(eq.niveau, eq.categorieId);
+    const ordre = (agres: Agres) => {
+      const liste = eq.ordrePassage?.[agres] ?? [];
+      const rang = (g: Gymnaste) => (liste.indexOf(g.id) < 0 ? Infinity : liste.indexOf(g.id));
+      return [...membres].sort((a, b) => (rang(a) === rang(b) ? 0 : rang(a) < rang(b) ? -1 : 1)).map((g) => `${g.prenom} ${g.nom}`);
+    };
+    const id = await createShare("equipe", {
+      club: clubNom,
+      equipe: eq.nom,
+      niveau: niveau.label,
+      categorie: cat ? { label: cat.label, annees: anneesCategorie(cat) } : null,
+      ordres: AGRES.map((a) => ({ agres: a.id, label: a.label, gymnastes: ordre(a.id) })),
+      gymnastes: membres.map((g) => ({
+        prenom: g.prenom,
+        nom: g.nom,
+        mouvements: mouvements
+          .filter((m) => m.gymnasteId === g.id)
+          .sort((a, b) => AGRES.findIndex((x) => x.id === a.agres) - AGRES.findIndex((x) => x.id === b.agres))
+          .map((m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts, series: m.series })),
+      })),
+    });
+    return `/partage/equipe/?id=${id}`;
+  }
 
   useEffect(() => {
     // Lecture du stockage local : impossible côté serveur avec l'export statique.
@@ -266,6 +296,7 @@ export default function Accueil() {
                                 await charger();
                               }}
                               onSupprimerGymnaste={supprimerGymnaste}
+                              onPartager={() => partagerEquipe(eq, c.nom)}
                               onSupprimer={async () => {
                                 await deleteEquipe(eq.id);
                                 await charger();
