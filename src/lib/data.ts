@@ -35,6 +35,13 @@ export interface Mouvement {
   series?: Record<string, SerieType>;
 }
 
+// Réglages du matériel à transmettre à un entraîneur remplaçant (saisis librement, en texte).
+export interface ReglagesCompetition {
+  ecartBarres?: string;
+  tremplinCm?: string;
+  tremplinPas?: string;
+}
+
 export interface Equipe {
   id: string;
   clubId: string;
@@ -44,6 +51,7 @@ export interface Equipe {
   gymnasteIds: string[];
   // Ordre de passage par agrès : ids des gymnastes dans l'ordre. Propre à l'équipe, une gymnaste pouvant être dans plusieurs équipes.
   ordrePassage?: Partial<Record<Agres, string[]>>;
+  reglages?: ReglagesCompetition;
   // Ordre des musiques de l'équipe : ids des gymnastes dans l'ordre.
   ordreMusique?: string[];
 }
@@ -290,6 +298,14 @@ export async function deleteInstantane(id: string): Promise<void> {
 export async function updateGymnaste(id: string, patch: Partial<Pick<Gymnaste, "prenom" | "nom" | "anneeNaissance" | "clubId">>): Promise<void> {
   const s = lire();
   ecrire({ ...s, gymnastes: s.gymnastes.map((g) => (g.id === id ? { ...g, ...patch } : g)) });
+}
+
+export async function setReglagesEquipe(equipeId: string, patch: ReglagesCompetition): Promise<void> {
+  const s = lire();
+  ecrire({
+    ...s,
+    equipes: s.equipes.map((e) => (e.id === equipeId ? { ...e, reglages: { ...e.reglages, ...patch } } : e)),
+  });
 }
 
 export async function setOrdrePassage(equipeId: string, agres: Agres, gymnasteIds: string[]): Promise<void> {

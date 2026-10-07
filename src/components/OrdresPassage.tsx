@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DragHandle from "@/components/DragHandle";
 import PartageBouton from "@/components/PartageBouton";
+import ReglagesCompetition from "@/components/ReglagesCompetition";
 import { useDragReorder } from "@/hooks/useDragReorder";
 import {
   getClubs,
@@ -274,105 +275,110 @@ export default function OrdresPassage() {
         )}
       </div>
 
-      <div className="w-full min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
-        <h2 className="mb-3 text-sm font-semibold text-foreground">
-          Notes de départ
-        </h2>
-        {!selection ? (
-          <p className="text-sm text-muted">
-            Sélectionnez une équipe pour voir la note de départ de chaque
-            gymnaste à chaque agrès, avec les totaux.
-          </p>
-        ) : membres.length === 0 ? (
-          <p className="text-sm text-muted">
-            Cette équipe n’a pas encore de gymnaste.
-          </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-muted">
-                  <th className="px-2 py-1.5 text-left font-semibold">
-                    Gymnaste
-                  </th>
-                  {AGRES.map((a) => (
-                    <th
-                      key={a.id}
-                      className="px-2 py-1.5 text-right font-semibold"
-                    >
-                      {a.id === "BARRES" ? "Barres" : a.label}
+      <div className="space-y-8">
+        <div className="w-full min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
+          <h2 className="mb-3 text-sm font-semibold text-foreground">
+            Notes de départ
+          </h2>
+          {!selection ? (
+            <p className="text-sm text-muted">
+              Sélectionnez une équipe pour voir la note de départ de chaque
+              gymnaste à chaque agrès, avec les totaux.
+            </p>
+          ) : membres.length === 0 ? (
+            <p className="text-sm text-muted">
+              Cette équipe n’a pas encore de gymnaste.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-muted">
+                    <th className="px-2 py-1.5 text-left font-semibold">
+                      Gymnaste
                     </th>
+                    {AGRES.map((a) => (
+                      <th
+                        key={a.id}
+                        className="px-2 py-1.5 text-right font-semibold"
+                      >
+                        {a.id === "BARRES" ? "Barres" : a.label}
+                      </th>
+                    ))}
+                    <th className="px-2 py-1.5 text-right font-semibold">
+                      Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {membres.map((g) => (
+                    <tr key={g.id} className="border-t border-border-subtle">
+                      <td className="px-2 py-1.5 text-foreground">
+                        {g.prenom} {g.nom}
+                      </td>
+                      {AGRES.map((a) => {
+                        const n = noteDe(g, a.id);
+                        const compte = n !== null && retenues(a.id).has(g.id);
+                        return (
+                          <td
+                            key={a.id}
+                            className={`${cellule} ${compte ? "font-semibold text-foreground" : "text-muted"}`}
+                          >
+                            {n === null ? "—" : fmt(n)}
+                          </td>
+                        );
+                      })}
+                      <td
+                        className={`${cellule} font-semibold text-foreground`}
+                      >
+                        {fmt(totalGym(g))}
+                      </td>
+                    </tr>
                   ))}
-                  <th className="px-2 py-1.5 text-right font-semibold">
-                    Total
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {membres.map((g) => (
-                  <tr key={g.id} className="border-t border-border-subtle">
-                    <td className="px-2 py-1.5 text-foreground">
-                      {g.prenom} {g.nom}
-                    </td>
-                    {AGRES.map((a) => {
-                      const n = noteDe(g, a.id);
-                      const compte = n !== null && retenues(a.id).has(g.id);
-                      return (
-                        <td
-                          key={a.id}
-                          className={`${cellule} ${compte ? "font-semibold text-foreground" : "text-muted"}`}
-                        >
-                          {n === null ? "—" : fmt(n)}
-                        </td>
-                      );
-                    })}
-                    <td className={`${cellule} font-semibold text-foreground`}>
-                      {fmt(totalGym(g))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t border-border-strong font-semibold text-foreground">
+                    <td className="px-2 py-1.5">Total équipe</td>
+                    {AGRES.map((a) => (
+                      <td key={a.id} className={cellule}>
+                        {fmt(totalAgres(a.id))}
+                      </td>
+                    ))}
+                    <td className={`${cellule} accent-gradient-text`}>
+                      {fmt(totalEquipe)}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="border-t border-border-strong font-semibold text-foreground">
-                  <td className="px-2 py-1.5">Total équipe</td>
-                  {AGRES.map((a) => (
-                    <td key={a.id} className={cellule}>
-                      {fmt(totalAgres(a.id))}
+                  <tr className="text-muted">
+                    <td className="px-2 py-1.5">Total max</td>
+                    {AGRES.map((a) => (
+                      <td key={a.id} className={cellule}>
+                        {fmt(maxAgres(a.id))}
+                      </td>
+                    ))}
+                    <td className={cellule}>{fmt(maxEquipe)}</td>
+                  </tr>
+                  <tr className="text-foreground">
+                    <td className="px-2 py-1.5" colSpan={5}>
+                      Total / total max
                     </td>
-                  ))}
-                  <td className={`${cellule} accent-gradient-text`}>
-                    {fmt(totalEquipe)}
-                  </td>
-                </tr>
-                <tr className="text-muted">
-                  <td className="px-2 py-1.5">Total max</td>
-                  {AGRES.map((a) => (
-                    <td key={a.id} className={cellule}>
-                      {fmt(maxAgres(a.id))}
+                    <td className={`${cellule} font-semibold`}>
+                      {fmt(totalEquipe)} / {fmt(maxEquipe)}
                     </td>
-                  ))}
-                  <td className={cellule}>{fmt(maxEquipe)}</td>
-                </tr>
-                <tr className="text-foreground">
-                  <td className="px-2 py-1.5" colSpan={5}>
-                    Total / total max
-                  </td>
-                  <td className={`${cellule} font-semibold`}>
-                    {fmt(totalEquipe)} / {fmt(maxEquipe)}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-            <p className="mt-2 text-xs text-muted">
-              Note D du meilleur mouvement de chaque gymnaste à chaque agrès ; «
-              — » : aucun mouvement créé. Total équipe : les {nbCompte}{" "}
-              meilleures notes de chaque agrès (en gras), les autres sont en
-              gris. Total max : {nbCompte} × la note D maximale du niveau à
-              chaque agrès. Le Total max ne prend pas en compte le bonus
-              artistique.
-            </p>
-          </div>
-        )}
+                  </tr>
+                </tfoot>
+              </table>
+              <p className="mt-2 text-xs text-muted">
+                Note D du meilleur mouvement de chaque gymnaste à chaque agrès ;
+                « — » : aucun mouvement créé. Total équipe : les {nbCompte}{" "}
+                meilleures notes de chaque agrès (en gras), les autres sont en
+                gris. Total max : {nbCompte} × la note D maximale du niveau à
+                chaque agrès. Le Total max ne prend pas en compte le bonus
+                artistique.
+              </p>
+            </div>
+          )}
+        </div>
+        <ReglagesCompetition />
       </div>
     </main>
   );
