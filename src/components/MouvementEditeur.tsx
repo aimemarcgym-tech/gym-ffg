@@ -336,21 +336,25 @@ export default function MouvementEditeur() {
             gymnaste={gymnaste}
             niveauId={niveauId}
             sauts={sautsNiveau}
-            onBasculer={(id) =>
+            onBasculer={(id, vueSerie) =>
               setIds((l) => {
-                // Un élément doublable se choisit une fois, puis une seconde ; un troisième clic le retire.
-                if (!getElementFedA(id)?.doublable) return bascule(l, id);
+                const el = getElementFedA(id);
                 const n = l.filter((x) => x.split("#")[0] === id).length;
-                // Éléments en série : un clic ajoute deux cases séparées d'un coup ; un nouveau clic retire les deux.
-                if (
-                  getElementFedA(id)?.extraFamilles?.includes("ELEMENTS_SERIE")
-                )
-                  return n === 0
-                    ? [...l, id, `${id}#2`]
-                    : l.filter((x) => x.split("#")[0] !== id);
+                const retirerTout = () =>
+                  l.filter((x) => x.split("#")[0] !== id);
+                // Élément de la catégorie « Éléments en série » : en deux cases seulement quand on le choisit depuis cette catégorie ;
+                // depuis une autre catégorie (sauts gymniques…), il s'ajoute une seule fois.
+                if (el?.extraFamilles?.includes("ELEMENTS_SERIE")) {
+                  if (!vueSerie) return n === 0 ? [...l, id] : retirerTout();
+                  if (n === 0) return [...l, id, `${id}#2`];
+                  if (n === 1) return [...l, `${id}#2`];
+                  return retirerTout();
+                }
+                // Autre élément doublable (bascule BI aux barres) : une fois, puis une seconde ; un troisième clic le retire.
+                if (!el?.doublable) return bascule(l, id);
                 if (n === 0) return [...l, id];
                 if (n === 1) return [...l, `${id}#2`];
-                return l.filter((x) => x.split("#")[0] !== id);
+                return retirerTout();
               })
             }
             onBasculerSaut={basculerSaut}
