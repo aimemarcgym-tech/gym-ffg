@@ -45,14 +45,13 @@ export function getReference(niveau: NiveauId) {
 
 export const niveauxFed = niveauxJson.niveaux as NiveauFed[];
 export const niveauxDuProgramme = (p: Programme) => niveauxFed.filter((n) => n.programme === p);
-// Année de référence de l'âge : l'âge réel de l'année en cours (année de début de saison moins année de naissance), et non l'âge de fin de saison du tableau de la brochure.
-export const anneeSaison = niveauxJson.anneeSaison - 1;
+export const anneeSaison = niveauxJson.anneeSaison;
 
 export function getNiveau(id: NiveauId): NiveauFed {
   return niveauxFed.find((n) => n.id === id)!;
 }
 
-// L'âge se calcule sur l'année de naissance : 10 ans = né en 2016 en 2026.
+// L'âge se calcule sur l'année de naissance : 10 ans = né en 2017 pour la saison 2026-2027.
 export function ageEnSaison(anneeNaissance: number): number {
   return anneeSaison - anneeNaissance;
 }
@@ -89,7 +88,7 @@ export function categoriesPossibles(niveau: NiveauId, anneesNaissance: number[])
 
 // Tableau âge / année de naissance de la saison.
 export const anneesParAge: { age: number; annee: string }[] = Object.entries(categoriesAgeJson.anneesNaissance)
-  .map(([age]) => ({ age: Number(age), annee: String(anneeSaison - Number(age)) }))
+  .map(([age, annee]) => ({ age: Number(age), annee: String(annee) }))
   .sort((a, b) => a.age - b.age);
 
 export function getElementsFedA(agres: AgresAvecGrille): ElementFedA[] {
