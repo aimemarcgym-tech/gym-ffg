@@ -156,7 +156,7 @@ export default function PanneauMouvement({
                   (lectureSeule ||
                     ouvert === (e.cle ?? e.id) ||
                     !!series[e.cle ?? e.id]) && (
-                    <div className="-mr-2 -mb-2 flex items-center">
+                    <div className="-mr-3 -mb-3 flex items-center">
                       {SERIES.filter((t) => {
                         const choisie = series[e.cle ?? e.id];
                         return lectureSeule
@@ -182,7 +182,7 @@ export default function PanneauMouvement({
                             onClick={() =>
                               onSerie?.(e.cle ?? e.id, actif ? null : t.id)
                             }
-                            className="p-2.5"
+                            className="p-4"
                             title={
                               actif
                                 ? `Retirer de la ${t.label.toLowerCase()}`
