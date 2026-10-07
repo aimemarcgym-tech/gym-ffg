@@ -205,6 +205,7 @@ export default function MouvementEditeur() {
               sauts={sautsNiveau}
               onRetirer={(cle) => setIds((l) => l.filter((x) => x !== cle))}
               series={series}
+              sansSeries={agres === "BARRES"}
               onSerie={(cle, type) =>
                 setSeries((s) => {
                   const suite = { ...s };

@@ -21,6 +21,8 @@ interface Props {
   onSerie?: (cle: string, type: SerieType | null) => void;
   // Page de partage : même affichage, sans poignée ni boutons.
   lectureSeule?: boolean;
+  // Pas de pastilles de série (barres).
+  sansSeries?: boolean;
 }
 
 const SERIES: { id: SerieType; label: string; plein: string; lueur: string }[] =
@@ -57,6 +59,7 @@ export default function PanneauMouvement({
   onReordonner = () => undefined,
   lectureSeule,
   series = {},
+  sansSeries,
   onSerie,
 }: Props) {
   const ids = elements.map((e) => e.cle ?? e.id);
@@ -136,7 +139,7 @@ export default function PanneauMouvement({
                     </button>
                   </div>
                 )}
-                <div className="flex items-center gap-2">
+                {!sansSeries && <div className="flex items-center gap-2">
                   {SERIES.filter((t) => {
                     const choisie = series[e.cle ?? e.id];
                     return lectureSeule
@@ -151,7 +154,7 @@ export default function PanneauMouvement({
                       >
                         <span
                           style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
-                          className={`inline-block h-3 w-3 rounded-full ${t.plein}`}
+                          className={`inline-block h-2.5 w-2.5 rounded-full ${t.plein}`}
                         />
                         {t.label}
                       </span>
@@ -173,7 +176,7 @@ export default function PanneauMouvement({
                             ? `0 0 12px 3px ${t.lueur}`
                             : `0 0 5px 1px ${t.lueur}`,
                         }}
-                        className={`h-3 w-3 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
+                        className={`h-2.5 w-2.5 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
                       />
                     );
                   })}
@@ -185,7 +188,7 @@ export default function PanneauMouvement({
                       }
                     </span>
                   )}
-                </div>
+                </div>}
               </div>
             </div>
           </li>
@@ -216,7 +219,7 @@ export default function PanneauMouvement({
                           ? "Trampo-tremp"
                           : "1 tremplin"}{" "}
                     · {fmt(v)}
-                  </div>
+                  </div>}
                   <div className="text-sm font-medium text-foreground">
                     {saut.nom}
                   </div>

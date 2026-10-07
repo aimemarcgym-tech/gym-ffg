@@ -52,7 +52,7 @@ function Vue({ m }: { m: MouvementPartage }) {
         </span>
       </h2>
       <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
-        <PanneauMouvement elements={choisis} retenus={retenus} sauts={sauts} series={m.series} lectureSeule />
+        <PanneauMouvement elements={choisis} retenus={retenus} sauts={sauts} series={m.series} sansSeries={m.agres === "BARRES"} lectureSeule />
         <PanneauAnalyse
           agres={m.agres}
           niveau={niveau}
