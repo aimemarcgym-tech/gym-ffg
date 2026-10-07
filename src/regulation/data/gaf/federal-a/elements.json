@@ -489,7 +489,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "DEUX",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-018",
@@ -500,7 +503,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "DEUX",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-019",
@@ -511,7 +517,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "UN",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-020",
@@ -521,7 +530,10 @@
     "valeur": 0.8,
     "verified": true,
     "sourcePage": 12,
-    "appel": "DEUX"
+    "appel": "DEUX",
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-021",
@@ -532,7 +544,10 @@
     "verified": true,
     "sourcePage": 12,
     "appel": "UN",
-    "appelAConfirmer": true
+    "appelAConfirmer": true,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-022",
@@ -595,7 +610,10 @@
     "nom": "Roulade avant départ libre : pose des mains sur la poutre, arrivée libre",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-028",
@@ -604,7 +622,10 @@
     "nom": "Roue",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-029",
@@ -622,7 +643,10 @@
     "nom": "Souplesse avant",
     "valeur": 0.8,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-031",
@@ -676,7 +700,10 @@
     "nom": "Demi-pivot",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-037",
@@ -685,7 +712,10 @@
     "nom": "½ tour (180°) à la station groupée sur une jambe, jambe libre tendue",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 13
+    "sourcePage": 13,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-038",
