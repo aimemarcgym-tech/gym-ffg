@@ -396,7 +396,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-011",
@@ -410,7 +411,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-012",
@@ -424,7 +426,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-013",
@@ -438,7 +441,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-014",
@@ -452,7 +456,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-015",
@@ -466,7 +471,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-016",
@@ -478,7 +484,8 @@
     "sourcePage": 12,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-017",
@@ -492,7 +499,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-018",
@@ -506,7 +514,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-019",
@@ -520,7 +529,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-020",
@@ -533,7 +543,8 @@
     "appel": "DEUX",
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-021",
@@ -547,7 +558,8 @@
     "appelAConfirmer": true,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-022",
@@ -589,7 +601,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-026",
@@ -601,7 +614,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-027",
@@ -613,7 +627,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-028",
@@ -625,7 +640,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-029",
@@ -646,7 +662,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-031",
@@ -703,7 +720,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-037",
@@ -715,7 +733,8 @@
     "sourcePage": 13,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-038",
@@ -802,7 +821,8 @@
     "sourcePage": 14,
     "extraFamilles": [
       "ELEMENTS_SERIE"
-    ]
+    ],
+    "doublable": true
   },
   {
     "id": "FA-PO-047",
