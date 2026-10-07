@@ -787,7 +787,10 @@
     "nom": "Flic flac jambes décalées ou serrées (comptabilisé une seule fois)",
     "valeur": 1.0,
     "verified": true,
-    "sourcePage": 14
+    "sourcePage": 14,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-046",
@@ -796,7 +799,10 @@
     "nom": "Roulade arrière piquée à l’ATR",
     "valeur": 1.0,
     "verified": true,
-    "sourcePage": 14
+    "sourcePage": 14,
+    "extraFamilles": [
+      "ELEMENTS_SERIE"
+    ]
   },
   {
     "id": "FA-PO-047",
