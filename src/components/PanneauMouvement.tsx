@@ -25,24 +25,14 @@ interface Props {
 
 const SERIES: { id: SerieType; label: string; plein: string; bord: string }[] =
   [
-    {
-      id: "MIXTE",
-      label: "Série mixte",
-      plein: "bg-blue-500",
-      bord: "border-blue-500",
-    },
+    { id: "MIXTE", label: "Série mixte", plein: "bg-[#0a84ff]", bord: "" },
     {
       id: "GYMNIQUE",
       label: "Série gymnique",
-      plein: "bg-green-500",
-      bord: "border-green-500",
+      plein: "bg-[#14f23c]",
+      bord: "",
     },
-    {
-      id: "ACRO",
-      label: "Série acro",
-      plein: "bg-yellow-400",
-      bord: "border-yellow-400",
-    },
+    { id: "ACRO", label: "Série acro", plein: "bg-[#ffe500]", bord: "" },
   ];
 
 const boutonFleche =
@@ -136,7 +126,7 @@ export default function PanneauMouvement({
                               : `Pointer : ${t.label.toLowerCase()}`
                           }
                           aria-pressed={actif}
-                          className={`h-3.5 w-3.5 rounded-full border-2 transition ${actif ? `${t.plein} ${t.bord}` : `bg-transparent ${t.bord} opacity-60 hover:opacity-100`}`}
+                          className={`h-4 w-4 rounded-full transition ${t.plein} ${actif ? "scale-110 ring-2 ring-white" : "opacity-40 hover:opacity-100"}`}
                         />
                       );
                     })}
