@@ -28,17 +28,26 @@ import {
   sautsValides,
   type SautChoisi,
 } from "@/engine/federal-a";
-import { elementsChoisis, getElementFedA, getElementsNiveau, getNiveau, niveauxFed } from "@/regulation/loader";
+import {
+  elementsChoisis,
+  getElementFedA,
+  getElementsNiveau,
+  getNiveau,
+  niveauxFed,
+} from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
 import { btnContour, lienDegrade, panneau, titrePanneau } from "@/lib/styles";
 import type { Appareil, AgresAvecGrille, NiveauId } from "@/regulation/types";
 import { RenommerEnLigne } from "@/components/EnLigne";
 
-const bascule = <T,>(liste: T[], x: T) => (liste.includes(x) ? liste.filter((y) => y !== x) : [...liste, x]);
+const bascule = <T,>(liste: T[], x: T) =>
+  liste.includes(x) ? liste.filter((y) => y !== x) : [...liste, x];
 
 export default function MouvementEditeur() {
   const [renomme, setRenomme] = useState(false);
-  const [etat, setEtat] = useState<"chargement" | "ok" | "introuvable">("chargement");
+  const [etat, setEtat] = useState<"chargement" | "ok" | "introuvable">(
+    "chargement",
+  );
   const [mouvement, setMouvement] = useState<Mouvement | null>(null);
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [instantanes, setInstantanes] = useState<Instantane[]>([]);
@@ -75,7 +84,14 @@ export default function MouvementEditeur() {
 
   useEffect(() => {
     if (etat !== "ok" || !mouvement) return;
-    updateMouvement(mouvement.id, { nom, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts, series });
+    updateMouvement(mouvement.id, {
+      nom,
+      niveau: niveauId,
+      elementIds: ids,
+      bonifIds: bonifs,
+      sauts,
+      series,
+    });
   }, [etat, mouvement, nom, niveauId, ids, bonifs, sauts, series]);
 
   const agres = mouvement?.agres ?? "SOL";
@@ -83,17 +99,28 @@ export default function MouvementEditeur() {
   const ag = agres as AgresAvecGrille;
   const niveau = getNiveau(niveauId);
 
-  const tous = useMemo(() => (grille ? getElementsNiveau(ag, niveauId) : []), [grille, ag, niveauId]);
+  const tous = useMemo(
+    () => (grille ? getElementsNiveau(ag, niveauId) : []),
+    [grille, ag, niveauId],
+  );
   const choisis = useMemo(
     () => elementsChoisis(ids, ag, niveauId),
     [ids, ag, niveauId],
   );
-  const sautsNiveau = useMemo(() => sautsValides(niveauId, sauts), [niveauId, sauts]);
+  const sautsNiveau = useMemo(
+    () => sautsValides(niveauId, sauts),
+    [niveauId, sauts],
+  );
   const noteD = grille ? calculerNoteD(ag, ids, bonifs, niveauId) : null;
   const d = grille ? noteD!.total : calculerNoteDSaut(sautsNiveau);
   const etats = grille ? etatBonifications(ag, choisis, niveauId) : [];
 
-  if (etat === "chargement") return <main className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">Chargement…</main>;
+  if (etat === "chargement")
+    return (
+      <main className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">
+        Chargement…
+      </main>
+    );
   if (etat === "introuvable" || !mouvement) {
     return (
       <main className="mx-auto max-w-5xl px-6 py-10">
@@ -107,7 +134,11 @@ export default function MouvementEditeur() {
 
   function basculerSaut(idSaut: string, appareil: Appareil) {
     // Deux sauts identiques ou différents sont autorisés : un clic ajoute le saut (même s'il est déjà choisi), la croix du saut le retire.
-    setSauts((s) => (s.length >= 2 ? [s[1], { idSaut, appareil }] : [...s, { idSaut, appareil }]));
+    setSauts((s) =>
+      s.length >= 2
+        ? [s[1], { idSaut, appareil }]
+        : [...s, { idSaut, appareil }],
+    );
   }
 
   function flash(t: string) {
@@ -116,7 +147,13 @@ export default function MouvementEditeur() {
   }
 
   async function instantane() {
-    const i = await createInstantane({ mouvementId: mouvement!.id, noteD: d, elementIds: ids, bonifIds: bonifs, sauts });
+    const i = await createInstantane({
+      mouvementId: mouvement!.id,
+      noteD: d,
+      elementIds: ids,
+      bonifIds: bonifs,
+      sauts,
+    });
     setInstantanes((l) => [...l, i]);
     flash("Instantané enregistré");
   }
@@ -125,7 +162,17 @@ export default function MouvementEditeur() {
   async function creerLien() {
     const id = await createShare("mouvements", {
       gymnaste: gymnaste ? `${gymnaste.prenom} ${gymnaste.nom}` : "",
-      mouvements: [{ nom, agres, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts, series }],
+      mouvements: [
+        {
+          nom,
+          agres,
+          niveau: niveauId,
+          elementIds: ids,
+          bonifIds: bonifs,
+          sauts,
+          series,
+        },
+      ],
     });
     return `/partage/mouvements/?id=${id}`;
   }
@@ -185,13 +232,21 @@ export default function MouvementEditeur() {
       <main className="mx-auto max-w-[1600px] px-6 py-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-muted">
-            {grille ? `${choisis.length} élément(s)` : `${sautsNiveau.length} saut(s)`}
+            {grille
+              ? `${choisis.length} élément(s)`
+              : `${sautsNiveau.length} saut(s)`}
             <span className="ml-3 text-xs">· ✓ Enregistré automatiquement</span>
-            {message && <span className="ml-3 text-xs text-accent-solid">{message}</span>}
+            {message && (
+              <span className="ml-3 text-xs text-accent-solid">{message}</span>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <PartageBouton onCreate={creerLien} className={btnContour} />
-            <button onClick={instantane} className={btnContour} title="Enregistre une version datée dans l’historique de progression (la séquence, elle, est déjà sauvegardée automatiquement)">
+            <button
+              onClick={instantane}
+              className={btnContour}
+              title="Enregistre une version datée dans l’historique de progression (la séquence, elle, est déjà sauvegardée automatiquement)"
+            >
               Enregistrer un instantané (historique)
             </button>
           </div>
@@ -222,9 +277,16 @@ export default function MouvementEditeur() {
                 <h2 className={titrePanneau}>Historique</h2>
                 <ul className="space-y-1.5">
                   {[...instantanes].reverse().map((i) => (
-                    <li key={i.id} className="flex items-center gap-2 rounded border border-border-subtle bg-surface-alt px-3 py-2 text-xs">
+                    <li
+                      key={i.id}
+                      className="flex items-center gap-2 rounded border border-border-subtle bg-surface-alt px-3 py-2 text-xs"
+                    >
                       <span className="flex-1 text-muted">
-                        {new Date(i.date).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })} · D {fmt(i.noteD)}
+                        {new Date(i.date).toLocaleString("fr-FR", {
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        })}{" "}
+                        · D {fmt(i.noteD)}
                       </span>
                       <button
                         onClick={() => {
@@ -279,6 +341,13 @@ export default function MouvementEditeur() {
                 // Un élément doublable se choisit une fois, puis une seconde ; un troisième clic le retire.
                 if (!getElementFedA(id)?.doublable) return bascule(l, id);
                 const n = l.filter((x) => x.split("#")[0] === id).length;
+                // Éléments en série : un clic ajoute deux cases séparées d'un coup ; un nouveau clic retire les deux.
+                if (
+                  getElementFedA(id)?.extraFamilles?.includes("ELEMENTS_SERIE")
+                )
+                  return n === 0
+                    ? [...l, id, `${id}#2`]
+                    : l.filter((x) => x.split("#")[0] !== id);
                 if (n === 0) return [...l, id];
                 if (n === 1) return [...l, `${id}#2`];
                 return l.filter((x) => x.split("#")[0] !== id);
@@ -287,7 +356,11 @@ export default function MouvementEditeur() {
             onBasculerSaut={basculerSaut}
           />
 
-          <PanneauReference agres={agres} niveau={niveau.label} niveauId={niveauId} />
+          <PanneauReference
+            agres={agres}
+            niveau={niveau.label}
+            niveauId={niveauId}
+          />
         </div>
       </main>
     </div>
