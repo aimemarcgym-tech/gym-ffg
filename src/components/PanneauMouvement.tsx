@@ -171,7 +171,7 @@ export default function PanneauMouvement({
                           >
                             <span
                               style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
-                              className={`inline-block h-[7px] w-[7px] rounded-full ${t.plein}`}
+                              className={`inline-block h-[6px] w-[6px] rounded-full ${t.plein}`}
                             />
                             {t.label}
                           </span>
@@ -196,7 +196,7 @@ export default function PanneauMouvement({
                                   ? `0 0 12px 3px ${t.lueur}`
                                   : `0 0 5px 1px ${t.lueur}`,
                               }}
-                              className={`block h-[7px] w-[7px] rounded-full transition ${t.plein} ${actif ? "scale-125 ring-1 ring-white" : "opacity-50"}`}
+                              className={`block h-[6px] w-[6px] rounded-full transition ${t.plein} ${actif ? "scale-125 ring-1 ring-white" : "opacity-50"}`}
                             />
                           </button>
                         );
