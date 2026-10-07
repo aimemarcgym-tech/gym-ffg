@@ -137,9 +137,12 @@ export default function PanneauMouvement({
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  {SERIES.filter(
-                    (t) => !lectureSeule || series[e.cle ?? e.id] === t.id,
-                  ).map((t) => {
+                  {SERIES.filter((t) => {
+                    const choisie = series[e.cle ?? e.id];
+                    return lectureSeule
+                      ? choisie === t.id
+                      : !choisie || choisie === t.id;
+                  }).map((t) => {
                     const actif = series[e.cle ?? e.id] === t.id;
                     return lectureSeule ? (
                       <span
@@ -148,7 +151,7 @@ export default function PanneauMouvement({
                       >
                         <span
                           style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
-                          className={`inline-block h-3.5 w-3.5 rounded-full ${t.plein}`}
+                          className={`inline-block h-3 w-3 rounded-full ${t.plein}`}
                         />
                         {t.label}
                       </span>
@@ -170,7 +173,7 @@ export default function PanneauMouvement({
                             ? `0 0 12px 3px ${t.lueur}`
                             : `0 0 5px 1px ${t.lueur}`,
                         }}
-                        className={`h-4 w-4 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
+                        className={`h-3 w-3 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
                       />
                     );
                   })}
