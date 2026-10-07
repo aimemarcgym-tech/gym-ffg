@@ -110,7 +110,8 @@
     "nom": "Tour d’appui arrière jambes tendues et corps aligné",
     "valeur": 0.6,
     "verified": true,
-    "sourcePage": 8
+    "sourcePage": 8,
+    "doublable": true
   },
   {
     "id": "FA-BR-013",
