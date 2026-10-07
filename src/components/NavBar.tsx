@@ -111,7 +111,7 @@ export default function NavBar() {
   const synchro = useSyncExternalStore(abonnerEtat, etatSync, () => "inactif" as EtatSync);
 
   return (
-    <nav className="relative flex flex-nowrap items-center justify-start gap-2 overflow-x-auto overscroll-x-contain border-b border-border-subtle bg-surface px-4 py-3 [&>:first-child]:ml-auto [&>:last-child]:mr-auto">
+    <nav className="relative flex flex-nowrap items-center justify-start gap-2 overflow-x-auto overscroll-x-contain border-b border-border-subtle bg-surface px-4 py-3 md:[justify-content:safe_center]">
       {DEBUT.map((o) => (
         <Link key={o.href} href={o.href === "/" ? "/" : o.href + "/"} className={onglet(o.href === "/" ? estAccueil(pathname) : pathname.startsWith(o.href))}>
           {o.label}
