@@ -172,6 +172,18 @@ export default function MusiquesEquipe() {
       });
       if (fichiers.length === 0)
         return setMessage("Aucune musique à partager pour cette équipe.");
+      // 1) Les MP3 eux-mêmes via la fenêtre de partage du système (WhatsApp, e-mail…) : c'est le seul moyen d'envoyer des fichiers
+      //    directement depuis une page web. Les navigateurs acceptent les MP3 mais pas les ZIP.
+      const mp3 = fichiers.map(
+        (f) => new File([f.blob], f.nom, { type: f.blob.type || "audio/mpeg" }),
+      );
+      const direct = await partagerFichiers(mp3, {
+        title: `Musiques ${selection.equipe.nom}`,
+      });
+      if (direct === "shared")
+        return setMessage(`${fichiers.length} musique(s) partagée(s).`);
+      if (direct === "cancelled") return setMessage(null);
+      // 2) À défaut, un seul fichier ZIP (partagé si possible, sinon téléchargé).
       const nomZip = `${nomFichierSur(selection.equipe.nom)}_musiques.zip`;
       const zip = new File([await creerZip(fichiers)], nomZip, {
         type: "application/zip",
@@ -190,7 +202,7 @@ export default function MusiquesEquipe() {
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
       setMessage(
-        `${nomZip} téléchargé (${fichiers.length} musique(s)) : joignez-le à un e-mail ou à un message.`,
+        `${nomZip} téléchargé (${fichiers.length} musique(s)) : joignez-le à votre message (sur WhatsApp Web : trombone, puis Document). Ce navigateur ne permet pas l’envoi direct vers WhatsApp.`,
       );
     } catch {
       setMessage("Impossible de préparer le fichier.");
