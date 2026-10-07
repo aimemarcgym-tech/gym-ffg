@@ -170,7 +170,7 @@ export default function PanneauMouvement({
                             className="flex items-center gap-1 text-[11px] text-muted"
                           >
                             <span
-                              style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
+                              style={{ boxShadow: `0 0 6px 1px ${t.lueur}` }}
                               className={`inline-block h-[6px] w-[6px] rounded-full ${t.plein}`}
                             />
                             {t.label}
@@ -193,7 +193,7 @@ export default function PanneauMouvement({
                             <span
                               style={{
                                 boxShadow: actif
-                                  ? `0 0 12px 3px ${t.lueur}`
+                                  ? `0 0 8px 2px ${t.lueur}`
                                   : `0 0 5px 1px ${t.lueur}`,
                               }}
                               className={`block h-[6px] w-[6px] rounded-full transition ${t.plein} ${actif ? "scale-125 ring-1 ring-white" : "opacity-50"}`}
