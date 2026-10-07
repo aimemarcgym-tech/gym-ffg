@@ -106,7 +106,7 @@ export default function FicheGymnaste() {
     const liste = [...mouvements].sort((a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres));
     const id = await createShare("mouvements", {
       gymnaste: `${g.prenom} ${g.nom}`,
-      mouvements: liste.map((m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts })),
+      mouvements: liste.map((m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts, series: m.series })),
     });
     return `/partage/mouvements/?id=${id}`;
   }

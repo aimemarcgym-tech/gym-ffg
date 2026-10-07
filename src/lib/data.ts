@@ -20,6 +20,8 @@ export interface Gymnaste {
   competences?: Record<string, StatutCompetence>;
 }
 
+export type SerieType = "MIXTE" | "GYMNIQUE" | "ACRO";
+
 export interface Mouvement {
   id: string;
   gymnasteId: string;
@@ -29,6 +31,8 @@ export interface Mouvement {
   elementIds: string[];
   bonifIds: string[];
   sauts: { idSaut: string; appareil: Appareil }[];
+  // Éléments pointés comme faisant partie d'une série : clé de l'élément dans la liste → type de série.
+  series?: Record<string, SerieType>;
 }
 
 export interface Equipe {

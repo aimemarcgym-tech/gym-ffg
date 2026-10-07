@@ -16,6 +16,7 @@ import {
   type Gymnaste,
   type Instantane,
   type Mouvement,
+  type SerieType,
 } from "@/lib/data";
 import PartageBouton from "@/components/PartageBouton";
 import { createShare } from "@/lib/shares";
@@ -48,6 +49,7 @@ export default function MouvementEditeur() {
   const [ids, setIds] = useState<string[]>([]);
   const [bonifs, setBonifs] = useState<string[]>([]);
   const [sauts, setSauts] = useState<SautChoisi[]>([]);
+  const [series, setSeries] = useState<Record<string, SerieType>>({});
 
   useEffect(() => {
     // Le paramètre d'URL n'est lisible que côté client avec l'export statique.
@@ -64,6 +66,7 @@ export default function MouvementEditeur() {
       setIds(m.elementIds);
       setBonifs(m.bonifIds);
       setSauts(m.sauts);
+      setSeries(m.series ?? {});
       setGymnaste((await getGymnaste(m.gymnasteId)) ?? null);
       setInstantanes(await getInstantanes(m.id));
       setEtat("ok");
@@ -72,8 +75,8 @@ export default function MouvementEditeur() {
 
   useEffect(() => {
     if (etat !== "ok" || !mouvement) return;
-    updateMouvement(mouvement.id, { nom, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts });
-  }, [etat, mouvement, nom, niveauId, ids, bonifs, sauts]);
+    updateMouvement(mouvement.id, { nom, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts, series });
+  }, [etat, mouvement, nom, niveauId, ids, bonifs, sauts, series]);
 
   const agres = mouvement?.agres ?? "SOL";
   const grille = agres !== "SAUT";
@@ -122,7 +125,7 @@ export default function MouvementEditeur() {
   async function creerLien() {
     const id = await createShare("mouvements", {
       gymnaste: gymnaste ? `${gymnaste.prenom} ${gymnaste.nom}` : "",
-      mouvements: [{ nom, agres, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts }],
+      mouvements: [{ nom, agres, niveau: niveauId, elementIds: ids, bonifIds: bonifs, sauts, series }],
     });
     return `/partage/mouvements/?id=${id}`;
   }
@@ -201,6 +204,15 @@ export default function MouvementEditeur() {
               retenus={retenus}
               sauts={sautsNiveau}
               onRetirer={(cle) => setIds((l) => l.filter((x) => x !== cle))}
+              series={series}
+              onSerie={(cle, type) =>
+                setSeries((s) => {
+                  const suite = { ...s };
+                  if (type) suite[cle] = type;
+                  else delete suite[cle];
+                  return suite;
+                })
+              }
               onRetirerSaut={(s) => setSauts((l) => l.filter((x) => x !== s))}
               onReordonner={setIds}
             />

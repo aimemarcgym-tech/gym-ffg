@@ -7,6 +7,7 @@ import { calculerNoteD, calculerNoteDSaut, etatBonifications, noteDMax, sautsVal
 import { elementsChoisis, getNiveau } from "@/regulation/loader";
 import { AGRES } from "@/regulation/libelles";
 import { getShare } from "@/lib/shares";
+import type { SerieType } from "@/lib/data";
 import { onglets, ongletBouton } from "@/lib/styles";
 import type { Agres, AgresAvecGrille, NiveauId } from "@/regulation/types";
 
@@ -17,6 +18,7 @@ export interface MouvementPartage {
   elementIds: string[];
   bonifIds: string[];
   sauts: SautChoisi[];
+  series?: Record<string, SerieType>;
 }
 
 export interface DonneesMouvements {
@@ -50,7 +52,7 @@ function Vue({ m }: { m: MouvementPartage }) {
         </span>
       </h2>
       <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
-        <PanneauMouvement elements={choisis} retenus={retenus} sauts={sauts} lectureSeule />
+        <PanneauMouvement elements={choisis} retenus={retenus} sauts={sauts} series={m.series} lectureSeule />
         <PanneauAnalyse
           agres={m.agres}
           niveau={niveau}

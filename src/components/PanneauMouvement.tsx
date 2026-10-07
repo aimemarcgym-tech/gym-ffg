@@ -6,6 +6,7 @@ import { getSautFedA } from "@/regulation/loader";
 import { LIBELLE_FAMILLE, fmt, fmtValeur } from "@/regulation/libelles";
 import { panneau, titrePanneau } from "@/lib/styles";
 import type { SautChoisi } from "@/engine/federal-a";
+import type { SerieType } from "@/lib/data";
 import type { ElementFedA } from "@/regulation/types";
 
 interface Props {
@@ -15,9 +16,34 @@ interface Props {
   onRetirer?: (id: string) => void;
   onRetirerSaut?: (s: SautChoisi) => void;
   onReordonner?: (ids: string[]) => void;
+  // Pastilles de série : mixte (bleue), gymnique (verte), acro (jaune).
+  series?: Record<string, SerieType>;
+  onSerie?: (cle: string, type: SerieType | null) => void;
   // Page de partage : même affichage, sans poignée ni boutons.
   lectureSeule?: boolean;
 }
+
+const SERIES: { id: SerieType; label: string; plein: string; bord: string }[] =
+  [
+    {
+      id: "MIXTE",
+      label: "Série mixte",
+      plein: "bg-blue-500",
+      bord: "border-blue-500",
+    },
+    {
+      id: "GYMNIQUE",
+      label: "Série gymnique",
+      plein: "bg-green-500",
+      bord: "border-green-500",
+    },
+    {
+      id: "ACRO",
+      label: "Série acro",
+      plein: "bg-yellow-400",
+      bord: "border-yellow-400",
+    },
+  ];
 
 const boutonFleche =
   "rounded border border-border-strong px-1.5 text-xs text-foreground hover:border-accent-solid/60";
@@ -30,6 +56,8 @@ export default function PanneauMouvement({
   onRetirerSaut,
   onReordonner = () => undefined,
   lectureSeule,
+  series = {},
+  onSerie,
 }: Props) {
   const ids = elements.map((e) => e.cle ?? e.id);
   const dnd = useDragReorder(ids, onReordonner);
@@ -56,14 +84,16 @@ export default function PanneauMouvement({
       <ol className="space-y-2">
         {elements.map((e, i) => (
           <li
-            key={(e.cle ?? e.id)}
-            ref={dnd.registre((e.cle ?? e.id))}
-            style={dnd.style((e.cle ?? e.id))}
+            key={e.cle ?? e.id}
+            ref={dnd.registre(e.cle ?? e.id)}
+            style={dnd.style(e.cle ?? e.id)}
             className="rounded border border-border-subtle bg-surface-alt p-2 transition"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-start gap-2">
-                {!lectureSeule && <DragHandle {...dnd.poignee((e.cle ?? e.id))} />}
+                {!lectureSeule && (
+                  <DragHandle {...dnd.poignee(e.cle ?? e.id)} />
+                )}
                 <div>
                   <div className="text-xs text-muted">
                     {i + 1}. {LIBELLE_FAMILLE[e.famille] ?? e.famille} ·{" "}
@@ -78,6 +108,47 @@ export default function PanneauMouvement({
                   {!retenus.has(e.id) && (
                     <div className="mt-0.5 text-xs text-danger">non compté</div>
                   )}
+                  <div className="mt-1.5 flex items-center gap-1.5">
+                    {SERIES.filter(
+                      (t) => !lectureSeule || series[e.cle ?? e.id] === t.id,
+                    ).map((t) => {
+                      const actif = series[e.cle ?? e.id] === t.id;
+                      return lectureSeule ? (
+                        <span
+                          key={t.id}
+                          className="flex items-center gap-1 text-[11px] text-muted"
+                        >
+                          <span
+                            className={`inline-block h-3 w-3 rounded-full ${t.plein}`}
+                          />
+                          {t.label}
+                        </span>
+                      ) : (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() =>
+                            onSerie?.(e.cle ?? e.id, actif ? null : t.id)
+                          }
+                          title={
+                            actif
+                              ? `Retirer de la ${t.label.toLowerCase()}`
+                              : `Pointer : ${t.label.toLowerCase()}`
+                          }
+                          aria-pressed={actif}
+                          className={`h-3.5 w-3.5 rounded-full border-2 transition ${actif ? `${t.plein} ${t.bord}` : `bg-transparent ${t.bord} opacity-60 hover:opacity-100`}`}
+                        />
+                      );
+                    })}
+                    {!lectureSeule && series[e.cle ?? e.id] && (
+                      <span className="text-[11px] text-muted">
+                        {
+                          SERIES.find((t) => t.id === series[e.cle ?? e.id])
+                            ?.label
+                        }
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               {!lectureSeule && (
@@ -97,7 +168,7 @@ export default function PanneauMouvement({
                     ↓
                   </button>
                   <button
-                    onClick={() => onRetirer?.((e.cle ?? e.id))}
+                    onClick={() => onRetirer?.(e.cle ?? e.id)}
                     className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
                     aria-label="Retirer"
                   >
