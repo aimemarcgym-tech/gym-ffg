@@ -23,16 +23,26 @@ interface Props {
   lectureSeule?: boolean;
 }
 
-const SERIES: { id: SerieType; label: string; plein: string; bord: string }[] =
+const SERIES: { id: SerieType; label: string; plein: string; lueur: string }[] =
   [
-    { id: "MIXTE", label: "Série mixte", plein: "bg-[#0a84ff]", bord: "" },
+    {
+      id: "MIXTE",
+      label: "Série mixte",
+      plein: "bg-[#00b7ff]",
+      lueur: "#00b7ff",
+    },
     {
       id: "GYMNIQUE",
       label: "Série gymnique",
-      plein: "bg-[#14f23c]",
-      bord: "",
+      plein: "bg-[#2bff00]",
+      lueur: "#2bff00",
     },
-    { id: "ACRO", label: "Série acro", plein: "bg-[#ffe500]", bord: "" },
+    {
+      id: "ACRO",
+      label: "Série acro",
+      plein: "bg-[#fff200]",
+      lueur: "#fff200",
+    },
   ];
 
 const boutonFleche =
@@ -98,74 +108,82 @@ export default function PanneauMouvement({
                   {!retenus.has(e.id) && (
                     <div className="mt-0.5 text-xs text-danger">non compté</div>
                   )}
-                  <div className="mt-1.5 flex items-center gap-1.5">
-                    {SERIES.filter(
-                      (t) => !lectureSeule || series[e.cle ?? e.id] === t.id,
-                    ).map((t) => {
-                      const actif = series[e.cle ?? e.id] === t.id;
-                      return lectureSeule ? (
-                        <span
-                          key={t.id}
-                          className="flex items-center gap-1 text-[11px] text-muted"
-                        >
-                          <span
-                            className={`inline-block h-3 w-3 rounded-full ${t.plein}`}
-                          />
-                          {t.label}
-                        </span>
-                      ) : (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() =>
-                            onSerie?.(e.cle ?? e.id, actif ? null : t.id)
-                          }
-                          title={
-                            actif
-                              ? `Retirer de la ${t.label.toLowerCase()}`
-                              : `Pointer : ${t.label.toLowerCase()}`
-                          }
-                          aria-pressed={actif}
-                          className={`h-4 w-4 rounded-full transition ${t.plein} ${actif ? "scale-110 ring-2 ring-white" : "opacity-40 hover:opacity-100"}`}
-                        />
-                      );
-                    })}
-                    {!lectureSeule && series[e.cle ?? e.id] && (
-                      <span className="text-[11px] text-muted">
-                        {
-                          SERIES.find((t) => t.id === series[e.cle ?? e.id])
-                            ?.label
-                        }
-                      </span>
-                    )}
-                  </div>
                 </div>
               </div>
-              {!lectureSeule && (
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => deplacer(i, -1)}
-                    className={boutonFleche}
-                    aria-label="Monter"
-                  >
-                    ↑
-                  </button>
-                  <button
-                    onClick={() => deplacer(i, 1)}
-                    className={boutonFleche}
-                    aria-label="Descendre"
-                  >
-                    ↓
-                  </button>
-                  <button
-                    onClick={() => onRetirer?.(e.cle ?? e.id)}
-                    className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
-                    aria-label="Retirer"
-                  >
-                    ✕
-                  </button>
+              <div className="flex shrink-0 flex-col items-end gap-2.5">
+                {!lectureSeule && (
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => deplacer(i, -1)}
+                      className={boutonFleche}
+                      aria-label="Monter"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={() => deplacer(i, 1)}
+                      className={boutonFleche}
+                      aria-label="Descendre"
+                    >
+                      ↓
+                    </button>
+                    <button
+                      onClick={() => onRetirer?.(e.cle ?? e.id)}
+                      className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
+                      aria-label="Retirer"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  {SERIES.filter(
+                    (t) => !lectureSeule || series[e.cle ?? e.id] === t.id,
+                  ).map((t) => {
+                    const actif = series[e.cle ?? e.id] === t.id;
+                    return lectureSeule ? (
+                      <span
+                        key={t.id}
+                        className="flex items-center gap-1 text-[11px] text-muted"
+                      >
+                        <span
+                          style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
+                          className={`inline-block h-3.5 w-3.5 rounded-full ${t.plein}`}
+                        />
+                        {t.label}
+                      </span>
+                    ) : (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() =>
+                          onSerie?.(e.cle ?? e.id, actif ? null : t.id)
+                        }
+                        title={
+                          actif
+                            ? `Retirer de la ${t.label.toLowerCase()}`
+                            : `Pointer : ${t.label.toLowerCase()}`
+                        }
+                        aria-pressed={actif}
+                        style={{
+                          boxShadow: actif
+                            ? `0 0 12px 3px ${t.lueur}`
+                            : `0 0 5px 1px ${t.lueur}`,
+                        }}
+                        className={`h-4 w-4 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
+                      />
+                    );
+                  })}
+                  {!lectureSeule && series[e.cle ?? e.id] && (
+                    <span className="text-[11px] text-muted">
+                      {
+                        SERIES.find((t) => t.id === series[e.cle ?? e.id])
+                          ?.label
+                      }
+                    </span>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </li>
         ))}
