@@ -139,56 +139,58 @@ export default function PanneauMouvement({
                     </button>
                   </div>
                 )}
-                {!sansSeries && <div className="flex items-center gap-2">
-                  {SERIES.filter((t) => {
-                    const choisie = series[e.cle ?? e.id];
-                    return lectureSeule
-                      ? choisie === t.id
-                      : !choisie || choisie === t.id;
-                  }).map((t) => {
-                    const actif = series[e.cle ?? e.id] === t.id;
-                    return lectureSeule ? (
-                      <span
-                        key={t.id}
-                        className="flex items-center gap-1 text-[11px] text-muted"
-                      >
+                {!sansSeries && (
+                  <div className="flex items-center gap-2">
+                    {SERIES.filter((t) => {
+                      const choisie = series[e.cle ?? e.id];
+                      return lectureSeule
+                        ? choisie === t.id
+                        : !choisie || choisie === t.id;
+                    }).map((t) => {
+                      const actif = series[e.cle ?? e.id] === t.id;
+                      return lectureSeule ? (
                         <span
-                          style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
-                          className={`inline-block h-2.5 w-2.5 rounded-full ${t.plein}`}
+                          key={t.id}
+                          className="flex items-center gap-1 text-[11px] text-muted"
+                        >
+                          <span
+                            style={{ boxShadow: `0 0 8px 2px ${t.lueur}` }}
+                            className={`inline-block h-2.5 w-2.5 rounded-full ${t.plein}`}
+                          />
+                          {t.label}
+                        </span>
+                      ) : (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() =>
+                            onSerie?.(e.cle ?? e.id, actif ? null : t.id)
+                          }
+                          title={
+                            actif
+                              ? `Retirer de la ${t.label.toLowerCase()}`
+                              : `Pointer : ${t.label.toLowerCase()}`
+                          }
+                          aria-pressed={actif}
+                          style={{
+                            boxShadow: actif
+                              ? `0 0 12px 3px ${t.lueur}`
+                              : `0 0 5px 1px ${t.lueur}`,
+                          }}
+                          className={`h-2.5 w-2.5 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
                         />
-                        {t.label}
+                      );
+                    })}
+                    {!lectureSeule && series[e.cle ?? e.id] && (
+                      <span className="text-[11px] text-muted">
+                        {
+                          SERIES.find((t) => t.id === series[e.cle ?? e.id])
+                            ?.label
+                        }
                       </span>
-                    ) : (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() =>
-                          onSerie?.(e.cle ?? e.id, actif ? null : t.id)
-                        }
-                        title={
-                          actif
-                            ? `Retirer de la ${t.label.toLowerCase()}`
-                            : `Pointer : ${t.label.toLowerCase()}`
-                        }
-                        aria-pressed={actif}
-                        style={{
-                          boxShadow: actif
-                            ? `0 0 12px 3px ${t.lueur}`
-                            : `0 0 5px 1px ${t.lueur}`,
-                        }}
-                        className={`h-2.5 w-2.5 rounded-full transition ${t.plein} ${actif ? "scale-125 ring-2 ring-white" : "opacity-50 hover:opacity-100"}`}
-                      />
-                    );
-                  })}
-                  {!lectureSeule && series[e.cle ?? e.id] && (
-                    <span className="text-[11px] text-muted">
-                      {
-                        SERIES.find((t) => t.id === series[e.cle ?? e.id])
-                          ?.label
-                      }
-                    </span>
-                  )}
-                </div>}
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </li>
@@ -219,7 +221,7 @@ export default function PanneauMouvement({
                           ? "Trampo-tremp"
                           : "1 tremplin"}{" "}
                     · {fmt(v)}
-                  </div>}
+                  </div>
                   <div className="text-sm font-medium text-foreground">
                     {saut.nom}
                   </div>
