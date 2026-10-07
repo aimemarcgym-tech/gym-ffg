@@ -114,7 +114,7 @@ export default function PanneauMouvement({
                   <div className="text-xs text-muted">
                     {i + 1}. {LIBELLE_FAMILLE[e.famille] ?? e.famille} ·{" "}
                     {fmtValeur(e)}
-                    {e.bonifFamille && (
+                    {e.bonifFamille && !e.cle?.endsWith("#2") && (
                       <span className="ml-1 text-accent-solid">· bonif</span>
                     )}
                   </div>
