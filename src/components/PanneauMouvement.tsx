@@ -49,7 +49,7 @@ const SERIES: { id: SerieType; label: string; plein: string; lueur: string }[] =
   ];
 
 const boutonFleche =
-  "rounded border border-border-strong px-1.5 text-xs text-foreground hover:border-accent-solid/60";
+  "rounded border border-border-strong px-1 text-[10px] leading-4 text-foreground hover:border-accent-solid/60";
 
 export default function PanneauMouvement({
   elements,
@@ -128,7 +128,7 @@ export default function PanneauMouvement({
               </div>
               <div className="flex shrink-0 flex-col items-end justify-between gap-2.5 self-stretch">
                 {!lectureSeule && (
-                  <div className="flex gap-1">
+                  <div className="flex gap-0.5">
                     <button
                       onClick={() => deplacer(i, -1)}
                       className={boutonFleche}
@@ -145,7 +145,7 @@ export default function PanneauMouvement({
                     </button>
                     <button
                       onClick={() => onRetirer?.(e.cle ?? e.id)}
-                      className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
+                      className="rounded border border-danger/40 px-1 text-[10px] leading-4 text-danger hover:bg-danger/10"
                       aria-label="Retirer"
                     >
                       ✕
@@ -249,7 +249,7 @@ export default function PanneauMouvement({
                 {!lectureSeule && (
                   <button
                     onClick={() => onRetirerSaut?.(s)}
-                    className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
+                    className="rounded border border-danger/40 px-1 text-[10px] leading-4 text-danger hover:bg-danger/10"
                     aria-label="Retirer le saut"
                   >
                     ✕
