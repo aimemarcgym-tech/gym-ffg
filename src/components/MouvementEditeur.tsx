@@ -9,6 +9,7 @@ import PanneauReference from "@/components/PanneauReference";
 import {
   createInstantane,
   deleteInstantane,
+  renommerInstantane,
   getGymnaste,
   getInstantanes,
   getMouvement,
@@ -146,6 +147,10 @@ export default function MouvementEditeur() {
     setTimeout(() => setMessage(""), 2500);
   }
 
+  const [renommeInstantane, setRenommeInstantane] = useState<string | null>(
+    null,
+  );
+
   async function instantane() {
     const i = await createInstantane({
       mouvementId: mouvement!.id,
@@ -153,8 +158,11 @@ export default function MouvementEditeur() {
       elementIds: ids,
       bonifIds: bonifs,
       sauts,
+      series,
     });
     setInstantanes((l) => [...l, i]);
+    // Le champ de nom s'ouvre tout de suite pour nommer l'instantané (Échap ou champ vide : on garde la date seule).
+    setRenommeInstantane(i.id);
     flash("Instantané enregistré");
   }
 
@@ -281,18 +289,53 @@ export default function MouvementEditeur() {
                       key={i.id}
                       className="flex items-center gap-2 rounded border border-border-subtle bg-surface-alt px-3 py-2 text-xs"
                     >
-                      <span className="flex-1 text-muted">
-                        {new Date(i.date).toLocaleString("fr-FR", {
-                          dateStyle: "short",
-                          timeStyle: "short",
-                        })}{" "}
-                        · D {fmt(i.noteD)}
+                      <span className="min-w-0 flex-1">
+                        {renommeInstantane === i.id ? (
+                          <RenommerEnLigne
+                            valeur={i.nom ?? ""}
+                            className="!py-1 !text-xs"
+                            onAnnuler={() => setRenommeInstantane(null)}
+                            onOk={async (n) => {
+                              await renommerInstantane(i.id, n);
+                              setInstantanes((l) =>
+                                l.map((x) =>
+                                  x.id === i.id ? { ...x, nom: n } : x,
+                                ),
+                              );
+                              setRenommeInstantane(null);
+                            }}
+                          />
+                        ) : (
+                          <>
+                            {i.nom && (
+                              <span className="block truncate text-sm font-medium text-foreground">
+                                {i.nom}
+                              </span>
+                            )}
+                            <span className="block text-muted">
+                              {new Date(i.date).toLocaleString("fr-FR", {
+                                dateStyle: "short",
+                                timeStyle: "short",
+                              })}{" "}
+                              · D {fmt(i.noteD)}
+                            </span>
+                          </>
+                        )}
                       </span>
+                      {renommeInstantane !== i.id && (
+                        <button
+                          onClick={() => setRenommeInstantane(i.id)}
+                          className="text-muted underline hover:text-foreground"
+                        >
+                          {i.nom ? "Renommer" : "Nommer"}
+                        </button>
+                      )}
                       <button
                         onClick={() => {
                           setIds(i.elementIds);
                           setBonifs(i.bonifIds);
                           setSauts(i.sauts);
+                          if (i.series) setSeries(i.series);
                           flash("Instantané restauré");
                         }}
                         className="accent-gradient-text underline"

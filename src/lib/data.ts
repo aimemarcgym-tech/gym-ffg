@@ -64,6 +64,9 @@ export interface Instantane {
   elementIds: string[];
   bonifIds: string[];
   sauts: Mouvement["sauts"];
+  series?: Mouvement["series"];
+  // Nom donné à l'instantané (facultatif).
+  nom?: string;
 }
 
 export type TypeProgramme = "TECHNIQUE" | "PHYSIQUE";
@@ -288,6 +291,11 @@ export async function createInstantane(data: Omit<Instantane, "id" | "date">): P
   const i = { id: nouvelId(), date: new Date().toISOString(), ...data };
   ecrire({ ...s, instantanes: [...(s.instantanes ?? []), i] });
   return i;
+}
+
+export async function renommerInstantane(id: string, nom: string): Promise<void> {
+  const s = lire();
+  ecrire({ ...s, instantanes: (s.instantanes ?? []).map((i) => (i.id === id ? { ...i, nom } : i)) });
 }
 
 export async function deleteInstantane(id: string): Promise<void> {
