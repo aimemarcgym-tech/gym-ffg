@@ -156,7 +156,37 @@ export default function PanneauBibliotheque(p: Props) {
             </label>
           )}
           <div className="max-h-[32rem] space-y-3 overflow-y-auto pr-2">
-            {parAppel ? (
+            {famille === "ELEMENTS_SERIE" ? (
+              // Éléments en série : une coupure entre les acrobaties et les sauts / pivots.
+              [
+                {
+                  titre: "Acrobaties",
+                  liste: visibles.filter((e) => e.famille.startsWith("ACRO")),
+                },
+                {
+                  titre: "Sauts / pivots",
+                  liste: visibles.filter((e) => !e.famille.startsWith("ACRO")),
+                },
+              ]
+                .filter((g) => g.liste.length > 0)
+                .map((g, i) => (
+                  <div
+                    key={g.titre}
+                    className={
+                      i > 0
+                        ? "mt-4 border-t border-dashed border-border-strong pt-3"
+                        : ""
+                    }
+                  >
+                    <h3 className="mb-1.5 text-xs font-semibold text-foreground">
+                      {g.titre}
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {g.liste.map(carte)}
+                    </div>
+                  </div>
+                ))
+            ) : parAppel ? (
               ORDRE_APPEL.map((ap) => {
                 const groupe = visibles.filter((e) => e.appel === ap);
                 if (!groupe.length) return null;
