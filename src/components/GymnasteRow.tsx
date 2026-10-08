@@ -25,10 +25,10 @@ export default function GymnasteRow({ gymnaste: g, horsCategorie, nbMouvements, 
       <div className="flex-1">
         <div className={carteLigne}>
           <Link href={`/gymnaste/?g=${g.id}`} className="flex-1">
-            <div className="text-lg font-medium text-foreground">
+            <div className="font-medium text-foreground">
               {g.prenom} {g.nom}
             </div>
-            <div className="text-sm text-muted">
+            <div className="text-xs text-muted">
               {ageEnSaison(g.anneeNaissance)} ans · {nbMouvements} mouvement(s)
               {horsCategorie && <span className="ml-2 text-danger">hors catégorie</span>}
             </div>
