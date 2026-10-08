@@ -18,6 +18,8 @@ export interface Gymnaste {
   anneeNaissance: number;
   // Absent = non disponible. Clé = id d'élément ou de saut.
   competences?: Record<string, StatutCompetence>;
+  // Réglages du matériel propres à la gymnaste (écart des barres, position du tremplin).
+  reglages?: ReglagesCompetition;
 }
 
 export type SerieType = "MIXTE" | "GYMNIQUE" | "ACRO";
@@ -316,6 +318,14 @@ export async function deleteInstantane(id: string): Promise<void> {
 export async function updateGymnaste(id: string, patch: Partial<Pick<Gymnaste, "prenom" | "nom" | "anneeNaissance" | "clubId">>): Promise<void> {
   const s = lire();
   ecrire({ ...s, gymnastes: s.gymnastes.map((g) => (g.id === id ? { ...g, ...patch } : g)) });
+}
+
+export async function setReglagesGymnaste(gymnasteId: string, patch: ReglagesCompetition): Promise<void> {
+  const s = lire();
+  ecrire({
+    ...s,
+    gymnastes: s.gymnastes.map((g) => (g.id === gymnasteId ? { ...g, reglages: { ...g.reglages, ...patch } } : g)),
+  });
 }
 
 export async function setReglagesEquipe(equipeId: string, patch: ReglagesCompetition): Promise<void> {
