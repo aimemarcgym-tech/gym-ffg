@@ -74,18 +74,18 @@ export default function EquipeGroupe(p: Props) {
             />
           </>
         ) : (
-        <button onClick={() => setOuvert(!ouvert)} aria-expanded={ouvert} className="flex items-center gap-2.5 text-left text-sm font-medium text-muted hover:text-foreground">
+        <button onClick={() => setOuvert(!ouvert)} aria-expanded={ouvert} className="flex items-center gap-2.5 text-left text-base font-medium text-muted hover:text-foreground">
           <span className={`transition-transform ${ouvert ? "rotate-90" : ""}`}>▶</span>
           {!sans && <span className={`h-2.5 w-2.5 rounded-full ${couleur.dot}`} />}
           <span className={sans ? "" : couleur.text}>{equipe ? equipe.nom : "Sans équipe"}</span>
           <span
-            className={`rounded-full border px-2 py-0.5 text-xs ${sans ? "border-border-strong text-muted" : `${couleur.border} ${couleur.bg} ${couleur.text}`}`}
+            className={`rounded-full border px-2 py-0.5 text-sm ${sans ? "border-border-strong text-muted" : `${couleur.border} ${couleur.bg} ${couleur.text}`}`}
           >
             {membres.length}
           </span>
         </button>
         )}
-        {niveau && <span className="text-xs text-muted">{niveau.label}</span>}
+        {niveau && <span className="text-sm text-muted">{niveau.label}</span>}
         {equipe && !renomme && (confSuppr ? (
           <ConfirmerEnLigne
             question={`Supprimer ${equipe.nom} ?`}
@@ -99,14 +99,14 @@ export default function EquipeGroupe(p: Props) {
           <>
             <button
               onClick={() => setRenomme(true)}
-              className="rounded border border-border-strong px-1.5 py-0.5 text-[10px] text-muted hover:border-accent-solid/60 hover:text-foreground"
+              className="rounded border border-border-strong px-1.5 py-0.5 text-[11px] text-muted hover:border-accent-solid/60 hover:text-foreground"
             >
               Renommer
             </button>
             {p.onSupprimer && (
               <button
                 onClick={() => setConfSuppr(true)}
-                className="rounded border border-border-strong px-1.5 py-0.5 text-[10px] text-muted hover:border-accent-solid/60 hover:text-foreground"
+                className="rounded border border-border-strong px-1.5 py-0.5 text-[11px] text-muted hover:border-accent-solid/60 hover:text-foreground"
               >
                 Supprimer
               </button>
@@ -114,7 +114,7 @@ export default function EquipeGroupe(p: Props) {
             {p.onPartager && (
               <PartageBouton
                 onCreate={p.onPartager}
-                className="accent-gradient rounded px-1.5 py-0.5 text-[10px] font-medium text-white hover:opacity-90 disabled:opacity-50"
+                className="accent-gradient rounded px-1.5 py-0.5 text-[11px] font-medium text-white hover:opacity-90 disabled:opacity-50"
               />
             )}
           </>
