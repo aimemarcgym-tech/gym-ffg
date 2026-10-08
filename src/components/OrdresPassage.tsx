@@ -195,6 +195,44 @@ export default function OrdresPassage() {
   const maxAgres = (a: Agres) =>
     selection ? nbCompte * noteDMax(selection.equipe.niveau, a) : 0;
   const maxEquipe = AGRES.reduce((t, a) => t + maxAgres(a.id), 0);
+
+  // Les trois panneaux de la page d'un coup : ordres de passage des 4 agrès, notes de départ avec totaux, réglages du matériel.
+  async function partagerPanneaux() {
+    if (!selection) throw new Error("Équipe introuvable");
+    // Relecture des gymnastes : les réglages sont saisis dans un autre panneau, qui a pu les modifier depuis le chargement.
+    const frais = await getGymnastes();
+    const id = await createShare("panneaux", {
+      club: selection.club,
+      equipe: selection.equipe.nom,
+      niveau: getNiveau(selection.equipe.niveau).label,
+      ordres: AGRES.map((a) => ({
+        agres: a.id,
+        label: a.label,
+        gymnastes: pour(a.id),
+      })),
+      notes: {
+        nbCompte,
+        agres: AGRES.map((a) => a.label),
+        gymnastes: membres.map((g) => ({
+          nom: `${g.prenom} ${g.nom}`,
+          notes: AGRES.map((a) => noteDe(g, a.id)),
+          compte: AGRES.map(
+            (a) => noteDe(g, a.id) !== null && retenues(a.id).has(g.id),
+          ),
+          total: totalGym(g),
+        })),
+        totauxAgres: AGRES.map((a) => totalAgres(a.id)),
+        maxAgres: AGRES.map((a) => maxAgres(a.id)),
+        totalEquipe,
+        maxEquipe,
+      },
+      reglages: membres.map((g) => ({
+        nom: `${g.prenom} ${g.nom}`,
+        reglages: frais.find((x) => x.id === g.id)?.reglages ?? {},
+      })),
+    });
+    return `/partage/panneaux/?id=${id}`;
+  }
   const cellule = "px-2 py-1.5 text-right tabular-nums";
 
   return (
@@ -247,6 +285,11 @@ export default function OrdresPassage() {
                 ))}
               </div>
               <div className="flex flex-wrap items-center gap-2">
+                <PartageBouton
+                  onCreate={partagerPanneaux}
+                  label="Partager les 3 panneaux"
+                  className="accent-gradient rounded px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                />
                 <PartageBouton
                   onCreate={partagerAgres}
                   label={`Partager ${libelle(agres)}`}

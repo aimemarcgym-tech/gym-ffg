@@ -2,7 +2,7 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db, firebaseConfigure } from "@/lib/firebase";
 
-export type TypePartage = "ordrePassage" | "ordresPassage" | "programme" | "mouvements" | "categories" | "reglages" | "equipe";
+export type TypePartage = "ordrePassage" | "ordresPassage" | "programme" | "mouvements" | "categories" | "reglages" | "equipe" | "panneaux";
 
 export interface Partage<T = unknown> {
   type: TypePartage;
