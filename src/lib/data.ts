@@ -293,6 +293,11 @@ export async function createInstantane(data: Omit<Instantane, "id" | "date">): P
   return i;
 }
 
+export async function modifierInstantane(id: string, patch: Partial<Pick<Instantane, "noteD" | "elementIds" | "bonifIds" | "sauts" | "series">>): Promise<void> {
+  const s = lire();
+  ecrire({ ...s, instantanes: (s.instantanes ?? []).map((i) => (i.id === id ? { ...i, ...patch } : i)) });
+}
+
 export async function renommerInstantane(id: string, nom: string): Promise<void> {
   const s = lire();
   ecrire({ ...s, instantanes: (s.instantanes ?? []).map((i) => (i.id === id ? { ...i, nom } : i)) });

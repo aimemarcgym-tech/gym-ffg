@@ -10,6 +10,7 @@ import {
   createInstantane,
   deleteInstantane,
   renommerInstantane,
+  modifierInstantane,
   getGymnaste,
   getInstantanes,
   getMouvement,
@@ -53,7 +54,11 @@ export default function MouvementEditeur() {
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [instantanes, setInstantanes] = useState<Instantane[]>([]);
   const [message, setMessage] = useState("");
-  const [renommeInstantane, setRenommeInstantane] = useState<string | null>(null);
+  const [renommeInstantane, setRenommeInstantane] = useState<string | null>(
+    null,
+  );
+  // Instantané en cours de modification : restauré dans l'éditeur, puis mis à jour avec « Enregistrer les modifications ».
+  const [modifId, setModifId] = useState<string | null>(null);
 
   const [nom, setNom] = useState("");
   const [niveauId, setNiveauId] = useState<NiveauId>("A");
@@ -146,6 +151,26 @@ export default function MouvementEditeur() {
   function flash(t: string) {
     setMessage(t);
     setTimeout(() => setMessage(""), 2500);
+  }
+
+  async function majInstantane() {
+    if (!modifId) return;
+    await modifierInstantane(modifId, {
+      noteD: d,
+      elementIds: ids,
+      bonifIds: bonifs,
+      sauts,
+      series,
+    });
+    setInstantanes((l) =>
+      l.map((x) =>
+        x.id === modifId
+          ? { ...x, noteD: d, elementIds: ids, bonifIds: bonifs, sauts, series }
+          : x,
+      ),
+    );
+    setModifId(null);
+    flash("Instantané mis à jour");
   }
 
   async function instantane() {
@@ -247,6 +272,17 @@ export default function MouvementEditeur() {
           </div>
           <div className="flex items-center gap-2">
             <PartageBouton onCreate={creerLien} className={btnContour} />
+            {modifId && (
+              <button
+                onClick={majInstantane}
+                className="accent-gradient rounded px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+              >
+                Enregistrer les modifications de «{" "}
+                {instantanes.find((x) => x.id === modifId)?.nom ||
+                  "l’instantané"}{" "}
+                »
+              </button>
+            )}
             <button
               onClick={instantane}
               className={btnContour}
@@ -284,7 +320,7 @@ export default function MouvementEditeur() {
                   {[...instantanes].reverse().map((i) => (
                     <li
                       key={i.id}
-                      className="flex items-center gap-2 rounded border border-border-subtle bg-surface-alt px-3 py-2 text-xs"
+                      className={`flex items-center gap-2 rounded border bg-surface-alt px-3 py-2 text-xs ${modifId === i.id ? "border-accent-solid" : "border-border-subtle"}`}
                     >
                       <span className="min-w-0 flex-1">
                         {renommeInstantane === i.id ? (
@@ -332,7 +368,23 @@ export default function MouvementEditeur() {
                           setIds(i.elementIds);
                           setBonifs(i.bonifIds);
                           setSauts(i.sauts);
+                          setSeries(i.series ?? {});
+                          setModifId(i.id);
+                          flash(
+                            "Modifiez le mouvement puis cliquez sur « Enregistrer les modifications »",
+                          );
+                        }}
+                        className="text-muted underline hover:text-foreground"
+                      >
+                        Modifier
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIds(i.elementIds);
+                          setBonifs(i.bonifIds);
+                          setSauts(i.sauts);
                           if (i.series) setSeries(i.series);
+                          setModifId(null);
                           flash("Instantané restauré");
                         }}
                         className="accent-gradient-text underline"
@@ -342,6 +394,7 @@ export default function MouvementEditeur() {
                       <button
                         onClick={async () => {
                           await deleteInstantane(i.id);
+                          if (modifId === i.id) setModifId(null);
                           setInstantanes((l) => l.filter((x) => x.id !== i.id));
                         }}
                         aria-label="Supprimer l’instantané"
