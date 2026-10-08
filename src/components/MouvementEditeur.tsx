@@ -53,6 +53,7 @@ export default function MouvementEditeur() {
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [instantanes, setInstantanes] = useState<Instantane[]>([]);
   const [message, setMessage] = useState("");
+  const [renommeInstantane, setRenommeInstantane] = useState<string | null>(null);
 
   const [nom, setNom] = useState("");
   const [niveauId, setNiveauId] = useState<NiveauId>("A");
@@ -146,10 +147,6 @@ export default function MouvementEditeur() {
     setMessage(t);
     setTimeout(() => setMessage(""), 2500);
   }
-
-  const [renommeInstantane, setRenommeInstantane] = useState<string | null>(
-    null,
-  );
 
   async function instantane() {
     const i = await createInstantane({
