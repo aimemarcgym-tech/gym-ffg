@@ -185,6 +185,16 @@ export default function PanneauAnalyse(p: Props) {
         )}
       </div>
 
+      {p.agres === "POUTRE" && (
+        <div className="mt-4 rounded border border-border-subtle bg-surface-alt p-3">
+          <h3 className="mb-1.5 text-sm font-semibold text-foreground">Partie artistique</h3>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
+            <li>Une chorégraphie sur pointes</li>
+            <li>Une chorégraphie avec les jambes</li>
+            <li>Placements des bras dans les séries gymniques</li>
+          </ul>
+        </div>
+      )}
     </section>
   );
 }
