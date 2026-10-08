@@ -191,7 +191,7 @@ export default function PanneauAnalyse(p: Props) {
           <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
             <li>Une chorégraphie sur pointes</li>
             <li>Une chorégraphie avec les jambes</li>
-            <li>Placements des bras dans les séries gymniques</li>
+            <li>Placement des bras dans les séries gymniques</li>
           </ul>
         </div>
       )}
