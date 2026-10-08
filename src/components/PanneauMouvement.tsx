@@ -167,7 +167,7 @@ export default function PanneauMouvement({
                         return lectureSeule ? (
                           <span
                             key={t.id}
-                            className="flex items-center gap-1 text-[11px] text-muted"
+                            className="mr-[18px] flex items-center gap-1 text-[11px] text-muted"
                           >
                             <span
                               style={{ boxShadow: `0 0 3px 0 ${t.lueur}` }}
@@ -202,7 +202,7 @@ export default function PanneauMouvement({
                         );
                       })}
                       {!lectureSeule && series[e.cle ?? e.id] && (
-                        <span className="text-[11px] text-muted">
+                        <span className="mr-[18px] text-[11px] text-muted">
                           {
                             SERIES.find((t) => t.id === series[e.cle ?? e.id])
                               ?.label
