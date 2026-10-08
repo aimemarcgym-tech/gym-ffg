@@ -26,6 +26,18 @@ export interface MouvementPartage {
   bonifIds: string[];
   sauts: SautChoisi[];
   series?: Record<string, SerieType>;
+  // Versions enregistrées du mouvement, consultables en lecture seule.
+  instantanes?: InstantanePartage[];
+}
+
+export interface InstantanePartage {
+  nom?: string;
+  date: string;
+  noteD: number;
+  elementIds: string[];
+  bonifIds: string[];
+  sauts: SautChoisi[];
+  series?: Record<string, SerieType>;
 }
 
 export interface DonneesMouvements {
@@ -41,7 +53,7 @@ const LIBELLE_LONG: Record<Agres, string> = {
 };
 
 // Même présentation que dans le constructeur : « Mon mouvement » et « Analyse », en lecture seule.
-function Vue({ m }: { m: MouvementPartage }) {
+function Panneaux({ m }: { m: MouvementPartage }) {
   const grille = m.agres !== "SAUT";
   const ag = m.agres as AgresAvecGrille;
   const niveau = getNiveau(m.niveau);
@@ -87,6 +99,58 @@ function Vue({ m }: { m: MouvementPartage }) {
         />
       </div>
     </section>
+  );
+}
+
+// Un mouvement : sa version actuelle et, s'il en a, ses instantanés, à consulter sans pouvoir les modifier.
+function Vue({ m }: { m: MouvementPartage }) {
+  const [version, setVersion] = useState<number | null>(null);
+  const instantanes = m.instantanes ?? [];
+  const i = version === null ? null : instantanes[version];
+  const libelle = (x: InstantanePartage) =>
+    x.nom ||
+    new Date(x.date).toLocaleString("fr-FR", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
+  const aff: MouvementPartage = i
+    ? {
+        ...m,
+        nom: `${m.nom} — ${libelle(i)}`,
+        elementIds: i.elementIds,
+        bonifIds: i.bonifIds,
+        sauts: i.sauts,
+        series: i.series,
+      }
+    : m;
+  return (
+    <div className="space-y-4">
+      {instantanes.length > 0 && (
+        <div>
+          <p className="mb-1.5 text-xs font-semibold tracking-wide text-muted uppercase">
+            Mouvements créés
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setVersion(null)}
+              className={`rounded border px-3 py-1.5 text-xs font-medium ${version === null ? "border-accent-solid text-white" : "border-border-strong text-muted hover:text-foreground"}`}
+            >
+              Version actuelle
+            </button>
+            {instantanes.map((x, k) => (
+              <button
+                key={k}
+                onClick={() => setVersion(k)}
+                className={`rounded border px-3 py-1.5 text-xs font-medium ${version === k ? "border-accent-solid text-white" : "border-border-strong text-muted hover:text-foreground"}`}
+              >
+                {libelle(x)} · D {x.noteD.toFixed(2).replace(".", ",")}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      <Panneaux key={version ?? -1} m={aff} />
+    </div>
   );
 }
 

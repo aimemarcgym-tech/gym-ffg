@@ -11,6 +11,7 @@ import {
   deleteInstantane,
   renommerInstantane,
   modifierInstantane,
+  instantanesPourPartage,
   getGymnaste,
   getInstantanes,
   getMouvement,
@@ -201,6 +202,7 @@ export default function MouvementEditeur() {
           bonifIds: bonifs,
           sauts,
           series,
+          instantanes: await instantanesPourPartage(mouvement!.id),
         },
       ],
     });

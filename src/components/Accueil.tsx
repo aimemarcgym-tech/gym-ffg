@@ -14,6 +14,7 @@ import {
   getEquipes,
   getGymnastes,
   getMouvements,
+  instantanesPourPartage,
   renameClub,
   setEquipeMembres,
   updateEquipe,
@@ -98,26 +99,31 @@ export default function Accueil() {
         label: a.label,
         gymnastes: ordre(a.id),
       })),
-      gymnastes: membres.map((g) => ({
-        prenom: g.prenom,
-        nom: g.nom,
-        mouvements: mouvements
-          .filter((m) => m.gymnasteId === g.id)
-          .sort(
-            (a, b) =>
-              AGRES.findIndex((x) => x.id === a.agres) -
-              AGRES.findIndex((x) => x.id === b.agres),
-          )
-          .map((m) => ({
-            nom: m.nom,
-            agres: m.agres,
-            niveau: m.niveau,
-            elementIds: m.elementIds,
-            bonifIds: m.bonifIds,
-            sauts: m.sauts,
-            series: m.series,
-          })),
-      })),
+      gymnastes: await Promise.all(
+        membres.map(async (g) => ({
+          prenom: g.prenom,
+          nom: g.nom,
+          mouvements: await Promise.all(
+            mouvements
+              .filter((m) => m.gymnasteId === g.id)
+              .sort(
+                (a, b) =>
+                  AGRES.findIndex((x) => x.id === a.agres) -
+                  AGRES.findIndex((x) => x.id === b.agres),
+              )
+              .map(async (m) => ({
+                nom: m.nom,
+                agres: m.agres,
+                niveau: m.niveau,
+                elementIds: m.elementIds,
+                bonifIds: m.bonifIds,
+                sauts: m.sauts,
+                series: m.series,
+                instantanes: await instantanesPourPartage(m.id),
+              })),
+          ),
+        })),
+      ),
     });
     return `/partage/equipe/?id=${id}`;
   }

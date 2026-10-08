@@ -15,6 +15,7 @@ import {
   getEquipes,
   getGymnaste,
   getMouvements,
+  instantanesPourPartage,
   setCompetence,
   setEquipeMembres,
   updateGymnaste,
@@ -106,7 +107,7 @@ export default function FicheGymnaste() {
     const liste = [...mouvements].sort((a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres));
     const id = await createShare("mouvements", {
       gymnaste: `${g.prenom} ${g.nom}`,
-      mouvements: liste.map((m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts, series: m.series })),
+      mouvements: await Promise.all(liste.map(async (m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts, series: m.series, instantanes: await instantanesPourPartage(m.id) }))),
     });
     return `/partage/mouvements/?id=${id}`;
   }

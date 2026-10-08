@@ -293,6 +293,11 @@ export async function createInstantane(data: Omit<Instantane, "id" | "date">): P
   return i;
 }
 
+// Instantanés d'un mouvement sous la forme embarquée dans un lien de partage (consultation seule).
+export async function instantanesPourPartage(mouvementId: string) {
+  return (await getInstantanes(mouvementId)).map((i) => ({ nom: i.nom, date: i.date, noteD: i.noteD, elementIds: i.elementIds, bonifIds: i.bonifIds, sauts: i.sauts, series: i.series }));
+}
+
 export async function modifierInstantane(id: string, patch: Partial<Pick<Instantane, "noteD" | "elementIds" | "bonifIds" | "sauts" | "series">>): Promise<void> {
   const s = lire();
   ecrire({ ...s, instantanes: (s.instantanes ?? []).map((i) => (i.id === id ? { ...i, ...patch } : i)) });
