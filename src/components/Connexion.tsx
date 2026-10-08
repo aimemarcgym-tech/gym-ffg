@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { firebaseConfigure } from "@/lib/firebase";
+import { onglets, ongletBouton } from "@/lib/styles";
 
 const champ = "w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none";
 
@@ -98,7 +99,27 @@ export default function Connexion() {
           </p>
         )}
 
-        <form onSubmit={envoyer} className="space-y-3 rounded-lg border border-border-subtle bg-surface p-4 shadow-sm">
+        <div className={`${onglets} mb-4`} role="tablist">
+          {(["connexion", "inscription"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              role="tab"
+              aria-selected={mode === m}
+              onClick={() => {
+                setErreur(null);
+                setInfo(null);
+                setMode(m);
+              }}
+              className={ongletBouton(mode === m, "flex-1 px-3 py-2.5")}
+            >
+              {m === "connexion" ? "Se connecter" : "Créer un compte"}
+            </button>
+          ))}
+        </div>
+
+        <form onSubmit={envoyer} className={`space-y-3 rounded-lg border bg-surface p-4 shadow-sm ${mode === "connexion" ? "border-border-subtle" : "border-accent-solid/60"}`}>
+          <h2 className="text-base font-semibold text-foreground">{mode === "connexion" ? "Connexion" : "Création de compte"}</h2>
           <div>
             <label className="mb-1 block text-xs font-medium text-muted">Email</label>
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" className={champ} />
@@ -137,16 +158,6 @@ export default function Connexion() {
           </button>
         </form>
 
-        <button
-          onClick={() => {
-            setErreur(null);
-            setInfo(null);
-            setMode((m) => (m === "connexion" ? "inscription" : "connexion"));
-          }}
-          className="accent-gradient-text mt-4 text-center text-sm font-medium"
-        >
-          {mode === "connexion" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
-        </button>
       </main>
     </div>
   );
