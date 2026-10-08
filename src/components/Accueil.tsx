@@ -408,7 +408,7 @@ export default function Accueil() {
                         .map((eq) => (
                           <div
                             key={eq.id}
-                            className="border-b border-border-strong pb-4 last:border-b-0 last:pb-0"
+                            className="border-b border-dashed border-border-strong pb-4 last:border-b-0 last:pb-0"
                           >
                             <EquipeGroupe
                               key={eq.id}
