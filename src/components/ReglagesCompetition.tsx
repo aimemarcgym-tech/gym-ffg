@@ -152,14 +152,14 @@ export default function ReglagesCompetition() {
 
       {selection && membres.length > 0 && (
         <div className="mt-4 space-y-3">
-          <div className="rounded-lg border border-accent-solid/50 bg-surface-alt/40 p-3">
-            <div className="mb-2 text-sm font-medium text-foreground">
+          <div className="rounded-lg border border-accent-from/60 bg-accent-from/15 p-4">
+            <div className="mb-3 text-base font-medium text-foreground">
               Toute l’équipe
             </div>
             <div className="grid grid-cols-3 gap-2">
               {CHAMPS.map((c) => (
                 <label key={c.cle} className="block">
-                  <span className="mb-1 block text-[11px] font-medium text-muted">
+                  <span className="mb-1 block text-xs font-medium text-muted">
                     {c.label} ({c.unite})
                   </span>
                   <input
@@ -169,7 +169,7 @@ export default function ReglagesCompetition() {
                     onChange={(e) => modifierEquipe(c.cle, e.target.value)}
                     placeholder={c.indice}
                     aria-label={`${c.label} en ${c.unite} — toute l’équipe`}
-                    className={`${champ} !px-2 !py-1.5`}
+                    className={`${champ} !py-2.5`}
                   />
                 </label>
               ))}
