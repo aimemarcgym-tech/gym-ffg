@@ -77,11 +77,41 @@ export default function ReglagesCompetition() {
     await setReglagesGymnaste(g.id, { [cle]: valeur });
   }
 
+  // Valeur commune à toute l'équipe pour un champ : renseignée seulement si toutes les gymnastes ont la même.
+  const commun = (cle: keyof ReglagesCompetition): string | null => {
+    const valeurs = membres.map((g) => g.reglages?.[cle] ?? "");
+    return valeurs.every((v) => v === valeurs[0]) ? valeurs[0] : null;
+  };
+
+  // Une même valeur pour toute l'équipe : elle est appliquée à chaque gymnaste (qui reste modifiable individuellement ensuite).
+  async function modifierTous(cle: keyof ReglagesCompetition, valeur: string) {
+    const ids = new Set(membres.map((g) => g.id));
+    setGymnastes((l) =>
+      l.map((x) =>
+        ids.has(x.id)
+          ? { ...x, reglages: { ...x.reglages, [cle]: valeur } }
+          : x,
+      ),
+    );
+    for (const g of membres) await setReglagesGymnaste(g.id, { [cle]: valeur });
+  }
+
   async function partager() {
     if (!selection) throw new Error("Équipe introuvable");
+    // Mêmes réglages pour toute l'équipe : une seule carte dans le lien ; sinon une carte par gymnaste.
+    const identiques = CHAMPS.every((c) => commun(c.cle) !== null);
     const id = await createShare("reglages", {
       club: selection.club,
       equipe: selection.equipe.nom,
+      ...(identiques
+        ? {
+            equipeEntiere: {
+              ecartBarres: commun("ecartBarres") ?? "",
+              tremplinCm: commun("tremplinCm") ?? "",
+              tremplinPas: commun("tremplinPas") ?? "",
+            },
+          }
+        : {}),
       gymnastes: membres.map((g) => ({
         nom: `${g.prenom} ${g.nom}`,
         reglages: g.reglages ?? {},
@@ -126,6 +156,35 @@ export default function ReglagesCompetition() {
 
       {selection && membres.length > 0 && (
         <div className="mt-4 space-y-3">
+          <div className="rounded-lg border border-accent-solid/50 bg-surface-alt/40 p-3">
+            <div className="mb-2 text-sm font-medium text-foreground">
+              Toute l’équipe
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {CHAMPS.map((c) => (
+                <label key={c.cle} className="block">
+                  <span className="mb-1 block text-[11px] font-medium text-muted">
+                    {c.label} ({c.unite})
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={commun(c.cle) ?? ""}
+                    onChange={(e) => modifierTous(c.cle, e.target.value)}
+                    placeholder={
+                      commun(c.cle) === null ? "différent" : c.indice
+                    }
+                    aria-label={`${c.label} en ${c.unite} — toute l’équipe`}
+                    className={`${champ} !px-2 !py-1.5`}
+                  />
+                </label>
+              ))}
+            </div>
+            <p className="mt-2 text-[11px] text-muted">
+              Une valeur saisie ici est appliquée à toutes les gymnastes ; tu
+              peux ensuite l’ajuster pour l’une d’elles.
+            </p>
+          </div>
           {membres.map((g) => (
             <div
               key={g.id}
