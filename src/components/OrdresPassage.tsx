@@ -201,6 +201,9 @@ export default function OrdresPassage() {
     if (!selection) throw new Error("Équipe introuvable");
     // Relecture des gymnastes : les réglages sont saisis dans un autre panneau, qui a pu les modifier depuis le chargement.
     const frais = await getGymnastes();
+    const equipeFraiche = (await getEquipes()).find(
+      (e) => e.id === selection.equipe.id,
+    );
     const id = await createShare("panneaux", {
       club: selection.club,
       equipe: selection.equipe.nom,
@@ -226,10 +229,18 @@ export default function OrdresPassage() {
         totalEquipe,
         maxEquipe,
       },
-      reglages: membres.map((g) => ({
-        nom: `${g.prenom} ${g.nom}`,
-        reglages: frais.find((x) => x.id === g.id)?.reglages ?? {},
-      })),
+      // Carte « Toute l'équipe » si elle est remplie, puis seulement les gymnastes dont au moins une case est remplie.
+      reglagesEquipe: Object.values(equipeFraiche?.reglages ?? {}).some(
+        (v) => v,
+      )
+        ? equipeFraiche?.reglages
+        : undefined,
+      reglages: membres
+        .map((g) => ({
+          nom: `${g.prenom} ${g.nom}`,
+          reglages: frais.find((x) => x.id === g.id)?.reglages ?? {},
+        }))
+        .filter((g) => Object.values(g.reglages).some((v) => v)),
     });
     return `/partage/panneaux/?id=${id}`;
   }

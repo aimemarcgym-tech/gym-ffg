@@ -96,15 +96,13 @@ export default function PartageReglages() {
         </div>
       </header>
       <main className="mx-auto max-w-2xl space-y-3 px-6 py-8">
-        {d.equipeEntiere ? (
+        {d.equipeEntiere && (
           <Carte titre="Toute l’équipe" r={d.equipeEntiere} />
-        ) : d.gymnastes ? (
-          d.gymnastes.map((g, i) => (
-            <Carte key={i} titre={g.nom} r={g.reglages} />
-          ))
-        ) : (
-          <Carte r={d.reglages ?? {}} />
         )}
+        {d.gymnastes?.map((g, i) => (
+          <Carte key={i} titre={g.nom} r={g.reglages} />
+        ))}
+        {!d.equipeEntiere && !d.gymnastes && <Carte r={d.reglages ?? {}} />}
         <p className="mt-6 text-center text-xs text-muted">
           Lien de partage en lecture seule, généré depuis l’application Gestion
           Compétitions &amp; Entraînements.

@@ -6,6 +6,7 @@ import {
   getClubs,
   getEquipes,
   getGymnastes,
+  setReglagesEquipe,
   setReglagesGymnaste,
   type Club,
   type Equipe,
@@ -77,42 +78,37 @@ export default function ReglagesCompetition() {
     await setReglagesGymnaste(g.id, { [cle]: valeur });
   }
 
-  // Valeur commune à toute l'équipe pour un champ : renseignée seulement si toutes les gymnastes ont la même.
-  const commun = (cle: keyof ReglagesCompetition): string | null => {
-    const valeurs = membres.map((g) => g.reglages?.[cle] ?? "");
-    return valeurs.every((v) => v === valeurs[0]) ? valeurs[0] : null;
-  };
+  // Réglages de la carte « Toute l'équipe » : propres à l'équipe, sans toucher à ceux des gymnastes.
+  const reglagesEquipe = selection?.equipe.reglages ?? {};
+  const rempli = (r?: ReglagesCompetition) =>
+    !!r && Object.values(r).some((v) => v);
 
-  // Une même valeur pour toute l'équipe : elle est appliquée à chaque gymnaste (qui reste modifiable individuellement ensuite).
-  async function modifierTous(cle: keyof ReglagesCompetition, valeur: string) {
-    const ids = new Set(membres.map((g) => g.id));
-    setGymnastes((l) =>
-      l.map((x) =>
-        ids.has(x.id)
-          ? { ...x, reglages: { ...x.reglages, [cle]: valeur } }
-          : x,
+  async function modifierEquipe(
+    cle: keyof ReglagesCompetition,
+    valeur: string,
+  ) {
+    if (!selection) return;
+    const id = selection.equipe.id;
+    setEquipes((l) =>
+      l.map((e) =>
+        e.id === id ? { ...e, reglages: { ...e.reglages, [cle]: valeur } } : e,
       ),
     );
-    for (const g of membres) await setReglagesGymnaste(g.id, { [cle]: valeur });
+    await setReglagesEquipe(id, { [cle]: valeur });
   }
 
   async function partager() {
     if (!selection) throw new Error("Équipe introuvable");
-    // Mêmes réglages pour toute l'équipe : une seule carte dans le lien ; sinon une carte par gymnaste.
-    const identiques = CHAMPS.every((c) => commun(c.cle) !== null);
+    // Le lien contient la carte « Toute l'équipe » si elle est remplie, puis seulement les gymnastes dont au moins une case est remplie.
+    const individuelles = membres.filter((g) => rempli(g.reglages));
     const id = await createShare("reglages", {
       club: selection.club,
       equipe: selection.equipe.nom,
-      ...(identiques
-        ? {
-            equipeEntiere: {
-              ecartBarres: commun("ecartBarres") ?? "",
-              tremplinCm: commun("tremplinCm") ?? "",
-              tremplinPas: commun("tremplinPas") ?? "",
-            },
-          }
-        : {}),
-      gymnastes: membres.map((g) => ({
+      equipeEntiere:
+        rempli(reglagesEquipe) || individuelles.length === 0
+          ? reglagesEquipe
+          : undefined,
+      gymnastes: individuelles.map((g) => ({
         nom: `${g.prenom} ${g.nom}`,
         reglages: g.reglages ?? {},
       })),
@@ -169,11 +165,9 @@ export default function ReglagesCompetition() {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={commun(c.cle) ?? ""}
-                    onChange={(e) => modifierTous(c.cle, e.target.value)}
-                    placeholder={
-                      commun(c.cle) === null ? "différent" : c.indice
-                    }
+                    value={reglagesEquipe[c.cle] ?? ""}
+                    onChange={(e) => modifierEquipe(c.cle, e.target.value)}
+                    placeholder={c.indice}
                     aria-label={`${c.label} en ${c.unite} — toute l’équipe`}
                     className={`${champ} !px-2 !py-1.5`}
                   />

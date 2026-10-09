@@ -8,16 +8,26 @@ interface Donnees {
   club: string;
   equipe: string;
   niveau: string;
-  ordres: { agres: string; label: string; gymnastes: { prenom: string; nom: string }[] }[];
+  ordres: {
+    agres: string;
+    label: string;
+    gymnastes: { prenom: string; nom: string }[];
+  }[];
   notes: {
     nbCompte: number;
     agres: string[];
-    gymnastes: { nom: string; notes: (number | null)[]; compte: boolean[]; total: number }[];
+    gymnastes: {
+      nom: string;
+      notes: (number | null)[];
+      compte: boolean[];
+      total: number;
+    }[];
     totauxAgres: number[];
     maxAgres: number[];
     totalEquipe: number;
     maxEquipe: number;
   };
+  reglagesEquipe?: ReglagesCompetition;
   reglages: { nom: string; reglages: ReglagesCompetition }[];
 }
 
@@ -37,8 +47,18 @@ export default function PartagePanneaux() {
     })();
   }, []);
 
-  if (d === null) return <main className="mx-auto max-w-2xl px-6 py-10 text-sm text-muted">Chargement…</main>;
-  if (d === "introuvable") return <main className="mx-auto max-w-2xl px-6 py-10 text-sm text-muted">Ce lien de partage n’existe pas ou plus.</main>;
+  if (d === null)
+    return (
+      <main className="mx-auto max-w-2xl px-6 py-10 text-sm text-muted">
+        Chargement…
+      </main>
+    );
+  if (d === "introuvable")
+    return (
+      <main className="mx-auto max-w-2xl px-6 py-10 text-sm text-muted">
+        Ce lien de partage n’existe pas ou plus.
+      </main>
+    );
 
   const n = d.notes;
 
@@ -60,15 +80,25 @@ export default function PartagePanneaux() {
           <h2 className={titre}>Ordres de passage</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {d.ordres.map((o) => (
-              <div key={o.agres} className="rounded-lg border border-border-subtle bg-surface p-3">
-                <h3 className="mb-2 text-sm font-semibold text-foreground">{o.label}</h3>
+              <div
+                key={o.agres}
+                className="rounded-lg border border-border-subtle bg-surface p-3"
+              >
+                <h3 className="mb-2 text-sm font-semibold text-foreground">
+                  {o.label}
+                </h3>
                 {o.gymnastes.length === 0 ? (
                   <p className="text-sm text-muted">Aucune gymnaste.</p>
                 ) : (
                   <ol className="space-y-1.5">
                     {o.gymnastes.map((g, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-solid text-[11px] font-semibold text-white">{i + 1}</span>
+                      <li
+                        key={i}
+                        className="flex items-center gap-2 text-sm text-foreground"
+                      >
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-solid text-[11px] font-semibold text-white">
+                          {i + 1}
+                        </span>
                         {g.prenom} {g.nom}
                       </li>
                     ))}
@@ -85,13 +115,20 @@ export default function PartagePanneaux() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-muted">
-                  <th className="px-2 py-1.5 text-left font-semibold">Gymnaste</th>
+                  <th className="px-2 py-1.5 text-left font-semibold">
+                    Gymnaste
+                  </th>
                   {n.agres.map((a) => (
-                    <th key={a} className="px-2 py-1.5 text-right font-semibold">
+                    <th
+                      key={a}
+                      className="px-2 py-1.5 text-right font-semibold"
+                    >
                       {a === "Barres asymétriques" ? "Barres" : a}
                     </th>
                   ))}
-                  <th className="px-2 py-1.5 text-right font-semibold">Total</th>
+                  <th className="px-2 py-1.5 text-right font-semibold">
+                    Total
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -99,11 +136,16 @@ export default function PartagePanneaux() {
                   <tr key={i} className="border-t border-border-subtle">
                     <td className="px-2 py-1.5 text-foreground">{g.nom}</td>
                     {g.notes.map((v, k) => (
-                      <td key={k} className={`${cellule} ${g.compte[k] ? "font-semibold text-foreground" : "text-muted"}`}>
+                      <td
+                        key={k}
+                        className={`${cellule} ${g.compte[k] ? "font-semibold text-foreground" : "text-muted"}`}
+                      >
                         {v === null ? "—" : fmt(v)}
                       </td>
                     ))}
-                    <td className={`${cellule} font-semibold text-foreground`}>{fmt(g.total)}</td>
+                    <td className={`${cellule} font-semibold text-foreground`}>
+                      {fmt(g.total)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -115,7 +157,9 @@ export default function PartagePanneaux() {
                       {fmt(v)}
                     </td>
                   ))}
-                  <td className={`${cellule} accent-gradient-text`}>{fmt(n.totalEquipe)}</td>
+                  <td className={`${cellule} accent-gradient-text`}>
+                    {fmt(n.totalEquipe)}
+                  </td>
                 </tr>
                 <tr className="text-muted">
                   <td className="px-2 py-1.5">Total max</td>
@@ -137,26 +181,65 @@ export default function PartagePanneaux() {
               </tfoot>
             </table>
             <p className="mt-2 text-xs text-muted">
-              Note D du meilleur mouvement de chaque gymnaste à chaque agrès. Total équipe : les {n.nbCompte} meilleures notes de chaque agrès (en gras). Le Total max ne prend pas en compte le bonus artistique.
+              Note D du meilleur mouvement de chaque gymnaste à chaque agrès.
+              Total équipe : les {n.nbCompte} meilleures notes de chaque agrès
+              (en gras). Le Total max ne prend pas en compte le bonus
+              artistique.
             </p>
           </div>
         </section>
 
         <section>
           <h2 className={titre}>Réglages du matériel</h2>
+          {!d.reglagesEquipe && d.reglages.length === 0 && (
+            <p className="text-sm text-muted">Aucun réglage renseigné.</p>
+          )}
           <div className="grid gap-3 sm:grid-cols-2">
-            {d.reglages.map((g, i) => (
-              <div key={i} className="rounded-lg border border-border-subtle bg-surface p-3">
-                <h3 className="mb-2 text-base font-semibold text-foreground">{g.nom}</h3>
+            {[
+              ...(d.reglagesEquipe
+                ? [{ nom: "Toute l’équipe", reglages: d.reglagesEquipe }]
+                : []),
+              ...d.reglages,
+            ].map((g, i) => (
+              <div
+                key={i}
+                className="rounded-lg border border-border-subtle bg-surface p-3"
+              >
+                <h3 className="mb-2 text-base font-semibold text-foreground">
+                  {g.nom}
+                </h3>
                 <dl className="space-y-1.5 text-sm">
                   {[
-                    { label: "Écart des barres", valeur: g.reglages.ecartBarres, unite: "cm" },
-                    { label: "Tremplin à la table de saut", valeur: g.reglages.tremplinCm, unite: "cm" },
-                    { label: "Tremplin à la table de saut", valeur: g.reglages.tremplinPas, unite: "pas" },
+                    {
+                      label: "Écart des barres",
+                      valeur: g.reglages.ecartBarres,
+                      unite: "cm",
+                    },
+                    {
+                      label: "Tremplin à la table de saut",
+                      valeur: g.reglages.tremplinCm,
+                      unite: "cm",
+                    },
+                    {
+                      label: "Tremplin à la table de saut",
+                      valeur: g.reglages.tremplinPas,
+                      unite: "pas",
+                    },
                   ].map((l, k) => (
-                    <div key={k} className="flex items-center justify-between gap-2">
+                    <div
+                      key={k}
+                      className="flex items-center justify-between gap-2"
+                    >
                       <dt className="text-muted">{l.label}</dt>
-                      <dd className="font-semibold text-foreground">{l.valeur ? `${l.valeur} ${l.unite}` : <span className="font-normal text-muted">non renseigné</span>}</dd>
+                      <dd className="font-semibold text-foreground">
+                        {l.valeur ? (
+                          `${l.valeur} ${l.unite}`
+                        ) : (
+                          <span className="font-normal text-muted">
+                            non renseigné
+                          </span>
+                        )}
+                      </dd>
                     </div>
                   ))}
                 </dl>
@@ -165,7 +248,10 @@ export default function PartagePanneaux() {
           </div>
         </section>
 
-        <p className="text-center text-xs text-muted">Lien de partage en lecture seule, généré depuis l’application Gestion Compétitions &amp; Entraînements.</p>
+        <p className="text-center text-xs text-muted">
+          Lien de partage en lecture seule, généré depuis l’application Gestion
+          Compétitions &amp; Entraînements.
+        </p>
       </main>
     </div>
   );
