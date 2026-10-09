@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getShare } from "@/lib/shares";
+import { onglets, ongletBouton } from "@/lib/styles";
 import type { ReglagesCompetition } from "@/lib/data";
 
 interface Donnees {
@@ -38,6 +39,7 @@ const cellule = "px-2 py-1.5 text-right tabular-nums";
 // Page publique des trois panneaux de l'onglet Ordres de passage d'une équipe, en lecture seule et sans compte.
 export default function PartagePanneaux() {
   const [d, setD] = useState<Donnees | "introuvable" | null>(null);
+  const [actif, setActif] = useState(0);
 
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("id") ?? "";
@@ -78,12 +80,22 @@ export default function PartagePanneaux() {
       <main className="mx-auto max-w-4xl space-y-10 px-6 py-8">
         <section>
           <h2 className={titre}>Ordres de passage</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {d.ordres.map((o) => (
-              <div
+          <div className={`${onglets} mb-4`}>
+            {d.ordres.map((o, i) => (
+              <button
                 key={o.agres}
-                className="rounded-lg border border-border-subtle bg-surface p-3"
+                type="button"
+                onClick={() => setActif(i)}
+                className={ongletBouton(i === actif, "flex-1 px-2 py-2.5")}
               >
+                {o.label}
+              </button>
+            ))}
+          </div>
+          {(() => {
+            const o = d.ordres[Math.min(actif, d.ordres.length - 1)];
+            return o ? (
+              <div className="rounded-lg border border-border-subtle bg-surface p-3">
                 <h3 className="mb-2 text-sm font-semibold text-foreground">
                   {o.label}
                 </h3>
@@ -105,8 +117,8 @@ export default function PartagePanneaux() {
                   </ol>
                 )}
               </div>
-            ))}
-          </div>
+            ) : null;
+          })()}
         </section>
 
         <section>
