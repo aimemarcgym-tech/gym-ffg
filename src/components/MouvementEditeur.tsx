@@ -265,7 +265,7 @@ export default function MouvementEditeur() {
         <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
             role="alert"
-            className="pointer-events-auto max-w-sm rounded-lg border-2 border-red-500 bg-red-950/95 px-5 py-4 text-center text-sm font-medium text-red-100 shadow-2xl"
+            className="pointer-events-auto max-w-sm rounded-lg border border-border-strong bg-surface-alt px-5 py-4 text-center text-sm font-semibold text-red-500 shadow-2xl"
             onClick={() => setAlerte(null)}
           >
             ⚠ {alerte}
