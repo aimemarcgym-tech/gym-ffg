@@ -45,6 +45,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <AuthGate>
           <div key={version}>{libre ? children : <main className="mx-auto max-w-5xl px-6 py-10">{children}</main>}</div>
         </AuthGate>
+        <p className="py-4 text-center text-[10px] text-muted/60">Version {process.env.NEXT_PUBLIC_VERSION}</p>
       </DialoguesProvider>
     </AuthProvider>
   );
