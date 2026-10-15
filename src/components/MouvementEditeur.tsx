@@ -57,6 +57,8 @@ export default function MouvementEditeur() {
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [instantanes, setInstantanes] = useState<Instantane[]>([]);
   const [message, setMessage] = useState("");
+  // Alerte au centre de la page (règle « le sol finit par une acrobatie »).
+  const [alerte, setAlerte] = useState<string | null>(null);
   const [renommeInstantane, setRenommeInstantane] = useState<string | null>(
     null,
   );
@@ -158,6 +160,11 @@ export default function MouvementEditeur() {
 
   // Au sol, le mouvement finit par une acrobatie : un élément qui n'en est pas une ne se place jamais en dernier (il passe avant la
   // dernière acrobatie) et on ne peut pas déplacer un autre élément en dernière position.
+  function alerter(texte: string) {
+    setAlerte(texte);
+    setTimeout(() => setAlerte((a) => (a === texte ? null : a)), 4000);
+  }
+
   function ajouter(l: string[], nouveaux: string[]): string[] {
     const dernier = l.length ? getElementFedA(l[l.length - 1]) : undefined;
     if (
@@ -169,7 +176,7 @@ export default function MouvementEditeur() {
         return e && !estAcro(e);
       })
     ) {
-      flash(
+      alerter(
         "Le sol doit finir par une acrobatie : l’élément est placé avant la dernière acrobatie.",
       );
       return [...l.slice(0, -1), ...nouveaux, l[l.length - 1]];
@@ -187,7 +194,7 @@ export default function MouvementEditeur() {
         ancienDernier &&
         estAcro(ancienDernier)
       ) {
-        flash("Impossible : le sol doit finir par une acrobatie.");
+        alerter("Impossible : le sol doit finir par une acrobatie.");
         return;
       }
     }
@@ -254,6 +261,17 @@ export default function MouvementEditeur() {
 
   return (
     <div className="min-h-screen">
+      {alerte && (
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            role="alert"
+            className="pointer-events-auto max-w-sm rounded-lg border-2 border-red-500 bg-red-950/95 px-5 py-4 text-center text-sm font-medium text-red-100 shadow-2xl"
+            onClick={() => setAlerte(null)}
+          >
+            ⚠ {alerte}
+          </div>
+        </div>
+      )}
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-[1600px] px-6 py-5">
           {gymnaste && (
