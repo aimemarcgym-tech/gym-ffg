@@ -11,6 +11,12 @@ import BandeauVerification from "@/components/BandeauVerification";
 
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  // Chaque nouvelle page s'ouvre tout en haut (ordinateur, tablette, mobile), même si la précédente était défilée.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    const id = requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    return () => cancelAnimationFrame(id);
+  }, [pathname]);
   // Quand un autre appareil modifie les données, les pages se rechargent pour afficher la nouvelle version.
   const [version, setVersion] = useState(0);
   useEffect(() => {
