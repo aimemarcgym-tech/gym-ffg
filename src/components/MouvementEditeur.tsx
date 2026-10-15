@@ -27,6 +27,8 @@ import {
   calculerNoteD,
   calculerNoteDSaut,
   etatBonifications,
+  estAcro,
+  avertissementFinMouvement,
   noteDMax,
   sautsValides,
   type SautChoisi,
@@ -152,6 +154,44 @@ export default function MouvementEditeur() {
   function flash(t: string) {
     setMessage(t);
     setTimeout(() => setMessage(""), 2500);
+  }
+
+  // Au sol, le mouvement finit par une acrobatie : un élément qui n'en est pas une ne se place jamais en dernier (il passe avant la
+  // dernière acrobatie) et on ne peut pas déplacer un autre élément en dernière position.
+  function ajouter(l: string[], nouveaux: string[]): string[] {
+    const dernier = l.length ? getElementFedA(l[l.length - 1]) : undefined;
+    if (
+      agres === "SOL" &&
+      dernier &&
+      estAcro(dernier) &&
+      nouveaux.some((c) => {
+        const e = getElementFedA(c);
+        return e && !estAcro(e);
+      })
+    ) {
+      flash(
+        "Le sol doit finir par une acrobatie : l’élément est placé avant la dernière acrobatie.",
+      );
+      return [...l.slice(0, -1), ...nouveaux, l[l.length - 1]];
+    }
+    return [...l, ...nouveaux];
+  }
+
+  function reordonner(suite: string[]) {
+    if (agres === "SOL" && suite.length && ids.length) {
+      const nouveauDernier = getElementFedA(suite[suite.length - 1]);
+      const ancienDernier = getElementFedA(ids[ids.length - 1]);
+      if (
+        nouveauDernier &&
+        !estAcro(nouveauDernier) &&
+        ancienDernier &&
+        estAcro(ancienDernier)
+      ) {
+        flash("Impossible : le sol doit finir par une acrobatie.");
+        return;
+      }
+    }
+    setIds(suite);
   }
 
   async function majInstantane() {
@@ -313,7 +353,7 @@ export default function MouvementEditeur() {
                 })
               }
               onRetirerSaut={(s) => setSauts((l) => l.filter((x) => x !== s))}
-              onReordonner={setIds}
+              onReordonner={reordonner}
             />
             {instantanes.length > 0 && (
               <section className={panneau}>
@@ -422,6 +462,7 @@ export default function MouvementEditeur() {
             nbSauts={sautsNiveau.length}
             d={d}
             dMax={noteDMax(niveauId, agres)}
+            avertissement={avertissementFinMouvement(agres, choisis)}
           />
 
           <PanneauBibliotheque
@@ -431,27 +472,28 @@ export default function MouvementEditeur() {
             gymnaste={gymnaste}
             niveauId={niveauId}
             sauts={sautsNiveau}
-            onBasculer={(id, vueSerie) =>
-              setIds((l) => {
-                const el = getElementFedA(id);
-                const n = l.filter((x) => x.split("#")[0] === id).length;
-                const retirerTout = () =>
-                  l.filter((x) => x.split("#")[0] !== id);
-                // Élément de la catégorie « Éléments en série » : en deux cases seulement quand on le choisit depuis cette catégorie ;
-                // depuis une autre catégorie (sauts gymniques…), il s'ajoute une seule fois.
-                if (el?.extraFamilles?.includes("ELEMENTS_SERIE")) {
-                  if (!vueSerie) return n === 0 ? [...l, id] : retirerTout();
-                  if (n === 0) return [...l, id, `${id}#2`];
-                  if (n === 1) return [...l, `${id}#2`];
-                  return retirerTout();
-                }
-                // Autre élément doublable (bascule BI aux barres) : une fois, puis une seconde ; un troisième clic le retire.
-                if (!el?.doublable) return bascule(l, id);
-                if (n === 0) return [...l, id];
-                if (n === 1) return [...l, `${id}#2`];
-                return retirerTout();
-              })
-            }
+            onBasculer={(id, vueSerie) => {
+              const l = ids;
+              const el = getElementFedA(id);
+              const n = l.filter((x) => x.split("#")[0] === id).length;
+              const retirerTout = () => l.filter((x) => x.split("#")[0] !== id);
+              let suite: string[];
+              if (el?.extraFamilles?.includes("ELEMENTS_SERIE")) {
+                // Élément en série : deux cases seulement quand on le choisit depuis la catégorie « Éléments en série » ; sinon une seule.
+                if (!vueSerie)
+                  suite = n === 0 ? ajouter(l, [id]) : retirerTout();
+                else if (n === 0) suite = ajouter(l, [id, `${id}#2`]);
+                else if (n === 1) suite = ajouter(l, [`${id}#2`]);
+                else suite = retirerTout();
+              } else if (!el?.doublable) {
+                suite = l.includes(id)
+                  ? l.filter((x) => x !== id)
+                  : ajouter(l, [id]);
+              } else if (n === 0) suite = ajouter(l, [id]);
+              else if (n === 1) suite = ajouter(l, [`${id}#2`]);
+              else suite = retirerTout();
+              setIds(suite);
+            }}
             onBasculerSaut={basculerSaut}
           />
 

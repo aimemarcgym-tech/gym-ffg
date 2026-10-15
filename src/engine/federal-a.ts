@@ -138,6 +138,17 @@ export function bonifsElement(element: ElementFedA, niveau: NiveauId = "A"): Bon
   return element.bonifFamille ? bonifsServies(element, "A").filter((b) => !!b.contribue.bonifFamille) : [];
 }
 
+// Acrobatie : famille « Acrobaties » du sol (Fédéral A) ou acrobaties de la grille Fédéral B.
+export function estAcro(e: ElementFedA): boolean {
+  return e.famille === "ACROBATIES" || e.famille.startsWith("ACRO") || e.famille.startsWith("B_ACRO");
+}
+
+// Au sol, le mouvement doit finir par une acrobatie : renvoie un avertissement quand le dernier élément n'en est pas une.
+export function avertissementFinMouvement(agres: Agres, elements: ElementFedA[]): string | null {
+  if (agres !== "SOL" || elements.length === 0) return null;
+  return estAcro(elements[elements.length - 1]) ? null : "Le sol doit finir par une acrobatie : le dernier élément n’en est pas une.";
+}
+
 export interface SautChoisi {
   idSaut: string;
   appareil: Appareil;

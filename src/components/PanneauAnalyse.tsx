@@ -79,6 +79,8 @@ interface Props {
   nbSauts: number;
   d: number;
   dMax: number;
+  // Avertissement de composition (par exemple : le sol doit finir par une acrobatie).
+  avertissement?: string | null;
 }
 
 export default function PanneauAnalyse(p: Props) {
@@ -104,6 +106,7 @@ export default function PanneauAnalyse(p: Props) {
             }
           >
             <ul className="space-y-1 text-sm">
+              {p.avertissement && <Ligne etat="ko">{p.avertissement}</Ligne>}
               <Ligne etat={complet ? "ok" : "ko"}>
                 {Math.min(p.nbElements, max)}/{max} élément(s) comptés
                 {complet ? "" : ` (encore ${max - p.nbElements})`}

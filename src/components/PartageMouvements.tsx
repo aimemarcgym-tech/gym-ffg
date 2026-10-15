@@ -7,6 +7,7 @@ import {
   calculerNoteD,
   calculerNoteDSaut,
   etatBonifications,
+  avertissementFinMouvement,
   noteDMax,
   sautsValides,
   type SautChoisi,
@@ -96,6 +97,7 @@ function Panneaux({ m }: { m: MouvementPartage }) {
           nbSauts={sauts.length}
           d={d}
           dMax={noteDMax(m.niveau, m.agres)}
+          avertissement={avertissementFinMouvement(m.agres, choisis)}
         />
       </div>
     </section>
