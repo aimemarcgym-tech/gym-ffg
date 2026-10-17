@@ -130,6 +130,7 @@ function PanneauxFederal({ m }: { m: MouvementPartage }) {
           nbSauts={sauts.length}
           d={d}
           dMax={noteDMax(m.niveau, m.agres)}
+          bonifsChoisies={m.bonifIds}
           avertissement={avertissementFinMouvement(m.agres, choisis)}
         />
       </div>

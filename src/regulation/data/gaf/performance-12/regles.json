@@ -1,0 +1,373 @@
+{
+ "source": "Brochure des programmes FFGym 2026-2027, Performance (pages 63 à 86)",
+ "noteD": {
+  "nbElementsMax": 8,
+  "valeurMin": 0.1,
+  "maxExigences": 4,
+  "pointsParExigence": 0.5,
+  "maxBonifElements": 2.0,
+  "pointsParBonif": 0.5
+ },
+ "penalitesNbElements": [
+  {
+   "min": 7,
+   "penalite": 0
+  },
+  {
+   "min": 5,
+   "penalite": -4
+  },
+  {
+   "min": 3,
+   "penalite": -6
+  },
+  {
+   "min": 1,
+   "penalite": -8
+  },
+  {
+   "min": 0,
+   "penalite": -10
+  }
+ ],
+ "exigences": {
+  "BARRES": [
+   {
+    "id": "PF-BR-EC1",
+    "label": "1 tour proche minimum B",
+    "court": "Tour proche",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-BR-EC2",
+    "label": "1 élément dans les grands tours (soleil ou lune, avec ou sans rotation longitudinale)",
+    "court": "Grand tour",
+    "contribue": {},
+    "check": {
+     "type": "VALEUR_FAMILLES",
+     "valeurMin": 0.1,
+     "familles": [
+      "PF_BR_3"
+     ],
+     "min": 1
+    }
+   },
+   {
+    "id": "PF-BR-EC3",
+    "label": "1 bascule ATR serré ou écarté dans les 10°",
+    "court": "Bascule ATR",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-BR-EC4",
+    "label": "1 sortie avec salto",
+    "court": "Sortie salto",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ],
+  "POUTRE": [
+   {
+    "id": "PF-PO-EC1",
+    "label": "1 liaison d’au moins 2 éléments gymniques différents dont un saut avec écart de 180° (transversal ou latéral écarté)",
+    "court": "Liaison gymnique",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-PO-EC2",
+    "label": "1 élément du groupe 3 (tours) ou 1 roulé / cercle",
+    "court": "Tour",
+    "contribue": {},
+    "check": {
+     "type": "ANY_OF",
+     "checks": [
+      {
+       "type": "VALEUR_FAMILLES",
+       "valeurMin": 0.1,
+       "familles": [
+        "PF_PO_3"
+       ],
+       "min": 1
+      },
+      {
+       "type": "ELEMENTS",
+       "ids": [
+        "PF-PO-1.303",
+        "PF-PO-1.403",
+        "PF-PO-1.304",
+        "PF-PO-1.207",
+        "PF-PO-1.308",
+        "PF-PO-1.514",
+        "PF-PO-4.203",
+        "PF-PO-4.204",
+        "PF-PO-4.304",
+        "PF-PO-4.105",
+        "PF-PO-4.305",
+        "PF-PO-4.206",
+        "PF-PO-4.306",
+        "PF-PO-4.307",
+        "PF-PO-5.405",
+        "PF-PO-5.505"
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "id": "PF-PO-EC3",
+    "label": "1 série acrobatique de 2 éléments acrobatiques minimum, identiques ou différents, dont 1 avec envol (sauf ATR)",
+    "court": "Série acro",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-PO-EC4",
+    "label": "Éléments acrobatiques de directions différentes (avant/latéral et arrière)",
+    "court": "Directions acro",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ],
+  "SOL": [
+   {
+    "id": "PF-SO-EC1",
+    "label": "1 passage gymnique de 2 sauts différents dont 1 écart 180° (transversal/latéral) ou écarté latéral",
+    "court": "Passage gymnique",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-SO-EC2",
+    "label": "1 salto avant ou arrière avec rotation longitudinale de 360° minimum, dans une ligne acrobatique",
+    "court": "Salto vrille",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-SO-EC3",
+    "label": "3 lignes acrobatiques dont 1 avec 3 éléments minimum",
+    "court": "3 lignes acro",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-SO-EC4",
+    "label": "1 salto avant (sauf renversement libre) et 1 salto arrière, dans une ligne acrobatique identique ou différente",
+    "court": "Salto av. + ar.",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ],
+  "SAUT": []
+ },
+ "bonifsElements": {
+  "BARRES": [
+   {
+    "id": "PF-BR-B1",
+    "label": "Rotation longitudinale de 180° minimum (tour proche, soleil) avec passage à l’ATR",
+    "court": "Rotation ATR",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-BR-B2",
+    "label": "Envol BS-BI ou sortie avec double rotation transversale",
+    "court": "Envol / double",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-BR-B3",
+    "label": "Tour proche en C minimum de famille différente de l’EC 1",
+    "court": "Tour proche C",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-BR-B4",
+    "label": "Prise différente, élément minimum B pour la prise lune",
+    "court": "Prise différente",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ],
+  "POUTRE": [
+   {
+    "id": "PF-PO-B1",
+    "label": "Série acrobatique de 2 éléments avec envol dont 1 salto",
+    "court": "Série salto",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-PO-B2",
+    "label": "Un salto ou renversement libre sur la poutre différent de celui de la série acrobatique de la bonification 1",
+    "court": "Salto différent",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-PO-B3",
+    "label": "Un élément gymnique de valeur B minimum et un élément gymnique de valeur C minimum",
+    "court": "Gym B et C",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-PO-B4",
+    "label": "Sortie (minimum B) en liaison avec un élément acrobatique avec envol",
+    "court": "Sortie + acro",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ],
+  "SOL": [
+   {
+    "id": "PF-SO-B1",
+    "label": "Salto avec rotation longitudinale de 720° minimum",
+    "court": "Salto 720°",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-SO-B2",
+    "label": "Salto avec double rotation transversale",
+    "court": "Double salto",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-SO-B3",
+    "label": "Ligne acrobatique avec 2 salti identiques ou différents en liaison directe ou indirecte",
+    "court": "Ligne 2 salti",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   },
+   {
+    "id": "PF-SO-B4",
+    "label": "Un élément gymnique de valeur B minimum et un élément gymnique de valeur C minimum",
+    "court": "Gym B et C",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ],
+  "SAUT": [
+   {
+    "id": "PF-SA-B1",
+    "label": "2 sauts dont les 1ers envols sont différents, avec rotation transversale dans les 2èmes envols et au plus 1,5 point de fautes sur chacun",
+    "court": "2 sauts",
+    "contribue": {},
+    "check": {
+     "type": "MANUAL"
+    }
+   }
+  ]
+ },
+ "bonifNoteD": {
+  "BARRES": [
+   {
+    "min": 1.8,
+    "points": 0.3
+   },
+   {
+    "min": 2.3,
+    "points": 0.6
+   },
+   {
+    "min": 2.8,
+    "points": 0.9
+   },
+   {
+    "min": 3.3,
+    "points": 1.2
+   },
+   {
+    "min": 3.8,
+    "points": 1.5
+   }
+  ],
+  "POUTRE": [
+   {
+    "min": 3.3,
+    "points": 0.3
+   },
+   {
+    "min": 3.6,
+    "points": 0.6
+   },
+   {
+    "min": 3.9,
+    "points": 0.9
+   },
+   {
+    "min": 4.2,
+    "points": 1.2
+   }
+  ],
+  "SOL": [
+   {
+    "min": 3.3,
+    "points": 0.3
+   },
+   {
+    "min": 3.6,
+    "points": 0.6
+   },
+   {
+    "min": 3.9,
+    "points": 0.9
+   },
+   {
+    "min": 4.2,
+    "points": 1.2
+   }
+  ]
+ }
+}

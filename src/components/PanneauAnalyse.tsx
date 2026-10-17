@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { reglesNiveau } from "@/regulation/loader";
+import { reglesNiveau, reglesPF } from "@/regulation/loader";
 import { fmt } from "@/regulation/libelles";
 import { panneau, titrePanneau } from "@/lib/styles";
 import type { BonifEtat, NoteD } from "@/engine/federal-a";
@@ -81,6 +81,8 @@ interface Props {
   dMax: number;
   // Avertissement de composition (par exemple : le sol doit finir par une acrobatie).
   avertissement?: string | null;
+  // Identifiants validés à la main (Performance 1 : bonifications sur éléments et saut).
+  bonifsChoisies?: string[];
 }
 
 export default function PanneauAnalyse(p: Props) {
@@ -89,7 +91,13 @@ export default function PanneauAnalyse(p: Props) {
   const max = regles.nbElementsMax;
   const nbPoints = regles.pointsParBonification;
   const grille = p.agres !== "SAUT";
-  const complet = p.nbElements >= max;
+  // Performance (1 et 2) : seuls les éléments de valeur 0,10 minimum comptent dans les 8 meilleures valeurs ; les exigences de composition
+  // remplacent les bonifications dans la note D ; Performance 1 ajoute des bonifications à la note finale.
+  const pf = p.niveau.programme === "PF";
+  const pf1 = p.niveau.id === "PF1";
+  const nbComptes = pf ? (p.noteD?.elementsRetenus.length ?? 0) : p.nbElements;
+  const complet = nbComptes >= max;
+  const bonifsFinale = pf1 ? (reglesPF.bonifsElements[p.agres] ?? []) : [];
 
   return (
     <section className={panneau}>
@@ -108,8 +116,8 @@ export default function PanneauAnalyse(p: Props) {
             <ul className="space-y-1 text-sm">
               {p.avertissement && <Ligne etat="ko">{p.avertissement}</Ligne>}
               <Ligne etat={complet ? "ok" : "ko"}>
-                {Math.min(p.nbElements, max)}/{max} élément(s) comptés
-                {complet ? "" : ` (encore ${max - p.nbElements})`}
+                {Math.min(nbComptes, max)}/{max} élément(s) comptés
+                {complet ? "" : ` (encore ${max - nbComptes})`}
               </Ligne>
               {regles.nbElementsMin > 0 && (
                 <Ligne
@@ -121,7 +129,13 @@ export default function PanneauAnalyse(p: Props) {
                     : ` (${fmt(regles.penaliteMin)} pt si ${regles.nbElementsMin - 1} ou moins)`}
                 </Ligne>
               )}
-              {p.nbElements > max && (
+              {pf && p.noteD && p.noteD.penalite < 0 && (
+                <Ligne etat="ko">
+                  Exercice trop court ({p.noteD.nbDistincts} élément(s)) :{" "}
+                  {fmt(p.noteD.penalite)} pt sur la note finale
+                </Ligne>
+              )}
+              {!pf && p.nbElements > max && (
                 <Ligne etat="confirmer">
                   {p.nbElements - max} élément(s) au-delà de {max} : seuls les
                   plus forts comptent
@@ -131,7 +145,7 @@ export default function PanneauAnalyse(p: Props) {
           </Bloc>
 
           <Bloc
-            titre="Bonifications"
+            titre={pf ? "Exigences de composition" : "Bonifications"}
             droite={
               <span className="text-xs text-muted">
                 retenues : {p.noteD?.bonifsRetenues.length ?? 0}/
@@ -205,27 +219,81 @@ export default function PanneauAnalyse(p: Props) {
         </Bloc>
       )}
 
+      {pf1 && (
+        <Bloc
+          titre="Bonifications (note finale)"
+          droite={
+            <span className="text-xs text-muted">
+              +{fmt(reglesPF.noteD.pointsParBonif)} chacune ·{" "}
+              {p.agres === "SAUT" ? "0,50" : "2,00"} max
+            </span>
+          }
+        >
+          <ul className="space-y-1 text-sm">
+            {p.noteD && (reglesPF.bonifNoteD[p.agres] ?? []).length > 0 && (
+              <Ligne
+                etat={p.noteD.bonifsFinale > 0 ? "ok" : "ko"}
+                droite={`+${fmt(Math.max(0, p.noteD.bonifsFinale - bonifsFinale.filter((b) => p.bonifsChoisies?.includes(b.id)).length * reglesPF.noteD.pointsParBonif))}`}
+              >
+                Bonification sur la note D ({fmt(p.d)})
+              </Ligne>
+            )}
+            {bonifsFinale.map((b) => {
+              const validee = !!p.bonifsChoisies?.includes(b.id);
+              return (
+                <Ligne
+                  key={b.id}
+                  etat={validee ? "ok" : "confirmer"}
+                  droite={
+                    validee
+                      ? `+${fmt(reglesPF.noteD.pointsParBonif)}`
+                      : undefined
+                  }
+                  onConfirmer={p.onBonif ? () => p.onBonif!(b.id) : undefined}
+                  confirme={validee}
+                >
+                  {b.label}
+                </Ligne>
+              );
+            })}
+          </ul>
+          <p className="mt-1 text-xs text-muted">
+            Ces bonifications s’ajoutent à la note finale ; elles ne font pas
+            partie de la note D.
+          </p>
+        </Bloc>
+      )}
+
       <div className="accent-gradient rounded px-4 py-3 text-white shadow-lg shadow-accent-from/20">
         <div className="flex items-center justify-between text-xs text-white/70 uppercase">
           <span>Note de départ</span>
           <span className="text-white/60 normal-case">
-            {grille ? "Éléments + bonifications" : "Meilleur saut"}
+            {grille
+              ? pf
+                ? "Éléments + exigences"
+                : "Éléments + bonifications"
+              : "Meilleur saut"}
           </span>
         </div>
         <div className="text-3xl font-bold">{fmt(p.d)}</div>
         {p.noteD && (
           <div className="text-xs text-white/85">
             {fmt(p.noteD.totalElements)} éléments +{" "}
-            {fmt(p.noteD.totalBonifications)} bonifications
+            {fmt(p.noteD.totalBonifications)}{" "}
+            {pf ? "d’exigences" : "bonifications"}
           </div>
         )}
         <div className="mt-0.5 text-sm font-semibold text-white">
           {fmt(p.d)} / {fmt(p.dMax)} maximum
         </div>
         <div className="text-xs text-white/70">
-          {p.noteD?.plafonne
-            ? `${fmt(p.noteD.totalElements + p.noteD.totalBonifications)} plafonné à ${fmt(p.niveau.plafondD)} en ${p.niveau.label}`
-            : `Plafond ${p.niveau.label} : ${fmt(p.niveau.plafondD)}`}
+          {pf
+            ? pf1 && p.noteD
+              ? `Avec les bonifications de la note finale : +${fmt(p.noteD.bonifsFinale)} (note de départ finale ${fmt(p.d + p.noteD.bonifsFinale)})`
+              : "Pas de plafond de la note D"
+            : p.noteD?.plafonne
+              ? `${fmt(p.noteD.totalElements + p.noteD.totalBonifications)} plafonné à ${fmt(p.niveau.plafondD)} en ${p.niveau.label}`
+              : `Plafond ${p.niveau.label} : ${fmt(p.niveau.plafondD)}`}
         </div>
         <div className="text-xs text-white/70">
           Note finale maximale possible : {fmt(p.dMax + 10)} (D {fmt(p.dMax)} +
@@ -261,7 +329,7 @@ export default function PanneauAnalyse(p: Props) {
         )}
       </div>
 
-      {(p.agres === "POUTRE" || p.agres === "SOL") && (
+      {(p.agres === "POUTRE" || p.agres === "SOL") && !pf && (
         <div className="mt-4 rounded border border-border-subtle bg-surface-alt p-3">
           <h3 className="mb-1.5 text-sm font-semibold text-foreground">
             Partie artistique

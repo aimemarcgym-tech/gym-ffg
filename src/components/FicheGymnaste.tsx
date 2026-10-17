@@ -121,9 +121,14 @@ export default function FicheGymnaste() {
 
   // Niveaux proposés : ceux de Performance 7-9 ans si la gymnaste est dans une équipe de ce programme, sinon les niveaux Fédéral.
   const enPerf = equipes.some((e) => estPerf79(e.niveau));
+  const enPF = equipes.some((e) => getNiveau(e.niveau).programme === "PF");
   const niveauxChoix = enPerf
     ? niveauxPerf79(agres).map((id) => getNiveau(id))
-    : niveauxMouvement.filter((n) => !estPerf79(n.id));
+    : enPF
+      ? niveauxMouvement.filter((n) => n.programme === "PF")
+      : niveauxMouvement.filter(
+          (n) => !estPerf79(n.id) && n.programme !== "PF",
+        );
   const niveauEffectif = niveauxChoix.some((n) => n.id === niveau)
     ? niveau
     : niveauxChoix[0].id;

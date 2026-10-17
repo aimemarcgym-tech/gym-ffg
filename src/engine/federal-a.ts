@@ -1,4 +1,4 @@
-import { estPerf79, noteDMaxPerf79, noteDPerf79, elementAutorise, getBonifications, getElementFedA, getNiveau, getSautFedA, getSautsNiveau, reglesNiveau } from "@/regulation/loader";
+import { programmeDe, reglesPF, estPerf79, noteDMaxPerf79, noteDPerf79, elementAutorise, getBonifications, getElementFedA, getElementsNiveau, getNiveau, getSautFedA, getSautsNiveau, reglesNiveau } from "@/regulation/loader";
 import type { Agres, Appareil, AgresAvecGrille, BonificationDef, CheckSpec, ElementFedA, NiveauId } from "@/regulation/types";
 
 export interface CheckResult {
@@ -29,6 +29,8 @@ export function evaluateCheck(spec: CheckSpec, elements: ElementFedA[]): CheckRe
       };
     case "NB_ELEMENTS":
       return { ok: elements.length >= spec.min };
+    case "ELEMENTS":
+      return { ok: elements.some((e) => spec.ids.includes(e.id)) };
     case "ANY_OF": {
       const resultats = spec.checks.map((c) => evaluateCheck(c, elements));
       return { ok: resultats.some((r) => r.ok), manual: resultats.some((r) => r.manual) };
@@ -64,6 +66,8 @@ export interface NoteD {
   // Fédéral B : pénalité (négative) quand la gymnaste présente trop peu d'éléments, à déduire de la note finale.
   penalite: number;
   nbDistincts: number;
+  // Performance 1 : bonifications de la note finale (note D + éléments), qui ne font pas partie de la note D.
+  bonifsFinale: number;
 }
 
 // Éléments identiques comptés une fois; un élément ne compte que s'il est reconnu, ce que le coach garantit en ne le saisissant pas sinon.
@@ -96,7 +100,10 @@ export function calculerNoteD(
       return !doublon;
     });
 
-  const elementsRetenus = [...distincts].sort((a, b) => b.valeur - a.valeur).slice(0, nbElementsMax);
+  // Performance : seuls les éléments de valeur 0,10 minimum comptent dans les 8 meilleures valeurs (les autres comptent pour l'exercice trop court).
+  const pf = programmeDe(niveau) === "PF";
+  const comptables = pf ? distincts.filter((e) => e.valeur >= reglesPF.noteD.valeurMin) : distincts;
+  const elementsRetenus = [...comptables].sort((a, b) => b.valeur - a.valeur).slice(0, nbElementsMax);
   const totalElements = round2(elementsRetenus.reduce((s, e) => s + e.valeur, 0));
 
   // Les bonifications que les éléments prouvent (eligible) sont retenues d'office, dans l'ordre du règlement, jusqu'au maximum ;
@@ -116,8 +123,19 @@ export function calculerNoteD(
   const plafond = getNiveau(niveau).plafondD;
   const brut = round2(totalElements + totalBonifications);
   const total = Math.min(brut, plafond);
-  const penalite = nbElementsMin > 0 && distincts.length < nbElementsMin ? penaliteMin : 0;
-  return { elementsRetenus, totalElements, bonifsRetenues, nbBonifications, totalBonifications, total, plafonne: total < brut, penalite, nbDistincts: distincts.length };
+  const penalite = pf ? (reglesPF.penalitesNbElements.find((p) => distincts.length >= p.min)?.penalite ?? 0) : nbElementsMin > 0 && distincts.length < nbElementsMin ? penaliteMin : 0;
+  return { elementsRetenus, totalElements, bonifsRetenues, nbBonifications, totalBonifications, total, plafonne: total < brut, penalite, nbDistincts: distincts.length, bonifsFinale: bonifsFinalePF(niveau, agres, total, idsBonifsValidees) };
+}
+
+// Performance 1 uniquement : bonification sur la note D (selon sa valeur) + bonifications sur éléments confirmées (2 points au maximum, 0,50 au saut) ;
+// elles s'ajoutent à la note finale et ne font pas partie de la note D.
+export function bonifsFinalePF(niveau: NiveauId, agres: Agres, noteD: number, confirmees: string[]): number {
+  if (niveau !== "PF1") return 0;
+  const defs = reglesPF.bonifsElements[agres] ?? [];
+  const nb = defs.filter((b) => confirmees.includes(b.id)).length;
+  const sursElements = Math.min(nb * reglesPF.noteD.pointsParBonif, agres === "SAUT" ? 0.5 : reglesPF.noteD.maxBonifElements);
+  const palier = [...(reglesPF.bonifNoteD[agres] ?? [])].reverse().find((p) => noteD >= p.min);
+  return round2(sursElements + (palier?.points ?? 0));
 }
 
 // Bonifications que cet élément peut servir (données de regles.json, rien de codé par agrès).
@@ -145,7 +163,7 @@ export function estAcro(e: ElementFedA): boolean {
 
 // Au sol, le mouvement doit finir par une acrobatie : renvoie un avertissement quand le dernier élément n'en est pas une.
 export function avertissementFinMouvement(agres: Agres, elements: ElementFedA[]): string | null {
-  if (agres !== "SOL" || elements.length === 0) return null;
+  if (agres !== "SOL" || elements.length === 0 || elements[0].grille === "PF") return null;
   return estAcro(elements[elements.length - 1]) ? null : "Le sol doit finir par une acrobatie : le dernier élément n’en est pas une.";
 }
 
@@ -173,6 +191,12 @@ export function sautsValides(niveau: NiveauId, sauts: SautChoisi[]): SautChoisi[
 // Note D maximale possible : le plafond du niveau (éléments + bonifications) ou, au saut, la valeur du meilleur saut du niveau.
 export function noteDMax(niveau: NiveauId, agres: Agres, categorieId?: string): number {
   if (estPerf79(niveau)) return noteDMaxPerf79(agres, niveau, categorieId);
+  if (programmeDe(niveau) === "PF") {
+    // Maximum théorique : les 8 plus fortes valeurs du tableau + les 4 exigences de composition ; au saut, la plus forte valeur.
+    if (agres === "SAUT") return Math.max(0, ...getSautsNiveau(niveau).map((s) => s.valeurTremplin));
+    const valeurs = getElementsNiveau(agres as AgresAvecGrille, niveau).map((e) => e.valeur).sort((a, b) => b - a).slice(0, reglesPF.noteD.nbElementsMax);
+    return round2(valeurs.reduce((t, v) => t + v, 0) + reglesPF.noteD.maxExigences * reglesPF.noteD.pointsParExigence);
+  }
   if (agres === "SAUT") return Math.max(0, ...getSautsNiveau(niveau).flatMap((s) => [s.valeurTrampoTremp, s.valeurTremplin, s.valeur79 ?? 0]));
   return getNiveau(niveau).plafondD;
 }

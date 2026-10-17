@@ -1,3 +1,4 @@
+import elementsPFJson from "./data/gaf/performance-12/elements.json";
 import type { Agres } from "./types";
 
 export const AGRES: { id: Agres; label: string }[] = [
@@ -8,6 +9,7 @@ export const AGRES: { id: Agres; label: string }[] = [
 ];
 
 export const LIBELLE_FAMILLE: Record<string, string> = {
+  ...(elementsPFJson.libellesFamilles as Record<string, string>),
   BASCULES: "Bascules",
   ELEMENTS_SERIE: "Éléments en série",
   PROCHES: "Éléments proches de la barre",

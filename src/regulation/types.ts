@@ -17,7 +17,13 @@ export interface ElementFedA {
   appel?: "UN" | "DEUX";
   appelAConfirmer?: boolean;
   // Grille Fédéral B (Île-de-France) : absent = grille Fédéral A.
-  grille?: "B";
+  grille?: "B" | "PF";
+  // Performance : code du tableau (g.vnn), nature (g gymnique, a acrobatique, s sans envol, e entrée, o sortie), texte complet si coupé.
+  code?: string;
+  nature?: "g" | "a" | "s" | "e" | "o";
+  detail?: string;
+  etoile?: boolean;
+  ffg?: boolean;
   // Non autorisé en Fédéral B3.
   interditB3?: boolean;
   // Peut figurer deux fois dans un mouvement (la seconde occurrence porte le suffixe « #2 » dans la liste d'identifiants).
@@ -44,8 +50,9 @@ export interface SautFedA {
 export type Appareil = "TRAMPO_TREMP" | "TREMPLIN" | "ANS79";
 
 // P79 : équipe Performance 7-9 ans ; P1 à P4 : niveaux de mouvement de ce programme (mouvements imposés avec options).
-export type NiveauId = "A" | "A2" | "A3" | "B1" | "B2" | "B3" | "P79" | "P1" | "P2" | "P3" | "P4";
-export type Programme = "A" | "B" | "P";
+export type NiveauId = "A" | "A2" | "A3" | "B1" | "B2" | "B3" | "P79" | "P1" | "P2" | "P3" | "P4" | "PF1" | "PF2";
+// A, B : Fédéral ; P : Performance 7-9 ans ; PF : Performance 1 et 2 (éléments à valeurs FIG).
+export type Programme = "A" | "B" | "P" | "PF";
 
 export interface CategorieAge {
   id: string;
@@ -76,6 +83,7 @@ export type CheckSpec =
   | { type: "BONIF_FAMILLE"; famille: BonifFamille }
   | { type: "VALEUR_FAMILLES"; valeur?: number; valeurMin?: number; familles?: string[]; min: number; sansSortie?: boolean }
   | { type: "NB_ELEMENTS"; min: number }
+  | { type: "ELEMENTS"; ids: string[] }
   | { type: "ANY_OF"; checks: CheckSpec[] }
   | { type: "ALL_OF"; checks: CheckSpec[] }
   | { type: "MANUAL" };

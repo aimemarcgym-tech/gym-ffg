@@ -5,13 +5,16 @@ import referenceJson from "./data/gaf/federal-a/reference.json";
 import niveauxJson from "./data/gaf/niveaux.json";
 import categoriesAgeJson from "./data/gaf/categories-age.json";
 import perf79Json from "./data/gaf/performance-79/programmes.json";
+import elementsPFJson from "./data/gaf/performance-12/elements.json";
+import sautsPFJson from "./data/gaf/performance-12/sauts.json";
+import reglesPFJson from "./data/gaf/performance-12/regles.json";
 import referenceBJson from "./data/gaf/federal-b/reference.json";
 import elementsBJson from "./data/gaf/federal-b/elements.json";
 import sautBJson from "./data/gaf/federal-b/saut.json";
 import reglesBJson from "./data/gaf/federal-b/regles.json";
 import type { Agres, AgresAvecGrille, BonificationDef, CategorieAge, ElementFedA, NiveauFed, NiveauId, Programme, ReglesFedA, ReglesFedB, SautFedA } from "./types";
 
-const elements = [...(elementsJson as ElementFedA[]), ...(elementsBJson as ElementFedA[])];
+const elements = [...(elementsJson as ElementFedA[]), ...(elementsBJson as ElementFedA[]), ...(elementsPFJson.elements as unknown as ElementFedA[])];
 const parId = new Map(elements.map((e) => [e.id, e]));
 
 export const reglesFedA = reglesJson as unknown as ReglesFedA;
@@ -30,6 +33,23 @@ export const sautsFedB: SautFedA[] = sautBJson.sauts.flatMap((s) =>
   })),
 );
 export const regleSautB = sautBJson.regle;
+
+// Performance (1 et 2) : valeurs du tableau des sauts ; avec le trampo-tremp, la valeur est celle du tremplin moins 1 point.
+export const sautsPF: SautFedA[] = sautsPFJson.sauts.map((s) => ({
+  id: s.id,
+  nom: `${s.code} · ${s.nom}`,
+  valeurTremplin: s.valeur,
+  valeurTrampoTremp: Math.round((s.valeur - 1) * 100) / 100,
+  niveaux: ["PF1", "PF2"] as NiveauId[],
+}));
+export const reglesPF = reglesPFJson as unknown as {
+  noteD: { nbElementsMax: number; valeurMin: number; maxExigences: number; pointsParExigence: number; maxBonifElements: number; pointsParBonif: number };
+  penalitesNbElements: { min: number; penalite: number }[];
+  exigences: Record<Agres, BonificationDef[]>;
+  bonifsElements: Record<Agres, BonificationDef[]>;
+  bonifNoteD: Partial<Record<Agres, { min: number; points: number }[]>>;
+};
+export const groupesSautsPF = sautsPFJson.groupes as Record<string, string>;
 
 export const referenceFedA = referenceJson as {
   temps: { agres: string; label: string; valeur: string }[];
@@ -96,7 +116,11 @@ export const anneesParAge: { age: number; annee: string }[] = Object.entries(cat
   .sort((a, b) => a.age - b.age);
 
 export function getElementsFedA(agres: AgresAvecGrille): ElementFedA[] {
-  return elements.filter((e) => e.agres === agres && e.grille !== "B");
+  return elements.filter((e) => e.agres === agres && !e.grille);
+}
+
+export function getElementsFedPF(agres: AgresAvecGrille): ElementFedA[] {
+  return elements.filter((e) => e.agres === agres && e.grille === "PF");
 }
 
 export function getElementsFedB(agres: AgresAvecGrille): ElementFedA[] {
@@ -121,7 +145,7 @@ export function elementsChoisis(ids: string[], agres: string, niveau: NiveauId):
 }
 
 export function getSautFedA(id: string): SautFedA | undefined {
-  return sautsFedA.find((s) => s.id === id) ?? sautsFedB.find((s) => s.id === id);
+  return sautsFedA.find((s) => s.id === id) ?? sautsFedB.find((s) => s.id === id) ?? sautsPF.find((s) => s.id === id);
 }
 
 export function programmeDe(niveau: NiveauId): Programme {
@@ -186,12 +210,15 @@ export function noteDMaxPerf79(agres: Agres, niveau: NiveauId, categorieId?: str
 
 // Sauts proposés pour un niveau : la table Fédéral A, ou celle du niveau Fédéral B.
 export function getSautsNiveau(niveau: NiveauId): SautFedA[] {
-  return (programmeDe(niveau) === "A" ? sautsFedA : sautsFedB).filter((s) => s.niveaux?.includes(niveau));
+  const p = programmeDe(niveau);
+  return (p === "A" ? sautsFedA : p === "B" ? sautsFedB : p === "PF" ? sautsPF : []).filter((s) => s.niveaux?.includes(niveau));
 }
 
 // Éléments réellement autorisés dans un niveau (les éléments C sont interdits en B2 et B3, certains éléments aux barres en B3).
 export function elementAutorise(e: ElementFedA, niveau: NiveauId): boolean {
-  if ((e.grille === "B") !== (programmeDe(niveau) === "B")) return false;
+  const attendue = programmeDe(niveau) === "B" ? "B" : programmeDe(niveau) === "PF" ? "PF" : undefined;
+  if (e.grille !== attendue) return false;
+  if (e.grille === "PF") return true;
   if (e.grille !== "B") return true;
   if ((niveau === "B2" || niveau === "B3") && e.valeur >= 0.8) return false;
   if (niveau === "B3" && e.interditB3) return false;
@@ -203,6 +230,7 @@ export function getElementsNiveau(agres: AgresAvecGrille, niveau: NiveauId): Ele
 }
 
 export function getBonifications(niveau: NiveauId, agres: AgresAvecGrille): BonificationDef[] {
+  if (programmeDe(niveau) === "PF") return reglesPF.exigences[agres] ?? [];
   if (programmeDe(niveau) === "B") return reglesFedB.bonifications[niveau as "B1" | "B2" | "B3"][agres];
   return reglesFedA.bonificationsParNiveau?.[niveau]?.[agres] ?? reglesFedA.bonifications[agres];
 }
@@ -210,6 +238,7 @@ export function getBonifications(niveau: NiveauId, agres: AgresAvecGrille): Boni
 // Règles de la note D d'un niveau : nombre d'éléments comptés, bonifications, pénalité en cas d'éléments insuffisants.
 export function reglesNiveau(niveau: NiveauId) {
   const n = getNiveau(niveau);
+  if (n.programme === "PF") return { nbElementsMax: reglesPF.noteD.nbElementsMax, nbElementsMin: 0, penaliteMin: 0, maxBonifications: reglesPF.noteD.maxExigences, pointsParBonification: reglesPF.noteD.pointsParExigence };
   if (n.regles) return n.regles;
   const r = reglesFedA.noteD;
   return { nbElementsMax: r.nbElementsMax, nbElementsMin: 0, penaliteMin: 0, maxBonifications: r.maxBonifications, pointsParBonification: r.pointsParBonification };

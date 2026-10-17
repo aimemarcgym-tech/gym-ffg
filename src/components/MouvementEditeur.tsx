@@ -324,7 +324,11 @@ export default function MouvementEditeur() {
             >
               {(perf
                 ? niveauxPerf79(agres).map((id) => getNiveau(id))
-                : niveauxMouvement.filter((n) => !estPerf79(n.id))
+                : niveauxMouvement.filter((n) =>
+                    getNiveau(niveauId).programme === "PF"
+                      ? n.programme === "PF"
+                      : !estPerf79(n.id) && n.programme !== "PF",
+                  )
               ).map((n) => (
                 <option key={n.id} value={n.id}>
                   {n.label}
@@ -519,6 +523,7 @@ export default function MouvementEditeur() {
                 nbSauts={sautsNiveau.length}
                 d={d}
                 dMax={noteDMax(niveauId, agres)}
+                bonifsChoisies={bonifs}
                 avertissement={avertissementFinMouvement(agres, choisis)}
               />
 

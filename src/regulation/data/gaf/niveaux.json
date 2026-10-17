@@ -370,6 +370,76 @@
         "notesComptees": 3
       },
       "categories": []
+    },
+    {
+      "id": "PF1",
+      "label": "Performance 1",
+      "detail": "Nationale B : code FFGym, éléments à valeur FIG",
+      "programme": "PF",
+      "plafondD": 30.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 4,
+        "notesComptees": 3
+      },
+      "categories": [
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        },
+        {
+          "id": "10-15",
+          "label": "10-15 ans",
+          "ageMin": 10,
+          "ageMax": 15
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-11",
+          "label": "10-11 ans",
+          "ageMin": 10,
+          "ageMax": 11
+        }
+      ]
+    },
+    {
+      "id": "PF2",
+      "label": "Performance 2",
+      "detail": "Nationale C : code FFGym, éléments à valeur FIG",
+      "programme": "PF",
+      "plafondD": 30.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 4,
+        "notesComptees": 3
+      },
+      "categories": [
+        {
+          "id": "10+",
+          "label": "10 ans et plus",
+          "ageMin": 10
+        },
+        {
+          "id": "10-13",
+          "label": "10-13 ans",
+          "ageMin": 10,
+          "ageMax": 13
+        },
+        {
+          "id": "10-11",
+          "label": "10-11 ans",
+          "ageMin": 10,
+          "ageMax": 11
+        }
+      ]
     }
   ],
   "sourceB": "Brochure des Programmes Régionaux 2026-2027, Fédéral B - IDF (pages 6 à 24)"

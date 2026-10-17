@@ -40,7 +40,7 @@ import {
   titreSection,
   vide,
 } from "@/lib/styles";
-import type { Agres, NiveauId } from "@/regulation/types";
+import type { Agres, NiveauId, Programme } from "@/regulation/types";
 import { ConfirmerEnLigne, RenommerEnLigne } from "@/components/EnLigne";
 import { createShare } from "@/lib/shares";
 import { AGRES } from "@/regulation/libelles";
@@ -154,18 +154,24 @@ export default function Accueil() {
   }
 
   // Chaque équipe appartient à un programme selon son niveau : A, A2, A3 pour le Fédéral A ; B1, B2, B3 pour le Fédéral B.
-  const programme =
-    filiere === "FEDERAL_B" ? "B" : filiere === "PERFORMANCE" ? "P" : "A";
-  const niveauxFiliere = niveauxDuProgramme(programme);
-  // Le panneau choisi décide des équipes affichées : Fédéral A = équipes A, A2, A3 ; Fédéral B = B1, B2, B3 ; Performance = aucune pour l'instant.
-  const programmeAffiche =
-    filiere === "FEDERAL" ? "A" : filiere === "FEDERAL_B" ? "B" : "P";
-  const equipesFiliere = programmeAffiche
-    ? equipes.filter((e) => programmeDe(e.niveau) === programmeAffiche)
-    : [];
-  const equipesDuProgramme = (p: "A" | "B" | "P") =>
-    equipes.filter((e) => programmeDe(e.niveau) === p);
-  const nbGymnastesProgramme = (p: "A" | "B" | "P") =>
+  // Le panneau Performance regroupe Performance 7-9 ans (P) et Performance 1 et 2 (PF).
+  const programmesAffiches: Programme[] =
+    filiere === "FEDERAL"
+      ? ["A"]
+      : filiere === "FEDERAL_B"
+        ? ["B"]
+        : ["P", "PF"];
+  const niveauxFiliere = programmesAffiches.flatMap((pr) =>
+    niveauxDuProgramme(pr),
+  );
+  const equipesFiliere = equipes.filter((e) =>
+    programmesAffiches.includes(programmeDe(e.niveau)),
+  );
+  const equipesDuProgramme = (p: Programme | Programme[]) =>
+    equipes.filter((e) =>
+      ([] as Programme[]).concat(p).includes(programmeDe(e.niveau)),
+    );
+  const nbGymnastesProgramme = (p: Programme | Programme[]) =>
     new Set(equipesDuProgramme(p).flatMap((e) => e.gymnasteIds)).size;
 
   const clubExistant = clubs.find(
@@ -209,7 +215,7 @@ export default function Accueil() {
     if (equipe.trim()) {
       const existante = (await getEquipes(c.id)).find(
         (x) =>
-          programmeDe(x.niveau) === programmeAffiche &&
+          programmesAffiches.includes(programmeDe(x.niveau)) &&
           x.nom.toLowerCase() === equipe.trim().toLowerCase(),
       );
       const cible =
@@ -269,8 +275,8 @@ export default function Accueil() {
         nbGymnastes={nbGymnastesProgramme("A")}
         nbEquipesB={equipesDuProgramme("B").length}
         nbGymnastesB={nbGymnastesProgramme("B")}
-        nbEquipesP={equipesDuProgramme("P").length}
-        nbGymnastesP={nbGymnastesProgramme("P")}
+        nbEquipesP={equipesDuProgramme(["P", "PF"]).length}
+        nbGymnastesP={nbGymnastesProgramme(["P", "PF"])}
       />
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">

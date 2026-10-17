@@ -45,7 +45,9 @@ export const ongletBouton = (actif: boolean, extra = "flex-1 px-2 py-1.5") =>
   `${extra} rounded text-xs font-semibold uppercase tracking-wide ${actif ? "accent-gradient text-white" : "text-muted hover:text-foreground"}`;
 
 // Tags de catégorie : A vert, A2 bleu clair, A3 jaune (teintes du site UFOLEP).
-export const STYLE_NIVEAU: Record<"A" | "A2" | "A3" | "B1" | "B2" | "B3" | "P79" | "P1" | "P2" | "P3" | "P4", string> = {
+export const STYLE_NIVEAU: Record<"A" | "A2" | "A3" | "B1" | "B2" | "B3" | "P79" | "P1" | "P2" | "P3" | "P4" | "PF1" | "PF2", string> = {
+  PF1: "bg-fuchsia-400/15 text-fuchsia-300 border-fuchsia-400/40",
+  PF2: "bg-pink-400/15 text-pink-300 border-pink-400/40",
   P79: "bg-rose-400/15 text-rose-300 border-rose-400/40",
   P1: "bg-rose-400/15 text-rose-300 border-rose-400/40",
   P2: "bg-rose-400/15 text-rose-300 border-rose-400/40",
