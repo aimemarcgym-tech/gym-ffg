@@ -49,7 +49,7 @@ export default function FilieresPanneaux({ actif, onChoisir, nbEquipes, nbGymnas
           <span className="accent-gradient-text text-xl font-bold">Performance</span>
           <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">à venir</span>
         </div>
-        <div className="text-xs text-muted">Nationale A, B, C · Régionale 7-9 ans · Individuel</div>
+        <div className="text-xs text-muted">Performance 7-9 ans et Performance 1 et 2</div>
         <div className="mt-1 text-xs text-muted">Programmes pas encore saisis</div>
       </button>
     </section>
