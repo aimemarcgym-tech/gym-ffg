@@ -26,9 +26,22 @@ import {
   type StatutCompetence,
 } from "@/lib/data";
 import { noteDMax, noteDMouvement } from "@/engine/federal-a";
-import { ageEnSaison, getNiveau, niveauxFed } from "@/regulation/loader";
+import {
+  ageEnSaison,
+  getNiveau,
+  niveauxMouvement,
+  niveauxPerf79,
+  estPerf79,
+} from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
-import { btnDanger, btnDegrade, carteLigne, champLibre, etiquette, lienDegrade } from "@/lib/styles";
+import {
+  btnDanger,
+  btnDegrade,
+  carteLigne,
+  champLibre,
+  etiquette,
+  lienDegrade,
+} from "@/lib/styles";
 import type { Agres, NiveauId } from "@/regulation/types";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
 import PartageBouton from "@/components/PartageBouton";
@@ -42,10 +55,14 @@ export default function FicheGymnaste() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [equipesClub, setEquipesClub] = useState<Equipe[]>([]);
   // Éditeur ouvert sous l'en-tête : le profil, ou l'équipe d'un tag (null = pas d'équipe pour l'instant).
-  const [edition, setEdition] = useState<{ type: "profil" } | { type: "equipe"; equipeId: string | null } | null>(null);
+  const [edition, setEdition] = useState<
+    { type: "profil" } | { type: "equipe"; equipeId: string | null } | null
+  >(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [mouvements, setMouvements] = useState<Mouvement[]>([]);
-  const [etat, setEtat] = useState<"chargement" | "ok" | "introuvable">("chargement");
+  const [etat, setEtat] = useState<"chargement" | "ok" | "introuvable">(
+    "chargement",
+  );
 
   const [nom, setNom] = useState("");
   const [agres, setAgres] = useState<Agres>("SOL");
@@ -67,7 +84,14 @@ export default function FicheGymnaste() {
     setEquipesClub(duClub);
     const siennes = duClub.filter((e) => e.gymnasteIds.includes(g.id));
     setEquipes(siennes);
-    setNiveau((n) => (siennes.length && !siennes.some((e) => e.niveau === n) ? siennes[0].niveau : n));
+    // Équipe Performance 7-9 ans : les niveaux de mouvement sont P1 à P4 (P79 est le niveau de l'équipe).
+    setNiveau((n) =>
+      siennes.length && !siennes.some((e) => e.niveau === n)
+        ? estPerf79(siennes[0].niveau)
+          ? "P1"
+          : siennes[0].niveau
+        : n,
+    );
     setMouvements(await getMouvements(g.id));
     setEtat("ok");
   }, []);
@@ -78,7 +102,11 @@ export default function FicheGymnaste() {
   }, [charger]);
 
   if (etat === "chargement") {
-    return <main className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">Chargement…</main>;
+    return (
+      <main className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">
+        Chargement…
+      </main>
+    );
   }
   if (etat === "introuvable" || !gymnaste) {
     return (
@@ -91,12 +119,25 @@ export default function FicheGymnaste() {
     );
   }
 
+  // Niveaux proposés : ceux de Performance 7-9 ans si la gymnaste est dans une équipe de ce programme, sinon les niveaux Fédéral.
+  const enPerf = equipes.some((e) => estPerf79(e.niveau));
+  const niveauxChoix = enPerf
+    ? niveauxPerf79(agres).map((id) => getNiveau(id))
+    : niveauxMouvement.filter((n) => !estPerf79(n.id));
+  const niveauEffectif = niveauxChoix.some((n) => n.id === niveau)
+    ? niveau
+    : niveauxChoix[0].id;
   const libelleAgres = AGRES.find((a) => a.id === agres)!.label;
   const nomParDefaut = `${libelleAgres} — compétition ${mouvements.filter((m) => m.agres === agres).length + 1}`;
 
   async function creer(e: FormEvent) {
     e.preventDefault();
-    const m = await createMouvement({ gymnasteId: gymnaste!.id, nom: nom.trim() || nomParDefaut, agres, niveau });
+    const m = await createMouvement({
+      gymnasteId: gymnaste!.id,
+      nom: nom.trim() || nomParDefaut,
+      agres,
+      niveau: niveauEffectif,
+    });
     router.push(`/mouvement/?m=${m.id}`);
   }
 
@@ -104,10 +145,23 @@ export default function FicheGymnaste() {
   async function partagerMouvements() {
     const g = gymnaste!;
     const ordre = AGRES.map((a) => a.id);
-    const liste = [...mouvements].sort((a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres));
+    const liste = [...mouvements].sort(
+      (a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres),
+    );
     const id = await createShare("mouvements", {
       gymnaste: `${g.prenom} ${g.nom}`,
-      mouvements: await Promise.all(liste.map(async (m) => ({ nom: m.nom, agres: m.agres, niveau: m.niveau, elementIds: m.elementIds, bonifIds: m.bonifIds, sauts: m.sauts, series: m.series, instantanes: await instantanesPourPartage(m.id) }))),
+      mouvements: await Promise.all(
+        liste.map(async (m) => ({
+          nom: m.nom,
+          agres: m.agres,
+          niveau: m.niveau,
+          elementIds: m.elementIds,
+          bonifIds: m.bonifIds,
+          sauts: m.sauts,
+          series: m.series,
+          instantanes: await instantanesPourPartage(m.id),
+        })),
+      ),
     });
     return `/partage/mouvements/?id=${id}`;
   }
@@ -118,32 +172,60 @@ export default function FicheGymnaste() {
     if (v.clubNom.toLowerCase() !== (club?.nom ?? "").toLowerCase()) {
       clubId = (await findOrCreateClub(v.clubNom)).id;
       // Les équipes appartiennent à un club : changer de club détache la gymnaste de ses équipes.
-      for (const e of equipes) await setEquipeMembres(e.id, e.gymnasteIds.filter((x) => x !== g.id));
+      for (const e of equipes)
+        await setEquipeMembres(
+          e.id,
+          e.gymnasteIds.filter((x) => x !== g.id),
+        );
     }
-    await updateGymnaste(g.id, { prenom: v.prenom, nom: v.nom, anneeNaissance: v.anneeNaissance, clubId });
+    await updateGymnaste(g.id, {
+      prenom: v.prenom,
+      nom: v.nom,
+      anneeNaissance: v.anneeNaissance,
+      clubId,
+    });
     setEdition(null);
     await charger();
   }
 
-  async function enregistrerEquipe(actuelle: Equipe | null, cible: CibleEquipe) {
+  async function enregistrerEquipe(
+    actuelle: Equipe | null,
+    cible: CibleEquipe,
+  ) {
     const g = gymnaste!;
     if (cible.type === "existante" && cible.equipeId === actuelle?.id) {
       setEdition(null);
       return;
     }
-    if (actuelle) await setEquipeMembres(actuelle.id, actuelle.gymnasteIds.filter((x) => x !== g.id));
+    if (actuelle)
+      await setEquipeMembres(
+        actuelle.id,
+        actuelle.gymnasteIds.filter((x) => x !== g.id),
+      );
     if (cible.type === "existante") {
       const t = equipesClub.find((e) => e.id === cible.equipeId);
-      if (t) await setEquipeMembres(t.id, [...t.gymnasteIds.filter((x) => x !== g.id), g.id]);
+      if (t)
+        await setEquipeMembres(t.id, [
+          ...t.gymnasteIds.filter((x) => x !== g.id),
+          g.id,
+        ]);
     } else if (cible.type === "nouvelle") {
-      const t = await createEquipe({ clubId: g.clubId, nom: cible.nom, niveau: cible.niveau, categorieId: cible.categorieId });
+      const t = await createEquipe({
+        clubId: g.clubId,
+        nom: cible.nom,
+        niveau: cible.niveau,
+        categorieId: cible.categorieId,
+      });
       await setEquipeMembres(t.id, [g.id]);
     }
     setEdition(null);
     await charger();
   }
 
-  async function changerStatut(elementId: string, statut: StatutCompetence | null) {
+  async function changerStatut(
+    elementId: string,
+    statut: StatutCompetence | null,
+  ) {
     await setCompetence(gymnaste!.id, elementId, statut);
     setGymnaste(await getGymnaste(gymnaste!.id).then((g) => g ?? gymnaste));
   }
@@ -156,7 +238,9 @@ export default function FicheGymnaste() {
             ← Toutes les gymnastes
           </Link>
           <button
-            onClick={() => setEdition(edition?.type === "profil" ? null : { type: "profil" })}
+            onClick={() =>
+              setEdition(edition?.type === "profil" ? null : { type: "profil" })
+            }
             title="Modifier le profil"
             className="group mt-1 block text-left"
           >
@@ -164,14 +248,36 @@ export default function FicheGymnaste() {
               {gymnaste.prenom} {gymnaste.nom}
             </h1>
             <p className="text-sm text-muted">
-              {club?.nom ?? "Aucun club"} · {ageEnSaison(gymnaste.anneeNaissance)} ans · née en {gymnaste.anneeNaissance}
+              {club?.nom ?? "Aucun club"} ·{" "}
+              {ageEnSaison(gymnaste.anneeNaissance)} ans · née en{" "}
+              {gymnaste.anneeNaissance}
             </p>
           </button>
           <div className="mt-2 flex flex-wrap gap-2">
-            {(equipes.length ? equipes.map((e) => ({ e, cle: e.id, texte: `${getNiveau(e.niveau).label} · ${e.nom}` })) : [{ e: null as Equipe | null, cle: "aucune", texte: "Sans équipe" }]).map((t) => (
+            {(equipes.length
+              ? equipes.map((e) => ({
+                  e,
+                  cle: e.id,
+                  texte: `${getNiveau(e.niveau).label} · ${e.nom}`,
+                }))
+              : [
+                  {
+                    e: null as Equipe | null,
+                    cle: "aucune",
+                    texte: "Sans équipe",
+                  },
+                ]
+            ).map((t) => (
               <button
                 key={t.cle}
-                onClick={() => setEdition(edition?.type === "equipe" && edition.equipeId === (t.e?.id ?? null) ? null : { type: "equipe", equipeId: t.e?.id ?? null })}
+                onClick={() =>
+                  setEdition(
+                    edition?.type === "equipe" &&
+                      edition.equipeId === (t.e?.id ?? null)
+                      ? null
+                      : { type: "equipe", equipeId: t.e?.id ?? null },
+                  )
+                }
                 title="Changer le niveau ou l’équipe"
                 className="rounded-full border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
               >
@@ -181,17 +287,27 @@ export default function FicheGymnaste() {
           </div>
 
           {edition?.type === "profil" && (
-            <ProfilEditeur key="profil" gymnaste={gymnaste} club={club} clubs={clubs} onEnregistrer={enregistrerProfil} onAnnuler={() => setEdition(null)} />
+            <ProfilEditeur
+              key="profil"
+              gymnaste={gymnaste}
+              club={club}
+              clubs={clubs}
+              onEnregistrer={enregistrerProfil}
+              onAnnuler={() => setEdition(null)}
+            />
           )}
           {edition?.type === "equipe" &&
             (() => {
-              const actuelle = equipes.find((e) => e.id === edition.equipeId) ?? null;
+              const actuelle =
+                equipes.find((e) => e.id === edition.equipeId) ?? null;
               return (
                 <EquipeEditeur
                   key={edition.equipeId ?? "aucune"}
                   actuelle={actuelle}
                   equipesClub={equipesClub}
-                  autresEquipesIds={equipes.filter((e) => e.id !== actuelle?.id).map((e) => e.id)}
+                  autresEquipesIds={equipes
+                    .filter((e) => e.id !== actuelle?.id)
+                    .map((e) => e.id)}
                   onEnregistrer={(c) => enregistrerEquipe(actuelle, c)}
                   onAnnuler={() => setEdition(null)}
                 />
@@ -203,8 +319,16 @@ export default function FicheGymnaste() {
       <main className="mx-auto max-w-5xl space-y-10 px-6 py-10">
         <section>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold text-foreground">Mouvements</h2>
-            {mouvements.length > 0 && <PartageBouton label="Partager les 4 agrès" onCreate={partagerMouvements} className={btnDegrade} />}
+            <h2 className="text-lg font-semibold text-foreground">
+              Mouvements
+            </h2>
+            {mouvements.length > 0 && (
+              <PartageBouton
+                label="Partager les 4 agrès"
+                onCreate={partagerMouvements}
+                className={btnDegrade}
+              />
+            )}
           </div>
 
           {mouvements.length > 0 && (
@@ -214,7 +338,10 @@ export default function FicheGymnaste() {
                   <Link href={`/mouvement/?m=${m.id}`} className="flex-1">
                     <div className="font-medium text-foreground">{m.nom}</div>
                     <div className="text-xs text-muted">
-                      {AGRES.find((a) => a.id === m.agres)?.label} · {getNiveau(m.niveau).label} · note D {fmt(noteDMouvement(m))} / {fmt(noteDMax(m.niveau, m.agres))}
+                      {AGRES.find((a) => a.id === m.agres)?.label} ·{" "}
+                      {getNiveau(m.niveau).label} · note D{" "}
+                      {fmt(noteDMouvement(m))} /{" "}
+                      {fmt(noteDMax(m.niveau, m.agres))}
                     </div>
                   </Link>
                   {supprId === m.id ? (
@@ -229,10 +356,16 @@ export default function FicheGymnaste() {
                     />
                   ) : (
                     <div className="flex items-center gap-3">
-                      <Link href={`/mouvement/?m=${m.id}`} className={lienDegrade}>
+                      <Link
+                        href={`/mouvement/?m=${m.id}`}
+                        className={lienDegrade}
+                      >
                         Ouvrir →
                       </Link>
-                      <button onClick={() => setSupprId(m.id)} className={btnDanger}>
+                      <button
+                        onClick={() => setSupprId(m.id)}
+                        className={btnDanger}
+                      >
                         Supprimer
                       </button>
                     </div>
@@ -242,14 +375,26 @@ export default function FicheGymnaste() {
             </ul>
           )}
 
-          <form onSubmit={creer} className="flex flex-wrap items-end gap-3 rounded-lg border border-border-subtle bg-surface p-4">
+          <form
+            onSubmit={creer}
+            className="flex flex-wrap items-end gap-3 rounded-lg border border-border-subtle bg-surface p-4"
+          >
             <div>
               <label className={etiquette}>Nom du mouvement</label>
-              <input value={nom} onChange={(e) => setNom(e.target.value)} placeholder={nomParDefaut} className={champLibre} />
+              <input
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                placeholder={nomParDefaut}
+                className={champLibre}
+              />
             </div>
             <div>
               <label className={etiquette}>Agrès</label>
-              <select value={agres} onChange={(e) => setAgres(e.target.value as Agres)} className={champLibre}>
+              <select
+                value={agres}
+                onChange={(e) => setAgres(e.target.value as Agres)}
+                className={champLibre}
+              >
                 {AGRES.map((a) => (
                   <option key={a.id} value={a.id}>
                     {a.label}
@@ -259,8 +404,12 @@ export default function FicheGymnaste() {
             </div>
             <div>
               <label className={etiquette}>Niveau</label>
-              <select value={niveau} onChange={(e) => setNiveau(e.target.value as NiveauId)} className={champLibre}>
-                {niveauxFed.map((n) => (
+              <select
+                value={niveauEffectif}
+                onChange={(e) => setNiveau(e.target.value as NiveauId)}
+                className={champLibre}
+              >
+                {niveauxChoix.map((n) => (
                   <option key={n.id} value={n.id}>
                     {n.label}
                   </option>

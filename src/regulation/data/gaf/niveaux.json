@@ -270,6 +270,106 @@
           "ageMax": 10
         }
       ]
+    },
+    {
+      "id": "P79",
+      "label": "Performance 7-9 ans",
+      "detail": "Programme régional Performance 7-9 ans (mouvements imposés)",
+      "programme": "P",
+      "pour": "equipe",
+      "plafondD": 8.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "categories": [
+        {
+          "id": "7",
+          "label": "7 ans (niveau 1)",
+          "ageMin": 7,
+          "ageMax": 7
+        },
+        {
+          "id": "7-8",
+          "label": "7-8 ans (niveaux 1 à 3)",
+          "ageMin": 7,
+          "ageMax": 8
+        },
+        {
+          "id": "7-9a",
+          "label": "7-9 ans (niveaux 1 à 2)",
+          "ageMin": 7,
+          "ageMax": 9
+        },
+        {
+          "id": "7-9b",
+          "label": "7-9 ans (niveaux 1 à 4)",
+          "ageMin": 7,
+          "ageMax": 9
+        }
+      ]
+    },
+    {
+      "id": "P1",
+      "label": "Performance 7-9 ans · niveau 1",
+      "detail": "Mouvement imposé avec options",
+      "programme": "P",
+      "pour": "mouvement",
+      "plafondD": 2.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "categories": []
+    },
+    {
+      "id": "P2",
+      "label": "Performance 7-9 ans · niveau 2",
+      "detail": "Mouvement imposé avec options",
+      "programme": "P",
+      "pour": "mouvement",
+      "plafondD": 4.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "categories": []
+    },
+    {
+      "id": "P3",
+      "label": "Performance 7-9 ans · niveau 3",
+      "detail": "Mouvement imposé avec options",
+      "programme": "P",
+      "pour": "mouvement",
+      "plafondD": 6.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "categories": []
+    },
+    {
+      "id": "P4",
+      "label": "Performance 7-9 ans · niveau 4",
+      "detail": "Mouvement imposé avec options",
+      "programme": "P",
+      "pour": "mouvement",
+      "plafondD": 8.0,
+      "format": {
+        "max": 5,
+        "min": 3,
+        "parAgres": 5,
+        "notesComptees": 3
+      },
+      "categories": []
     }
   ],
   "sourceB": "Brochure des Programmes Régionaux 2026-2027, Fédéral B - IDF (pages 6 à 24)"

@@ -9,6 +9,8 @@ interface Props {
   nbGymnastes: number;
   nbEquipesB: number;
   nbGymnastesB: number;
+  nbEquipesP: number;
+  nbGymnastesP: number;
 }
 
 // Même style que les cartes d'évolution de l'accueil UFOLEP.
@@ -19,38 +21,83 @@ const carte = (choisie: boolean) =>
       : "border-border-subtle bg-surface-alt hover:border-accent-solid/60"
   }`;
 
-export default function FilieresPanneaux({ actif, onChoisir, nbEquipes, nbGymnastes, nbEquipesB, nbGymnastesB }: Props) {
+export default function FilieresPanneaux({
+  actif,
+  onChoisir,
+  nbEquipes,
+  nbGymnastes,
+  nbEquipesB,
+  nbGymnastesB,
+  nbEquipesP,
+  nbGymnastesP,
+}: Props) {
   return (
     <section className="mb-10 grid gap-3 sm:grid-cols-3">
-      <button onClick={() => onChoisir("FEDERAL")} aria-pressed={actif === "FEDERAL"} className={carte(actif === "FEDERAL")}>
+      <button
+        onClick={() => onChoisir("FEDERAL")}
+        aria-pressed={actif === "FEDERAL"}
+        className={carte(actif === "FEDERAL")}
+      >
         <div className="mb-1 flex items-center justify-between">
-          <span className="accent-gradient-text text-xl font-bold">Fédéral A</span>
-          <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">GAF</span>
+          <span className="accent-gradient-text text-xl font-bold">
+            Fédéral A
+          </span>
+          <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">
+            GAF
+          </span>
         </div>
-        <div className="text-xs text-muted">Programme national · A, A2 et A3</div>
+        <div className="text-xs text-muted">
+          Programme national · A, A2 et A3
+        </div>
         <div className="mt-1 text-xs text-muted">
-          {nbEquipes} équipe{nbEquipes > 1 ? "s" : ""} · {nbGymnastes} gymnaste{nbGymnastes > 1 ? "s" : ""}
+          {nbEquipes} équipe{nbEquipes > 1 ? "s" : ""} · {nbGymnastes} gymnaste
+          {nbGymnastes > 1 ? "s" : ""}
         </div>
       </button>
 
-      <button onClick={() => onChoisir("FEDERAL_B")} aria-pressed={actif === "FEDERAL_B"} className={carte(actif === "FEDERAL_B")}>
+      <button
+        onClick={() => onChoisir("FEDERAL_B")}
+        aria-pressed={actif === "FEDERAL_B"}
+        className={carte(actif === "FEDERAL_B")}
+      >
         <div className="mb-1 flex items-center justify-between">
-          <span className="accent-gradient-text text-xl font-bold">Fédéral B</span>
-          <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">GAF</span>
+          <span className="accent-gradient-text text-xl font-bold">
+            Fédéral B
+          </span>
+          <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">
+            GAF
+          </span>
         </div>
-        <div className="text-xs text-muted">Programme régional IDF · B1, B2 et B3</div>
+        <div className="text-xs text-muted">
+          Programme régional IDF · B1, B2 et B3
+        </div>
         <div className="mt-1 text-xs text-muted">
-          {nbEquipesB} équipe{nbEquipesB > 1 ? "s" : ""} · {nbGymnastesB} gymnaste{nbGymnastesB > 1 ? "s" : ""}
+          {nbEquipesB} équipe{nbEquipesB > 1 ? "s" : ""} · {nbGymnastesB}{" "}
+          gymnaste{nbGymnastesB > 1 ? "s" : ""}
         </div>
       </button>
 
-      <button onClick={() => onChoisir("PERFORMANCE")} aria-pressed={actif === "PERFORMANCE"} className={carte(actif === "PERFORMANCE")}>
+      <button
+        onClick={() => onChoisir("PERFORMANCE")}
+        aria-pressed={actif === "PERFORMANCE"}
+        className={carte(actif === "PERFORMANCE")}
+      >
         <div className="mb-1 flex items-center justify-between">
-          <span className="accent-gradient-text text-xl font-bold">Performance</span>
-          <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">à venir</span>
+          <span className="accent-gradient-text text-xl font-bold">
+            Performance
+          </span>
+          <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">
+            GAF
+          </span>
         </div>
-        <div className="text-xs text-muted">Performance 7-9 ans (régionale) et Performance 1 et 2</div>
-        <div className="mt-1 text-xs text-muted">Programmes pas encore saisis</div>
+        <div className="text-xs text-muted">
+          Performance 7-9 ans (régionale) et Performance 1 et 2
+        </div>
+        <div className="mt-1 text-xs text-muted">
+          {nbEquipesP} équipe{nbEquipesP > 1 ? "s" : ""} · {nbGymnastesP}{" "}
+          gymnaste{nbGymnastesP > 1 ? "s" : ""} · 7-9 ans seulement pour
+          l’instant
+        </div>
       </button>
     </section>
   );

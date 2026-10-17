@@ -12,7 +12,11 @@ import {
   sautsValides,
   type SautChoisi,
 } from "@/engine/federal-a";
-import { elementsChoisis, getNiveau } from "@/regulation/loader";
+import { elementsChoisis, estPerf79, getNiveau } from "@/regulation/loader";
+import {
+  PanneauAnalysePerf79,
+  PanneauMouvementPerf79,
+} from "@/components/Perf79";
 import { AGRES } from "@/regulation/libelles";
 import { getShare } from "@/lib/shares";
 import type { SerieType } from "@/lib/data";
@@ -55,6 +59,35 @@ const LIBELLE_LONG: Record<Agres, string> = {
 
 // Même présentation que dans le constructeur : « Mon mouvement » et « Analyse », en lecture seule.
 function Panneaux({ m }: { m: MouvementPartage }) {
+  if (estPerf79(m.niveau)) {
+    return (
+      <section>
+        <h2 className="mb-3 text-lg font-semibold text-foreground">
+          {m.nom}{" "}
+          <span className="text-sm font-normal text-muted">
+            · {AGRES.find((a) => a.id === m.agres)?.label} ·{" "}
+            {getNiveau(m.niveau).label}
+          </span>
+        </h2>
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+          <PanneauMouvementPerf79
+            agres={m.agres}
+            niveau={m.niveau}
+            choisies={m.bonifIds}
+          />
+          <PanneauAnalysePerf79
+            agres={m.agres}
+            niveau={m.niveau}
+            choisies={m.bonifIds}
+          />
+        </div>
+      </section>
+    );
+  }
+  return <PanneauxFederal m={m} />;
+}
+
+function PanneauxFederal({ m }: { m: MouvementPartage }) {
   const grille = m.agres !== "SAUT";
   const ag = m.agres as AgresAvecGrille;
   const niveau = getNiveau(m.niveau);

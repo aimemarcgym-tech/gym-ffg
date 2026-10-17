@@ -4,6 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PanneauAnalyse from "@/components/PanneauAnalyse";
 import PanneauBibliotheque from "@/components/PanneauBibliotheque";
+import {
+  PanneauAnalysePerf79,
+  PanneauMouvementPerf79,
+} from "@/components/Perf79";
 import PanneauMouvement from "@/components/PanneauMouvement";
 import PanneauReference from "@/components/PanneauReference";
 import {
@@ -38,7 +42,11 @@ import {
   getElementFedA,
   getElementsNiveau,
   getNiveau,
-  niveauxFed,
+  niveauxMouvement,
+  niveauxPerf79,
+  estPerf79,
+  noteDPerf79,
+  optionsPerf79,
 } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
 import { btnContour, lienDegrade, panneau, titrePanneau } from "@/lib/styles";
@@ -124,7 +132,12 @@ export default function MouvementEditeur() {
     [niveauId, sauts],
   );
   const noteD = grille ? calculerNoteD(ag, ids, bonifs, niveauId) : null;
-  const d = grille ? noteD!.total : calculerNoteDSaut(sautsNiveau);
+  const perf = estPerf79(niveauId);
+  const d = perf
+    ? noteDPerf79(agres, niveauId, bonifs)
+    : grille
+      ? noteD!.total
+      : calculerNoteDSaut(sautsNiveau);
   const etats = grille ? etatBonifications(ag, choisis, niveauId) : [];
 
   if (etat === "chargement")
@@ -309,7 +322,10 @@ export default function MouvementEditeur() {
               aria-label="Niveau"
               className="rounded border border-border-strong bg-surface-alt px-2 py-0.5 text-xs text-foreground focus:border-accent-solid focus:outline-none"
             >
-              {niveauxFed.map((n) => (
+              {(perf
+                ? niveauxPerf79(agres).map((id) => getNiveau(id))
+                : niveauxMouvement.filter((n) => !estPerf79(n.id))
+              ).map((n) => (
                 <option key={n.id} value={n.id}>
                   {n.label}
                 </option>
@@ -322,9 +338,13 @@ export default function MouvementEditeur() {
       <main className="mx-auto max-w-[1600px] px-6 py-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-muted">
-            {grille
-              ? `${choisis.length} élément(s)`
-              : `${sautsNiveau.length} saut(s)`}
+            {perf
+              ? agres === "SAUT"
+                ? "Saut imposé"
+                : `${bonifs.filter((id) => optionsPerf79(agres, niveauId).includes(id)).length} option(s) validée(s)`
+              : grille
+                ? `${choisis.length} élément(s)`
+                : `${sautsNiveau.length} saut(s)`}
             <span className="ml-3 text-xs">· ✓ Enregistré automatiquement</span>
             {message && (
               <span className="ml-3 text-xs text-accent-solid">{message}</span>
@@ -353,26 +373,37 @@ export default function MouvementEditeur() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]">
+        <div
+          className={`grid grid-cols-1 items-start gap-6 ${perf ? "lg:grid-cols-[1.1fr_1fr]" : "lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]"}`}
+        >
           <div className="space-y-6">
-            <PanneauMouvement
-              elements={choisis}
-              retenus={retenus}
-              sauts={sautsNiveau}
-              onRetirer={(cle) => setIds((l) => l.filter((x) => x !== cle))}
-              series={series}
-              sansSeries={agres === "BARRES"}
-              onSerie={(cle, type) =>
-                setSeries((s) => {
-                  const suite = { ...s };
-                  if (type) suite[cle] = type;
-                  else delete suite[cle];
-                  return suite;
-                })
-              }
-              onRetirerSaut={(s) => setSauts((l) => l.filter((x) => x !== s))}
-              onReordonner={reordonner}
-            />
+            {perf ? (
+              <PanneauMouvementPerf79
+                agres={agres}
+                niveau={niveauId}
+                choisies={bonifs}
+                onBasculer={(id) => setBonifs((l) => bascule(l, id))}
+              />
+            ) : (
+              <PanneauMouvement
+                elements={choisis}
+                retenus={retenus}
+                sauts={sautsNiveau}
+                onRetirer={(cle) => setIds((l) => l.filter((x) => x !== cle))}
+                series={series}
+                sansSeries={agres === "BARRES"}
+                onSerie={(cle, type) =>
+                  setSeries((s) => {
+                    const suite = { ...s };
+                    if (type) suite[cle] = type;
+                    else delete suite[cle];
+                    return suite;
+                  })
+                }
+                onRetirerSaut={(s) => setSauts((l) => l.filter((x) => x !== s))}
+                onReordonner={reordonner}
+              />
+            )}
             {instantanes.length > 0 && (
               <section className={panneau}>
                 <h2 className={titrePanneau}>Historique</h2>
@@ -469,57 +500,68 @@ export default function MouvementEditeur() {
             )}
           </div>
 
-          <PanneauAnalyse
-            agres={agres}
-            niveau={niveau}
-            nbElements={choisis.length}
-            noteD={noteD}
-            etats={etats}
-            bonifsRetenues={noteD?.bonifsRetenues ?? []}
-            onBonif={(id) => setBonifs((l) => bascule(l, id))}
-            nbSauts={sautsNiveau.length}
-            d={d}
-            dMax={noteDMax(niveauId, agres)}
-            avertissement={avertissementFinMouvement(agres, choisis)}
-          />
+          {perf ? (
+            <PanneauAnalysePerf79
+              agres={agres}
+              niveau={niveauId}
+              choisies={bonifs}
+            />
+          ) : (
+            <>
+              <PanneauAnalyse
+                agres={agres}
+                niveau={niveau}
+                nbElements={choisis.length}
+                noteD={noteD}
+                etats={etats}
+                bonifsRetenues={noteD?.bonifsRetenues ?? []}
+                onBonif={(id) => setBonifs((l) => bascule(l, id))}
+                nbSauts={sautsNiveau.length}
+                d={d}
+                dMax={noteDMax(niveauId, agres)}
+                avertissement={avertissementFinMouvement(agres, choisis)}
+              />
 
-          <PanneauBibliotheque
-            agres={agres}
-            elements={tous}
-            choisis={choisis}
-            gymnaste={gymnaste}
-            niveauId={niveauId}
-            sauts={sautsNiveau}
-            onBasculer={(id, vueSerie) => {
-              const l = ids;
-              const el = getElementFedA(id);
-              const n = l.filter((x) => x.split("#")[0] === id).length;
-              const retirerTout = () => l.filter((x) => x.split("#")[0] !== id);
-              let suite: string[];
-              if (el?.extraFamilles?.includes("ELEMENTS_SERIE")) {
-                // Élément en série : deux cases seulement quand on le choisit depuis la catégorie « Éléments en série » ; sinon une seule.
-                if (!vueSerie)
-                  suite = n === 0 ? ajouter(l, [id]) : retirerTout();
-                else if (n === 0) suite = ajouter(l, [id, `${id}#2`]);
-                else if (n === 1) suite = ajouter(l, [`${id}#2`]);
-                else suite = retirerTout();
-              } else if (!el?.doublable) {
-                suite = l.includes(id)
-                  ? l.filter((x) => x !== id)
-                  : ajouter(l, [id]);
-              } else if (n === 0) suite = ajouter(l, [id]);
-              else if (n === 1) suite = ajouter(l, [`${id}#2`]);
-              else suite = retirerTout();
-              setIds(suite);
-            }}
-            onBasculerSaut={basculerSaut}
-          />
+              <PanneauBibliotheque
+                agres={agres}
+                elements={tous}
+                choisis={choisis}
+                gymnaste={gymnaste}
+                niveauId={niveauId}
+                sauts={sautsNiveau}
+                onBasculer={(id, vueSerie) => {
+                  const l = ids;
+                  const el = getElementFedA(id);
+                  const n = l.filter((x) => x.split("#")[0] === id).length;
+                  const retirerTout = () =>
+                    l.filter((x) => x.split("#")[0] !== id);
+                  let suite: string[];
+                  if (el?.extraFamilles?.includes("ELEMENTS_SERIE")) {
+                    // Élément en série : deux cases seulement quand on le choisit depuis la catégorie « Éléments en série » ; sinon une seule.
+                    if (!vueSerie)
+                      suite = n === 0 ? ajouter(l, [id]) : retirerTout();
+                    else if (n === 0) suite = ajouter(l, [id, `${id}#2`]);
+                    else if (n === 1) suite = ajouter(l, [`${id}#2`]);
+                    else suite = retirerTout();
+                  } else if (!el?.doublable) {
+                    suite = l.includes(id)
+                      ? l.filter((x) => x !== id)
+                      : ajouter(l, [id]);
+                  } else if (n === 0) suite = ajouter(l, [id]);
+                  else if (n === 1) suite = ajouter(l, [`${id}#2`]);
+                  else suite = retirerTout();
+                  setIds(suite);
+                }}
+                onBasculerSaut={basculerSaut}
+              />
 
-          <PanneauReference
-            agres={agres}
-            niveau={niveau.label}
-            niveauId={niveauId}
-          />
+              <PanneauReference
+                agres={agres}
+                niveau={niveau.label}
+                niveauId={niveauId}
+              />
+            </>
+          )}
         </div>
       </main>
     </div>

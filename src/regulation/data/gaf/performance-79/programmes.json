@@ -1,0 +1,609 @@
+{
+  "source": "Brochure des programmes FFGym 2026-2027, Performance 7-9 ans (pages 26 à 62)",
+  "pointsParOption": 0.5,
+  "niveaux": {
+    "P1": {
+      "base": 1.0,
+      "max": 2.0
+    },
+    "P2": {
+      "base": 3.0,
+      "max": 4.0
+    },
+    "P3": {
+      "base": 5.0,
+      "max": 6.0
+    },
+    "P4": {
+      "base": 7.0,
+      "max": 8.0
+    }
+  },
+  "saut": [
+    {
+      "niveau": "P1",
+      "valeur": 4.5,
+      "texte": "Départ 10 m maximum, saut droit arrivée pieds serrés sur table de saut à 1 m puis fente avant, ATR tombé dos"
+    },
+    {
+      "niveau": "P2",
+      "valeur": 5.0,
+      "texte": "Départ 15 m maximum, lune avec trampo-tremp arrivée dos sur la pile de tapis à hauteur"
+    },
+    {
+      "niveau": "P3",
+      "valeur": 6.0,
+      "texte": "Départ 15 m maximum, lune avec trampo-tremp arrivée debout sur la pile de tapis puis tomber ventre gainé"
+    }
+  ],
+  "barres": {
+    "P1": [
+      {
+        "nom": "Séquence 1 (barre inférieure)",
+        "items": [
+          {
+            "texte": "Départ à la station debout épaules à hauteur de la barre inférieure - sauter à l’appui facial",
+            "id": "BR-P1-1-1"
+          },
+          {
+            "texte": "Maintien 2 secondes en appui facial actif",
+            "id": "BR-P1-1-2"
+          },
+          {
+            "texte": "Rotation en avant (passage par la chandelle) - descente contrôlée - maintien 2 secondes des jambes en fermeture (pointes de pieds à la barre)",
+            "id": "BR-P1-1-3"
+          },
+          {
+            "texte": "Descente contrôlée jusqu’à la suspension droite (passage par l’équerre) - réception à la station debout",
+            "id": "BR-P1-1-4"
+          }
+        ]
+      },
+      {
+        "nom": "Séquence 2 (barre supérieure)",
+        "items": [
+          {
+            "texte": "De la suspension alignée - placement et maintien 2 secondes en courbe AVANT - retour à la suspension droite",
+            "id": "BR-P1-2-1"
+          },
+          {
+            "texte": "Placement et maintien 2 secondes en courbe ARRIÈRE - retour à la suspension droite",
+            "id": "BR-P1-2-2"
+          },
+          {
+            "type": "ET",
+            "option": 1,
+            "texte": "Placement en courbe arrière - fermeture à la suspension mi-renversée jambes écartées et tendues (Stalder) - maintien 2 secondes - retour à la suspension droite",
+            "id": "BR-P1-2-3"
+          },
+          {
+            "texte": "Tour complet en suspension (prises : dorsale / mixte / dorsale / mixte / dorsale) - réception à la station debout (sauf si option 2)",
+            "id": "BR-P1-2-4"
+          },
+          {
+            "type": "ET",
+            "option": 2,
+            "texte": "Traction sans prise d’élan - descente contrôlée à la suspension droite - réception à la station debout",
+            "id": "BR-P1-2-5"
+          }
+        ]
+      }
+    ],
+    "P2": [
+      {
+        "nom": "Séquence 1 (barre inférieure)",
+        "items": [
+          {
+            "texte": "Balancé avant / arrière - réception à la station debout sur caisse ou tremplin",
+            "id": "BR-P2-1-1"
+          },
+          {
+            "texte": "Départ à la station debout épaules à hauteur de la barre inférieure - sauter à l’appui actif - oscillation en suspension mi-renversée jambes écartées et tendues (Stalder) - retour à la station debout sur caisse ou tremplin",
+            "id": "BR-P2-1-2"
+          },
+          {
+            "type": "ET",
+            "option": 1,
+            "texte": "Départ à la station debout épaules à hauteur de la barre inférieure - sauter à l’appui actif - oscillation à la suspension mi-renversée en fermeture jambes serrées et tendues (pieds-mains) - retour à la station debout sur caisse ou tremplin",
+            "id": "BR-P2-1-3"
+          },
+          {
+            "texte": "Départ à la station debout épaules à hauteur de la barre inférieure - renversement libre à l’appui facial",
+            "id": "BR-P2-1-4"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Bascule faciale (possibilité de lâcher la barre et de reculer avant d’effectuer la bascule, départ au choix sol, tremplin ou caisse) - arrêt en appui, ou possibilité d’enchaîner avec l’élément prise d’élan à l’horizontale",
+            "id": "BR-P2-1-5"
+          },
+          {
+            "texte": "Prise d’élan à l’horizontale, corps tendu",
+            "id": "BR-P2-1-6"
+          },
+          {
+            "texte": "Tour d’appui arrière",
+            "id": "BR-P2-1-7"
+          },
+          {
+            "texte": "Sortie filée avant - réception à la station debout",
+            "id": "BR-P2-1-8"
+          }
+        ]
+      },
+      {
+        "nom": "Séquence 2 (barre supérieure)",
+        "items": [
+          {
+            "texte": "Départ à la suspension droite - traction renversement à l’appui facial",
+            "id": "BR-P2-2-1"
+          },
+          {
+            "texte": "Rotation contrôlée en avant en traction (bras fléchis) - renversement à l’appui facial",
+            "id": "BR-P2-2-2"
+          },
+          {
+            "texte": "Rotation en avant - maintien 2 secondes en position de chandelle - descente contrôlée jusqu’à la suspension droite",
+            "id": "BR-P2-2-3"
+          },
+          {
+            "texte": "Placement et maintien 2 secondes en courbe ARRIÈRE puis en courbe AVANT (courbe arrière puis courbe avant, ou courbe avant puis courbe arrière)",
+            "id": "BR-P2-2-4"
+          },
+          {
+            "texte": "Placement en courbe avant et passage dynamique de la courbe arrière à la courbe avant 5 fois enchaînés, puis fermeture - filé en avant - élan en arrière (ou l’inverse)",
+            "id": "BR-P2-2-5"
+          },
+          {
+            "texte": "2 balancés (avant / arrière) à l’oblique basse (45°) - réception à la station debout",
+            "id": "BR-P2-2-6"
+          }
+        ]
+      }
+    ],
+    "P3": [
+      {
+        "nom": "Séquence 1 (barre inférieure)",
+        "items": [
+          {
+            "texte": "Départ à la station debout - bascule faciale - prise d’élan à l’horizontale, corps tendu",
+            "id": "BR-P3-1-1"
+          },
+          {
+            "texte": "Bascule faciale - prise d’élan à l’horizontale, corps tendu",
+            "id": "BR-P3-1-2"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "Bascule faciale - prise d’élan à l’ATR, corps tendu",
+            "id": "BR-P3-1-3"
+          },
+          {
+            "texte": "Tour proche au choix à l’horizontale (Stalder / pieds-mains / tour d’appui arrière libre) - retour à la station debout",
+            "id": "BR-P3-1-4"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Tour proche au choix à 45° de la verticale (Stalder / pieds-mains / tour d’appui arrière libre) - retour à la station debout",
+            "id": "BR-P3-1-5"
+          }
+        ]
+      },
+      {
+        "nom": "Séquence 2 (barre supérieure)",
+        "items": [
+          {
+            "texte": "Bascule faciale (de la prise d’élan ou avec élan donné par l’entraîneur) - prise d’élan à 45° de la verticale, corps tendu",
+            "id": "BR-P3-2-1"
+          },
+          {
+            "texte": "Grande culbute (balancé avant avec retour à l’appui facial) - filé avant et balancé arrière",
+            "id": "BR-P3-2-2"
+          },
+          {
+            "texte": "2 balancés (avant / arrière) à l’horizontale",
+            "id": "BR-P3-2-3"
+          },
+          {
+            "texte": "Balancé avant ½ tour à l’horizontale",
+            "id": "BR-P3-2-4"
+          },
+          {
+            "texte": "Balancé avant en prise mixte avec changement en prise palmaire devant (supination)",
+            "id": "BR-P3-2-5"
+          },
+          {
+            "texte": "Balancé arrière avec recherche d’appui dynamique - retour à la station debout",
+            "id": "BR-P3-2-6"
+          }
+        ]
+      }
+    ]
+  },
+  "poutre": {
+    "P1": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "De la station faciale, sauter à l’appui et sans arrêt passer une jambe tendue latéralement pour s’établir au siège transversal",
+            "id": "PO-P1-1-1"
+          },
+          {
+            "texte": "S’allonger sur le dos, lever les jambes tendues à la verticale, maintien 2 secondes - retour au siège",
+            "id": "PO-P1-1-2"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "Chandelle maintien 2 secondes et retour au siège",
+            "id": "PO-P1-1-3"
+          },
+          {
+            "texte": "Départ à genoux mains sur la poutre - tendre les jambes pointes retournées, maintien 2 secondes",
+            "id": "PO-P1-1-4"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Départ à genoux - placement du dos en position groupée - retour accroupi",
+            "id": "PO-P1-1-5"
+          },
+          {
+            "texte": "Un détourné",
+            "id": "PO-P1-1-6"
+          },
+          {
+            "texte": "Sur pieds plats - retiré - développé en 4ème devant jambe à l’horizontale - raccourci - développé 4ème derrière - jambe droite puis jambe gauche (ou inversement)",
+            "id": "PO-P1-1-7"
+          },
+          {
+            "texte": "Demi plié relevé, maintien 2 secondes",
+            "id": "PO-P1-1-8"
+          },
+          {
+            "texte": "Sortie saut vertical en bout de poutre",
+            "id": "PO-P1-1-9"
+          }
+        ]
+      }
+    ],
+    "P2": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "De la station faciale, sauter à l’appui et sans arrêt passer une jambe tendue latéralement pour s’établir au siège transversal - équerre jambes écartées, maintien 2 secondes",
+            "id": "PO-P2-1-1"
+          },
+          {
+            "texte": "ATR transversal jambes écartées ou serrées - retour en fente",
+            "id": "PO-P2-1-2"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "Souplesse arrière - retour en fente",
+            "id": "PO-P2-1-3"
+          },
+          {
+            "texte": "Demi plié au retiré - relevé - poser le pied devant - détourné - 1 pas détourné (dans le même sens)",
+            "id": "PO-P2-1-4"
+          },
+          {
+            "texte": "Position de départ à l’arabesque - battement en 4ème devant à l’horizontale - relevé sur ½ pointe, jambe gauche puis jambe droite (ou inversement)",
+            "id": "PO-P2-1-5"
+          },
+          {
+            "texte": "Fente avant jambe gauche - renversement avant jusqu’à la pose des mains - jambe droite au moins à l’horizontale sans poussée de la jambe gauche - revenir en fente avant jambe gauche - fente avant jambe droite - renversement avant jusqu’à la pose des mains - jambe gauche au moins à l’horizontale sans poussée de la jambe droite - revenir en fente avant jambe gauche (ou inversement)",
+            "id": "PO-P2-1-6"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Roue - retour en fente",
+            "id": "PO-P2-1-7"
+          },
+          {
+            "texte": "Battement 4ème devant à l’horizontale jambe droite - poser le pied avant - battement 4ème arrière jambe gauche (ou inversement) - poser le pied arrière - ½ plié - relevé sur ½ pointes, maintien 2 secondes - saut vertical",
+            "id": "PO-P2-1-8"
+          },
+          {
+            "texte": "Sortie en rondade",
+            "id": "PO-P2-1-9"
+          }
+        ]
+      }
+    ],
+    "P3": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "Appel 2 pieds - s’établir directement à l’équerre jambes écartées, maintien 2 secondes (position latérale ou transversale)",
+            "id": "PO-P3-1-1"
+          },
+          {
+            "texte": "Départ au retiré pied plat - ½ tour sur ½ pointe - poser pieds plats - 1 détourné",
+            "id": "PO-P3-1-2"
+          },
+          {
+            "texte": "ATR transversal jambes écartées, retour pied-pied - souplesse arrière, retour en fente",
+            "id": "PO-P3-1-3"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "Flip jambes décalées - retour en fente",
+            "id": "PO-P3-1-4"
+          },
+          {
+            "texte": "Cabriole 4ème devant jambe droite à l’horizontale - cabriole 4ème devant jambe gauche à l’horizontale (ou inversement)",
+            "id": "PO-P3-1-5"
+          },
+          {
+            "texte": "ATR transversal maintien 2 secondes jambes serrées puis écartées - retour à l’arabesque",
+            "id": "PO-P3-1-6"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Tic-tac - retour en fente",
+            "id": "PO-P3-1-7"
+          },
+          {
+            "texte": "Demi plié - relevé, maintien 2 secondes - saut écart antéropostérieur",
+            "id": "PO-P3-1-8"
+          },
+          {
+            "texte": "LIAISON : roue + salto groupé en sortie de poutre",
+            "id": "PO-P3-1-9"
+          }
+        ]
+      }
+    ],
+    "P4": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "Entrée B maximum (issue du code performance)",
+            "id": "PO-P4-1-1"
+          },
+          {
+            "texte": "Départ fente - ½ tour au retiré en dedans - arrêt - rester au retiré - ½ tour au retiré en dedans sur la même jambe",
+            "id": "PO-P4-1-2"
+          },
+          {
+            "texte": "Flip jambes décalées - retour en fente",
+            "id": "PO-P4-1-3"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "LIAISON : ATR transversal jambes écartées, serrées et écartées - retour pied-pied + flip jambes décalées - retour en fente",
+            "id": "PO-P4-1-4"
+          },
+          {
+            "texte": "Cabriole 4ème devant jambe à l’horizontale - battement cloche (descente de la jambe avant vers l’arrière) - cabriole 4ème arrière à l’arabesque - saut écart antéro-postérieur (préparation saut changement de jambe)",
+            "id": "PO-P4-1-5"
+          },
+          {
+            "texte": "Tic-tac - retour à l’arabesque, maintien 2 secondes",
+            "id": "PO-P4-1-6"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Souplesse avant avec passage en 4ème devant ou saut de mains",
+            "id": "PO-P4-1-7"
+          },
+          {
+            "texte": "LIAISON : roue arabesque contrôlée enchaînée avec souplesse arrière - retour en fente",
+            "id": "PO-P4-1-8"
+          },
+          {
+            "texte": "Départ en transversal - saut 1/4 de tour - saut 1/4 de tour (dans le même sens)",
+            "id": "PO-P4-1-9"
+          },
+          {
+            "texte": "LIAISON : sortie rondade + salto arrière groupé avec ouverture",
+            "id": "PO-P4-1-10"
+          }
+        ]
+      }
+    ]
+  },
+  "sol": {
+    "P1": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "Préparation pivot : relevé sur pied plat au retiré + détourné sur demi-pointe",
+            "id": "SO-P1-1-1"
+          },
+          {
+            "texte": "LIAISON : départ latéral roue 1/4 retour en latéral + pas chassé latéral + roue pied-pied, bras à l’oblique basse",
+            "id": "SO-P1-1-2"
+          },
+          {
+            "texte": "Roulade arrière carpé bras tendus",
+            "id": "SO-P1-1-3"
+          },
+          {
+            "texte": "LIAISON : battement fente avant + ATR une jambe à la verticale et une jambe à l’horizontale",
+            "id": "SO-P1-1-4"
+          },
+          {
+            "texte": "LIAISON : battement 4ème devant à l’horizontale jambe droite - poser le pied avant - battement 4ème arrière jambe gauche + battement 4ème devant à l’horizontale jambe gauche - poser le pied avant - battement 4ème arrière jambe droite (ou inversement) + saut vertical",
+            "id": "SO-P1-1-5"
+          },
+          {
+            "texte": "LIAISON : chandelle bras aux oreilles + venir en fermeture complète + chandelle arrivée jambes écartées + grand écart antéropostérieur droit ou gauche + écrasement facial à 90°",
+            "id": "SO-P1-1-6"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "LIAISON : chandelle bras aux oreilles + venir en fermeture complète + chandelle arrivée jambes écartées + grand écart antéropostérieur droit ou gauche + écrasement facial à 90° + passage de l’écrasement facial à l’appui ventral bassin collé au sol",
+            "id": "SO-P1-1-7"
+          },
+          {
+            "texte": "Pont maintien 2 secondes puis lever la jambe à la verticale",
+            "id": "SO-P1-1-8"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "LIAISON : pont maintien 2 secondes puis lever la jambe à la verticale + pousser pour revenir en fente",
+            "id": "SO-P1-1-9"
+          }
+        ]
+      }
+    ],
+    "P2": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "LIAISON : sursaut rondade + flip + rebond",
+            "id": "SO-P2-1-1"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "LIAISON : sursaut rondade + 2 flips + rebond",
+            "id": "SO-P2-1-2"
+          },
+          {
+            "texte": "LIAISON : cabriole + sissone (préparation changement de jambe)",
+            "id": "SO-P2-1-3"
+          },
+          {
+            "texte": "LIAISON : 1 pas chassé jambe gauche + 1 pas chassé jambe droite (ou inversement) + assemblé + saut vertical",
+            "id": "SO-P2-1-4"
+          },
+          {
+            "texte": "LIAISON : battement - fente - ATR rebond + pont - se relever",
+            "id": "SO-P2-1-5"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "Sursaut saut de mains - rebond",
+            "id": "SO-P2-1-6"
+          },
+          {
+            "texte": "LIAISON : battement - fente - tic-tac pied-pied + roulade arrière bras et corps tendus arrivée en courbe avant",
+            "id": "SO-P2-1-7"
+          },
+          {
+            "texte": "Équerre écartée maintien 2 secondes - grand écart au choix (gauche, droit, facial) maintien 2 secondes",
+            "id": "SO-P2-1-8"
+          },
+          {
+            "texte": "Départ en fente sur un genou - relevé sur pied plat au retiré - détourné",
+            "id": "SO-P2-1-9"
+          }
+        ]
+      }
+    ],
+    "P3": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "LIAISON : battement - fente - ATR 1/4 de valse arrière + roulade avant à l’équerre écartée + placement du dos - arrivée en fermeture (pieds entre les mains)",
+            "id": "SO-P3-1-1"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "LIAISON : battement - fente - ATR 1/4 de valse arrière + roulade avant à l’équerre écartée + placement du dos à l’ATR (endo)",
+            "id": "SO-P3-1-2"
+          },
+          {
+            "texte": "LIAISON : saut écart antéro-postérieur - saut vertical (du rebond)",
+            "id": "SO-P3-1-3"
+          },
+          {
+            "texte": "LIAISON : 1 pas ou sursaut rondade + flip + salto arrière groupé",
+            "id": "SO-P3-1-4"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "1 pas ou sursaut rondade + 2 flips + salto arrière groupé",
+            "id": "SO-P3-1-5"
+          },
+          {
+            "texte": "PASSAGE GYMNIQUE : pas chassé + saut changement de jambe",
+            "id": "SO-P3-1-6"
+          },
+          {
+            "texte": "LIAISON : souplesse arrière ATR jambes écartées-serrées-écartées retour pied-pied + roulade arrière à l’ATR arrivée en fente",
+            "id": "SO-P3-1-7"
+          },
+          {
+            "texte": "LIAISON : départ en fente ½ pivot au retiré - détourné",
+            "id": "SO-P3-1-8"
+          },
+          {
+            "texte": "LIAISON : salto avant groupé + élan + sursaut saut de mains + rebond",
+            "id": "SO-P3-1-9"
+          }
+        ]
+      }
+    ],
+    "P4": [
+      {
+        "nom": "Mouvement",
+        "items": [
+          {
+            "texte": "Série obligatoire à faire avant l’enchaînement en musique : battement - fente - ATR roulade équerre écartée - placement du dos à l’ATR (endo) ½ valse avant par ¼ de valse - roulade arrière à l’ATR ¼ de valse (retour libre)",
+            "id": "SO-P4-1-1"
+          },
+          {
+            "texte": "LIAISON : rondade + flip + salto arrière tendu",
+            "id": "SO-P4-1-2"
+          },
+          {
+            "texte": "LIAISON : salto avant groupé + élan + salto avant groupé",
+            "id": "SO-P4-1-3"
+          },
+          {
+            "type": "OU",
+            "option": 1,
+            "texte": "Salto avant groupé + salto avant groupé",
+            "id": "SO-P4-1-4"
+          },
+          {
+            "texte": "LIAISON : sursaut + rondade + flip + flip + flip + rebond",
+            "id": "SO-P4-1-5"
+          },
+          {
+            "type": "OU",
+            "option": 2,
+            "texte": "LIAISON : sursaut + rondade + flip + flip + salto arrière groupé",
+            "id": "SO-P4-1-6"
+          },
+          {
+            "texte": "LIAISON : saut écart antéro-postérieur + saut vertical ½ tour (du rebond)",
+            "id": "SO-P4-1-7"
+          },
+          {
+            "texte": "PASSAGE GYMNIQUE : pas chassé + saut changement de jambe + grand jeté",
+            "id": "SO-P4-1-8"
+          },
+          {
+            "texte": "Pivot au retiré",
+            "id": "SO-P4-1-9"
+          }
+        ]
+      }
+    ]
+  }
+}

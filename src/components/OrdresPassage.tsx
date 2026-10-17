@@ -193,7 +193,10 @@ export default function OrdresPassage() {
   const totalEquipe = AGRES.reduce((t, a) => t + totalAgres(a.id), 0);
   // Maximum théorique : le nombre de notes retenues multiplié par la note D maximale du niveau, à chaque agrès.
   const maxAgres = (a: Agres) =>
-    selection ? nbCompte * noteDMax(selection.equipe.niveau, a) : 0;
+    selection
+      ? nbCompte *
+        noteDMax(selection.equipe.niveau, a, selection.equipe.categorieId)
+      : 0;
   const maxEquipe = AGRES.reduce((t, a) => t + maxAgres(a.id), 0);
 
   // Les trois panneaux de la page d'un coup : ordres de passage des 4 agrès, notes de départ avec totaux, réglages du matériel.

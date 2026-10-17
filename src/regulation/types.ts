@@ -43,8 +43,9 @@ export interface SautFedA {
 // ANS79 : Fédéral A3 7/9 ans, table de saut à 1,00 m, trampo-tremp uniquement.
 export type Appareil = "TRAMPO_TREMP" | "TREMPLIN" | "ANS79";
 
-export type NiveauId = "A" | "A2" | "A3" | "B1" | "B2" | "B3";
-export type Programme = "A" | "B";
+// P79 : équipe Performance 7-9 ans ; P1 à P4 : niveaux de mouvement de ce programme (mouvements imposés avec options).
+export type NiveauId = "A" | "A2" | "A3" | "B1" | "B2" | "B3" | "P79" | "P1" | "P2" | "P3" | "P4";
+export type Programme = "A" | "B" | "P";
 
 export interface CategorieAge {
   id: string;
@@ -60,6 +61,8 @@ export interface NiveauFed {
   label: string;
   detail: string;
   programme: Programme;
+  // Absent : sert à l'équipe et au mouvement. « equipe » : choix d'équipe seulement ; « mouvement » : niveau d'un mouvement seulement.
+  pour?: "equipe" | "mouvement";
   plafondD: number;
   // Fédéral B : règles de note D propres au niveau (Fédéral A : reglesFedA.noteD).
   regles?: { nbElementsMax: number; nbElementsMin: number; penaliteMin: number; maxBonifications: number; pointsParBonification: number };

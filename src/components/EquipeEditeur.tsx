@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { getNiveau, niveauxFed } from "@/regulation/loader";
+import { getNiveau, niveauxEquipe } from "@/regulation/loader";
 import { btnContour, btnDegrade, champ, etiquette } from "@/lib/styles";
 import type { Equipe } from "@/lib/data";
 import type { NiveauId } from "@/regulation/types";
@@ -53,7 +53,7 @@ export default function EquipeEditeur({ actuelle, equipesClub, autresEquipesIds,
         <div>
           <label className={etiquette}>Niveau</label>
           <select value={niveau} onChange={(e) => setNiveau(e.target.value as NiveauId)} className={champ}>
-            {niveauxFed.map((n) => (
+            {niveauxEquipe.map((n) => (
               <option key={n.id} value={n.id}>
                 {n.label}
               </option>

@@ -17,7 +17,7 @@ import {
   categoriesIndividuel,
   categoriesPossibles,
   getNiveau,
-  niveauxFed,
+  niveauxEquipe,
   sourceIndividuel,
 } from "@/regulation/loader";
 import PartageBouton from "@/components/PartageBouton";
@@ -222,7 +222,7 @@ export default function CategoriesAge() {
       <section>
         <h2 className={titreSection}>Catégories par niveau (équipes)</h2>
         <div className="grid gap-4 md:grid-cols-3">
-          {niveauxFed.map((n) => (
+          {niveauxEquipe.map((n) => (
             <div
               key={n.id}
               className="rounded-lg border border-border-subtle bg-surface-alt p-3.5"

@@ -4,11 +4,12 @@ import reglesJson from "./data/gaf/federal-a/regles.json";
 import referenceJson from "./data/gaf/federal-a/reference.json";
 import niveauxJson from "./data/gaf/niveaux.json";
 import categoriesAgeJson from "./data/gaf/categories-age.json";
+import perf79Json from "./data/gaf/performance-79/programmes.json";
 import referenceBJson from "./data/gaf/federal-b/reference.json";
 import elementsBJson from "./data/gaf/federal-b/elements.json";
 import sautBJson from "./data/gaf/federal-b/saut.json";
 import reglesBJson from "./data/gaf/federal-b/regles.json";
-import type { AgresAvecGrille, BonificationDef, CategorieAge, ElementFedA, NiveauFed, NiveauId, Programme, ReglesFedA, ReglesFedB, SautFedA } from "./types";
+import type { Agres, AgresAvecGrille, BonificationDef, CategorieAge, ElementFedA, NiveauFed, NiveauId, Programme, ReglesFedA, ReglesFedB, SautFedA } from "./types";
 
 const elements = [...(elementsJson as ElementFedA[]), ...(elementsBJson as ElementFedA[])];
 const parId = new Map(elements.map((e) => [e.id, e]));
@@ -44,7 +45,10 @@ export function getReference(niveau: NiveauId) {
 }
 
 export const niveauxFed = niveauxJson.niveaux as NiveauFed[];
-export const niveauxDuProgramme = (p: Programme) => niveauxFed.filter((n) => n.programme === p);
+// Niveaux proposés pour une équipe (hors niveaux de mouvement propres à Performance 7-9 ans) et pour un mouvement (hors niveau d'équipe).
+export const niveauxEquipe = niveauxFed.filter((n) => n.pour !== "mouvement");
+export const niveauxMouvement = niveauxFed.filter((n) => n.pour !== "equipe");
+export const niveauxDuProgramme = (p: Programme) => niveauxEquipe.filter((n) => n.programme === p);
 export const anneeSaison = niveauxJson.anneeSaison;
 
 export function getNiveau(id: NiveauId): NiveauFed {
@@ -122,6 +126,62 @@ export function getSautFedA(id: string): SautFedA | undefined {
 
 export function programmeDe(niveau: NiveauId): Programme {
   return getNiveau(niveau).programme;
+}
+
+// ——— Performance 7-9 ans : mouvements imposés, chaque option validée rapporte 0,50 point ———
+export interface ItemPerf79 {
+  id: string;
+  texte: string;
+  type?: "OU" | "ET";
+  option?: number;
+}
+export interface SequencePerf79 {
+  nom: string;
+  items: ItemPerf79[];
+}
+
+export const estPerf79 = (niveau: NiveauId) => programmeDe(niveau) === "P";
+
+export const perf79 = perf79Json as unknown as {
+  pointsParOption: number;
+  niveaux: Record<string, { base: number; max: number }>;
+  saut: { niveau: string; valeur: number; texte: string }[];
+  barres: Record<string, SequencePerf79[]>;
+  poutre: Record<string, SequencePerf79[]>;
+  sol: Record<string, SequencePerf79[]>;
+};
+
+// Niveaux possibles d'un agrès : saut et barres de 1 à 3, poutre et sol de 1 à 4.
+export function niveauxPerf79(agres: Agres): NiveauId[] {
+  return (agres === "POUTRE" || agres === "SOL" ? ["P1", "P2", "P3", "P4"] : ["P1", "P2", "P3"]) as NiveauId[];
+}
+
+export function sequencesPerf79(agres: Agres, niveau: NiveauId): SequencePerf79[] {
+  if (agres === "SAUT") return [];
+  return perf79[agres === "BARRES" ? "barres" : agres === "POUTRE" ? "poutre" : "sol"][niveau] ?? [];
+}
+
+// Identifiants des options d'un mouvement imposé.
+export function optionsPerf79(agres: Agres, niveau: NiveauId): string[] {
+  return sequencesPerf79(agres, niveau).flatMap((s) => s.items.filter((i) => i.option).map((i) => i.id));
+}
+
+export function noteDPerf79(agres: Agres, niveau: NiveauId, choisies: string[]): number {
+  if (agres === "SAUT") return perf79.saut.find((s) => s.niveau === niveau)?.valeur ?? 0;
+  const valides = new Set(optionsPerf79(agres, niveau));
+  const n = new Set(choisies.filter((id) => valides.has(id))).size;
+  return (perf79.niveaux[niveau]?.base ?? 0) + n * perf79.pointsParOption;
+}
+
+// Niveau le plus haut autorisé à un agrès pour une catégorie d'équipe : 7 ans niveau 1 ; 7-8 ans niveaux 1 à 3 ; 7-9 ans niveaux 1 à 2 ou 1 à 4.
+const NIVEAU_HAUT_CATEGORIE: Record<string, number> = { "7": 1, "7-8": 3, "7-9a": 2, "7-9b": 4 };
+
+export function noteDMaxPerf79(agres: Agres, niveau: NiveauId, categorieId?: string): number {
+  if (niveau === "P79") {
+    const permis = niveauxPerf79(agres).filter((id) => Number(id.slice(1)) <= (NIVEAU_HAUT_CATEGORIE[categorieId ?? "7-9b"] ?? 4));
+    return Math.max(0, ...permis.map((id) => noteDMaxPerf79(agres, id)));
+  }
+  return agres === "SAUT" ? (perf79.saut.find((s) => s.niveau === niveau)?.valeur ?? 0) : (perf79.niveaux[niveau]?.max ?? 0);
 }
 
 // Sauts proposés pour un niveau : la table Fédéral A, ou celle du niveau Fédéral B.

@@ -154,17 +154,18 @@ export default function Accueil() {
   }
 
   // Chaque équipe appartient à un programme selon son niveau : A, A2, A3 pour le Fédéral A ; B1, B2, B3 pour le Fédéral B.
-  const programme = filiere === "FEDERAL_B" ? "B" : "A";
+  const programme =
+    filiere === "FEDERAL_B" ? "B" : filiere === "PERFORMANCE" ? "P" : "A";
   const niveauxFiliere = niveauxDuProgramme(programme);
   // Le panneau choisi décide des équipes affichées : Fédéral A = équipes A, A2, A3 ; Fédéral B = B1, B2, B3 ; Performance = aucune pour l'instant.
   const programmeAffiche =
-    filiere === "FEDERAL" ? "A" : filiere === "FEDERAL_B" ? "B" : null;
+    filiere === "FEDERAL" ? "A" : filiere === "FEDERAL_B" ? "B" : "P";
   const equipesFiliere = programmeAffiche
     ? equipes.filter((e) => programmeDe(e.niveau) === programmeAffiche)
     : [];
-  const equipesDuProgramme = (p: "A" | "B") =>
+  const equipesDuProgramme = (p: "A" | "B" | "P") =>
     equipes.filter((e) => programmeDe(e.niveau) === p);
-  const nbGymnastesProgramme = (p: "A" | "B") =>
+  const nbGymnastesProgramme = (p: "A" | "B" | "P") =>
     new Set(equipesDuProgramme(p).flatMap((e) => e.gymnasteIds)).size;
 
   const clubExistant = clubs.find(
@@ -268,31 +269,13 @@ export default function Accueil() {
         nbGymnastes={nbGymnastesProgramme("A")}
         nbEquipesB={equipesDuProgramme("B").length}
         nbGymnastesB={nbGymnastesProgramme("B")}
+        nbEquipesP={equipesDuProgramme("P").length}
+        nbGymnastesP={nbGymnastesProgramme("P")}
       />
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <section className="md:col-span-2">
           <h2 className={titreSection}>Mes gymnastes — classement par club</h2>
-
-          {filiere === "PERFORMANCE" && (
-            <div className={vide}>
-              <p className="font-semibold text-foreground">
-                Performance : bientôt disponible
-              </p>
-              <p className="mt-1">
-                Les programmes Performance (Nationale A, B et C, Régionale 7-9
-                ans) ne sont pas encore saisis. En attendant, tes gymnastes
-                restent enregistrées à droite et tu peux les répartir en équipes
-                Fédéral A ou Fédéral B.
-              </p>
-              <button
-                onClick={() => choisirFiliere("FEDERAL")}
-                className="mt-3 rounded border border-border-strong px-3 py-1.5 text-sm text-foreground hover:border-accent-solid/60"
-              >
-                Revenir au Fédéral A
-              </button>
-            </div>
-          )}
 
           {trie.length === 0 && (
             <p className={vide}>
@@ -301,16 +284,19 @@ export default function Accueil() {
             </p>
           )}
           {trie.length > 0 &&
-            filiere !== "PERFORMANCE" &&
             equipesFiliere.length === 0 &&
             gymnastes.every((g) =>
               equipes.some((e) => e.gymnasteIds.includes(g.id)),
             ) && (
               <p className={vide}>
                 Aucune équipe{" "}
-                {filiere === "FEDERAL_B" ? "Fédéral B" : "Fédéral A"} pour le
-                moment. Créez-en une en ajoutant une gymnaste avec un nom
-                d’équipe.
+                {filiere === "FEDERAL_B"
+                  ? "Fédéral B"
+                  : filiere === "PERFORMANCE"
+                    ? "Performance 7-9 ans"
+                    : "Fédéral A"}{" "}
+                pour le moment. Créez-en une en ajoutant une gymnaste avec un
+                nom d’équipe.
               </p>
             )}
 

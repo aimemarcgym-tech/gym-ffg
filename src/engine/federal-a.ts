@@ -1,4 +1,4 @@
-import { elementAutorise, getBonifications, getElementFedA, getNiveau, getSautFedA, getSautsNiveau, reglesNiveau } from "@/regulation/loader";
+import { estPerf79, noteDMaxPerf79, noteDPerf79, elementAutorise, getBonifications, getElementFedA, getNiveau, getSautFedA, getSautsNiveau, reglesNiveau } from "@/regulation/loader";
 import type { Agres, Appareil, AgresAvecGrille, BonificationDef, CheckSpec, ElementFedA, NiveauId } from "@/regulation/types";
 
 export interface CheckResult {
@@ -171,7 +171,8 @@ export function sautsValides(niveau: NiveauId, sauts: SautChoisi[]): SautChoisi[
 }
 
 // Note D maximale possible : le plafond du niveau (éléments + bonifications) ou, au saut, la valeur du meilleur saut du niveau.
-export function noteDMax(niveau: NiveauId, agres: Agres): number {
+export function noteDMax(niveau: NiveauId, agres: Agres, categorieId?: string): number {
+  if (estPerf79(niveau)) return noteDMaxPerf79(agres, niveau, categorieId);
   if (agres === "SAUT") return Math.max(0, ...getSautsNiveau(niveau).flatMap((s) => [s.valeurTrampoTremp, s.valeurTremplin, s.valeur79 ?? 0]));
   return getNiveau(niveau).plafondD;
 }
@@ -183,6 +184,8 @@ export function noteDMouvement(m: {
   bonifIds: string[];
   sauts: SautChoisi[];
 }): number {
+  // Performance 7-9 ans : mouvement imposé, les options validées sont enregistrées dans bonifIds.
+  if (estPerf79(m.niveau)) return noteDPerf79(m.agres, m.niveau, m.bonifIds);
   if (m.agres === "SAUT") return calculerNoteDSaut(sautsValides(m.niveau, m.sauts));
   return calculerNoteD(m.agres, m.elementIds, m.bonifIds, m.niveau).total;
 }
