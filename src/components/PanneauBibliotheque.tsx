@@ -1,7 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ageEnSaison, getSautsNiveau } from "@/regulation/loader";
+import {
+  ageEnSaison,
+  getNiveau,
+  getSautsNiveau,
+  groupesSautsPF,
+} from "@/regulation/loader";
 import {
   LIBELLE_APPEL,
   LIBELLE_FAMILLE,
@@ -42,6 +47,8 @@ function Statut({ statut }: { statut?: "MAITRISE" | "APPRENTISSAGE" }) {
 export default function PanneauBibliotheque(p: Props) {
   const [famille, setFamille] = useState("");
   const [recherche, setRecherche] = useState("");
+  // Performance 1 et 2 : sauts classés par famille (groupes 1 à 5 de la brochure) ; « Tous les sauts » par défaut.
+  const [familleSaut, setFamilleSaut] = useState("");
   const [maitrisesSeules, setMaitrisesSeules] = useState(false);
   const comp = p.gymnaste?.competences ?? {};
   // L'option « 7/9 ans » (saut à 1,00 m) n'est proposée qu'aux gymnastes de 7 à 9 ans.
@@ -225,61 +232,81 @@ export default function PanneauBibliotheque(p: Props) {
               ? "Deux sauts au maximum : le meilleur est retenu (même note D avec tremplin ou trampo-tremp)."
               : "Deux sauts au maximum : choisissez aussi le tremplin utilisé."}
           </p>
+          {getNiveau(p.niveauId).programme === "PF" && (
+            <select
+              value={familleSaut}
+              onChange={(e) => setFamilleSaut(e.target.value)}
+              aria-label="Famille de sauts"
+              className={`${champ} mb-2`}
+            >
+              <option value="">Tous les sauts</option>
+              {Object.entries(groupesSautsPF).map(([g, titre]) => (
+                <option key={g} value={g}>
+                  Famille {g} · {titre}
+                </option>
+              ))}
+            </select>
+          )}
           <div className="grid max-h-[32rem] gap-2 overflow-y-auto pr-2">
-            {getSautsNiveau(p.niveauId).map((s) => (
-              <div
-                key={s.id}
-                className="rounded border border-border-subtle bg-surface-alt p-2"
-              >
-                <div className="mb-2 flex items-start justify-between gap-2">
-                  <span className="text-xs leading-snug text-foreground">
-                    {s.nom}
-                  </span>
-                  <Statut statut={comp[s.id]} />
+            {getSautsNiveau(p.niveauId)
+              .filter(
+                (s) =>
+                  !familleSaut || s.id.replace("PF-SA-", "")[0] === familleSaut,
+              )
+              .map((s) => (
+                <div
+                  key={s.id}
+                  className="rounded border border-border-subtle bg-surface-alt p-2"
+                >
+                  <div className="mb-2 flex items-start justify-between gap-2">
+                    <span className="text-xs leading-snug text-foreground">
+                      {s.nom}
+                    </span>
+                    <Statut statut={comp[s.id]} />
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {(
+                      (s.unique
+                        ? ["TRAMPO_TREMP"]
+                        : s.valeur79 !== undefined && age7a9
+                          ? ["TRAMPO_TREMP", "TREMPLIN", "ANS79"]
+                          : ["TRAMPO_TREMP", "TREMPLIN"]) as Appareil[]
+                    ).map((app) => {
+                      const nb = p.sauts.filter(
+                        (x) => x.idSaut === s.id && x.appareil === app,
+                      ).length;
+                      const actif = nb > 0;
+                      const v =
+                        app === "ANS79"
+                          ? (s.valeur79 ?? 0)
+                          : app === "TRAMPO_TREMP"
+                            ? s.valeurTrampoTremp
+                            : s.valeurTremplin;
+                      return (
+                        <button
+                          key={app}
+                          onClick={() => p.onBasculerSaut(s.id, app)}
+                          className="flex-1 rounded border border-border-strong px-2 py-1.5 text-xs text-foreground hover:border-accent-solid/60"
+                        >
+                          {actif && (
+                            <span className="text-success">
+                              ✓{nb > 1 ? ` ×${nb}` : ""}{" "}
+                            </span>
+                          )}
+                          {s.unique
+                            ? "Note D"
+                            : app === "ANS79"
+                              ? "7/9 ans (saut 1,00 m)"
+                              : app === "TRAMPO_TREMP"
+                                ? "Trampo-tremp"
+                                : "1 tremplin"}{" "}
+                          · {fmt(v)}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {(
-                    (s.unique
-                      ? ["TRAMPO_TREMP"]
-                      : s.valeur79 !== undefined && age7a9
-                        ? ["TRAMPO_TREMP", "TREMPLIN", "ANS79"]
-                        : ["TRAMPO_TREMP", "TREMPLIN"]) as Appareil[]
-                  ).map((app) => {
-                    const nb = p.sauts.filter(
-                      (x) => x.idSaut === s.id && x.appareil === app,
-                    ).length;
-                    const actif = nb > 0;
-                    const v =
-                      app === "ANS79"
-                        ? (s.valeur79 ?? 0)
-                        : app === "TRAMPO_TREMP"
-                          ? s.valeurTrampoTremp
-                          : s.valeurTremplin;
-                    return (
-                      <button
-                        key={app}
-                        onClick={() => p.onBasculerSaut(s.id, app)}
-                        className="flex-1 rounded border border-border-strong px-2 py-1.5 text-xs text-foreground hover:border-accent-solid/60"
-                      >
-                        {actif && (
-                          <span className="text-success">
-                            ✓{nb > 1 ? ` ×${nb}` : ""}{" "}
-                          </span>
-                        )}
-                        {s.unique
-                          ? "Note D"
-                          : app === "ANS79"
-                            ? "7/9 ans (saut 1,00 m)"
-                            : app === "TRAMPO_TREMP"
-                              ? "Trampo-tremp"
-                              : "1 tremplin"}{" "}
-                        · {fmt(v)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </>
       )}
