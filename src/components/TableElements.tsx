@@ -72,7 +72,7 @@ function Entete({ colonnes }: { colonnes: string[] }) {
         {colonnes.map((c, i) => (
           <th
             key={c}
-            className={`${th} ${i === 0 ? "w-28" : i === 1 ? "min-w-[420px]" : "w-28"}`}
+            className={`${th} ${c === "Nom" || (i === 1 && colonnes[0] !== "Nom") ? "min-w-[420px]" : "w-28"}`}
           >
             {c}
           </th>
@@ -253,7 +253,7 @@ export default function TableElements() {
                             key={x.id}
                             className="border-t border-border-subtle"
                           >
-                            <td className="px-4 py-2 text-foreground">
+                            <td className="min-w-[420px] px-4 py-2 text-foreground">
                               {x.nom}
                             </td>
                             <td className="px-4 py-2">
