@@ -91,7 +91,7 @@ export default function FilieresPanneaux({
           </span>
         </div>
         <div className="text-xs text-muted">
-          Performance 7-9 ans (régionale) et Performance 1 et 2
+          7-9 ans (régionale) et Performance 1 et 2
         </div>
         <div className="mt-1 text-xs text-muted">
           {nbEquipesP} équipe{nbEquipesP > 1 ? "s" : ""} · {nbGymnastesP}{" "}
