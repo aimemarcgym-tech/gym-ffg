@@ -1,0 +1,108 @@
+{
+ "source": "Brochure des programmes FFGym 2026-2027, Performance (pages 63 à 86 et 175 à 181)",
+ "temps": [
+  {
+   "agres": "POUTRE",
+   "label": "Poutre : durée maximum",
+   "valeur": "1'30",
+   "page": 78
+  },
+  {
+   "agres": "POUTRE",
+   "label": "Poutre : temps de chute sans pénalité",
+   "valeur": "10 s",
+   "page": 78
+  },
+  {
+   "agres": "SOL",
+   "label": "Sol : durée maximum",
+   "valeur": "1'30",
+   "page": 83
+  },
+  {
+   "agres": "BARRES",
+   "label": "Barres : temps de chute sans pénalité",
+   "valeur": "30 s",
+   "page": 76
+  }
+ ],
+ "lexique": [
+  {
+   "terme": "VD",
+   "definition": "Valeur de difficulté d’un élément : A 0,10 · B 0,20 · C 0,30 · D 0,40 · E 0,50 · F 0,60 · G 0,70 (jusqu’à J 1,00). Sans valeur = 0"
+  },
+  {
+   "terme": "Note D",
+   "definition": "Les 8 VD les plus élevées (sortie comprise, éléments de valeur 0,10 minimum) + les exigences de composition. Au saut : valeur du saut"
+  },
+  {
+   "terme": "EC",
+   "definition": "Exigence de composition : 4 par agrès (barres, poutre, sol), +0,50 chacune, 2 points au maximum"
+  },
+  {
+   "terme": "Bonification",
+   "definition": "Performance 1 uniquement : sur la note D (paliers) et sur éléments (0,50 chacune, 2 points au maximum, 0,50 au saut). Elles s’ajoutent à la note finale"
+  },
+  {
+   "terme": "Note E",
+   "definition": "10,00 points moins les déductions d’exécution et d’artistique"
+  },
+  {
+   "terme": "Ligne acrobatique",
+   "definition": "Au sol : au moins 2 éléments avec envol directement liés dont un salto, impulsion 2 pieds ; 4 lignes au maximum"
+  },
+  {
+   "terme": "Passage gymnique",
+   "definition": "Au sol : sauts liés directement ou indirectement (pas courus, petits sauts, pas chassés, tours chaînés)"
+  },
+  {
+   "terme": "Série acrobatique",
+   "definition": "À la poutre : au moins 2 éléments acrobatiques, identiques ou différents, dont 1 avec envol (sauf ATR)"
+  },
+  {
+   "terme": "BI / BS",
+   "definition": "Barre inférieure / barre supérieure"
+  },
+  {
+   "terme": "ATR",
+   "definition": "Appui tendu renversé"
+  }
+ ],
+ "infos": {
+  "COMMUN": [
+   "8 éléments maximum sont comptés (sortie comprise), de valeur 0,10 minimum ; les éléments sans valeur servent à éviter la pénalité d’exercice trop court.",
+   "Exercice trop court (déduction neutre sur la note finale) : 7 éléments ou plus = 0 ; 5-6 éléments = −4,00 ; 3-4 = −6,00 ; 1-2 = −8,00 ; aucun = −10,00.",
+   "Un élément ne reçoit sa VD qu’une seule fois dans l’exercice, dans l’ordre chronologique.",
+   "4 exigences de composition à 0,50 (2 points au maximum) : seuls les éléments de valeur 0,10 minimum les remplissent ; un élément peut en remplir plusieurs mais ne peut pas être répété pour une autre.",
+   "Équipe : 5 gymnastes maximum, 3 minimum, 4 passent à chaque agrès, total des 3 meilleures notes."
+  ],
+  "PF1": [
+   "Performance 1 (Nationale B, individuelles Nationale 10 à 13 ans) : bonifications sur la note D et sur éléments, ajoutées à la note finale."
+  ],
+  "PF2": [
+   "Performance 2 (Nationale C) : mêmes règles que Performance 1, sans les bonifications."
+  ],
+  "SAUT": [
+   "Un ou deux sauts identiques ou différents : seul le meilleur est pris en compte. Course d’élan de 25 m maximum, une 3e course d’élan autorisée.",
+   "Trampo-tremp autorisé quel que soit l’âge : valeur du tableau moins 1,00 point. Tous les sauts avec impulsion des deux mains sur la table ; pas de réception latérale.",
+   "Bonification (Performance 1) : 2 sauts aux 1ers envols différents, avec rotation transversale dans les 2es envols et 1,5 point de fautes au plus sur chacun : +0,50."
+  ],
+  "BARRES": [
+   "4 EC : tour proche minimum B ; élément dans les grands tours ; bascule ATR dans les 10° ; sortie avec salto.",
+   "Pas de sortie : 7 éléments seulement comptés et −0,50. Entrée : un seul essai de plus, avec −1,00.",
+   "Présence de l’entraîneur obligatoire pendant tout l’exercice pour les 10 à 13 ans en individuel et les équipes 10-11 et 10-13 ans ; non-retrait du tremplin : −0,50."
+  ],
+  "POUTRE": [
+   "Durée maximum 1'30 (−0,10 au-delà de 1'31) ; temps de chute 10 secondes.",
+   "Parmi les 8 éléments : 3 gymniques, 3 acrobatiques et 2 au choix (valeur 0,10 minimum).",
+   "4 EC : liaison de 2 éléments gymniques dont un saut écart 180° ; un tour (groupe 3) ou un roulé / cercle ; série acrobatique avec envol ; acrobaties de directions différentes (avant/latéral et arrière).",
+   "Pas de sortie : 7 éléments seulement comptés et −0,50."
+  ],
+  "SOL": [
+   "Durée maximum 1'30 (−0,10 au-delà de 1'31) ; musique obligatoire (absence : −1,00), paroles autorisées ; praticable 12 m × 12 m.",
+   "Parmi les 8 éléments : 3 gymniques, 3 acrobatiques et 2 au choix (valeur 0,10 minimum).",
+   "4 EC : passage gymnique de 2 sauts dont un écart 180° ; salto avec rotation longitudinale de 360° ; 3 lignes acrobatiques dont une de 3 éléments ; un salto avant et un salto arrière.",
+   "La sortie est la dernière ligne acrobatique prise en compte ; une seule ligne acrobatique : 7 éléments seulement et −0,50."
+  ]
+ }
+}

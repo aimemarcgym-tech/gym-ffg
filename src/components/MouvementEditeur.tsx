@@ -389,7 +389,7 @@ export default function MouvementEditeur() {
         </div>
 
         <div
-          className={`grid grid-cols-1 items-start gap-6 ${perf ? "lg:grid-cols-[1.1fr_1fr]" : "lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]"}`}
+          className={`grid grid-cols-1 items-start gap-6 ${perf ? "lg:grid-cols-[1.1fr_1fr_0.9fr]" : "lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]"}`}
         >
           <div className="space-y-6">
             {perf ? (
@@ -516,11 +516,18 @@ export default function MouvementEditeur() {
           </div>
 
           {perf ? (
-            <PanneauAnalysePerf79
-              agres={agres}
-              niveau={niveauId}
-              choisies={bonifs}
-            />
+            <>
+              <PanneauAnalysePerf79
+                agres={agres}
+                niveau={niveauId}
+                choisies={bonifs}
+              />
+              <PanneauReference
+                agres={agres}
+                niveau={niveau.label}
+                niveauId={niveauId}
+              />
+            </>
           ) : (
             <>
               <PanneauAnalyse

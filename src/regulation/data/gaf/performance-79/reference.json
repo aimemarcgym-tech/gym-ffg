@@ -1,0 +1,96 @@
+{
+ "source": "Brochure des programmes FFGym 2026-2027, Performance 7-9 ans (pages 26 à 62)",
+ "temps": [
+  {
+   "agres": "POUTRE",
+   "label": "Poutre : durée maximum",
+   "valeur": "1'30",
+   "page": 42
+  },
+  {
+   "agres": "POUTRE",
+   "label": "Poutre : temps de chute sans pénalité",
+   "valeur": "10 s",
+   "page": 30
+  },
+  {
+   "agres": "SOL",
+   "label": "Sol : durée maximum",
+   "valeur": "1'30",
+   "page": 52
+  },
+  {
+   "agres": "BARRES",
+   "label": "Barres : temps de chute sans pénalité",
+   "valeur": "30 s",
+   "page": 30
+  }
+ ],
+ "lexique": [
+  {
+   "terme": "Note D",
+   "definition": "Valeur du mouvement imposé : base du niveau (1, 3, 5 ou 7 points) plus 0,50 par option validée. Au saut, valeur du saut"
+  },
+  {
+   "terme": "Note E",
+   "definition": "10,00 points moins les déductions d’exécution et d’artistique"
+  },
+  {
+   "terme": "Option",
+   "definition": "Variante plus difficile, +0,50 point si elle est réalisée sans chute. « OU » remplace l’élément placé au-dessus ; « ET » est un élément supplémentaire"
+  },
+  {
+   "terme": "Liaison",
+   "definition": "Série d’éléments directement liés, sans pas intermédiaire"
+  },
+  {
+   "terme": "Passage gymnique",
+   "definition": "Série de sauts liés directement ou indirectement (pas courus, petits sauts, pas chassés, tours chaînés)"
+  },
+  {
+   "terme": "Séquence",
+   "definition": "Aux barres, un mouvement compose 2 séquences : la première à la barre inférieure (BI), la seconde à la barre supérieure (BS)"
+  },
+  {
+   "terme": "BI / BS",
+   "definition": "Barre inférieure / barre supérieure"
+  },
+  {
+   "terme": "ATR",
+   "definition": "Appui tendu renversé"
+  }
+ ],
+ "infos": {
+  "COMMUN": [
+   "Mouvements imposés : éléments, liaisons et séries imposés, avec une gestuelle chorégraphique libre à la poutre et au sol.",
+   "Note D = valeur de base du niveau + 0,50 par option validée (2 options par niveau). Une option « OU » non reconnue : −1,00 point.",
+   "Un élément ne peut pas être répété (−0,50). Aucun autre élément codifié ne peut être ajouté (−0,50). Élément non tenté : −2,00 ; non reconnu : −1,00.",
+   "L’ordre des éléments doit être respecté : −0,10 point à chaque fois à la poutre et au sol, −0,50 aux barres.",
+   "Niveaux : 7 ans niveau 1 ; 8 ans niveaux 1 à 3 ; 9 ans niveaux 1 à 3 au saut et aux barres, niveaux 1 à 4 à la poutre et au sol.",
+   "Présence de l’entraîneur obligatoire à proximité de la table de saut et sous les barres asymétriques."
+  ],
+  "SAUT": [
+   "Deux sauts identiques ou différents : le meilleur est pris en compte.",
+   "Trampo-tremp en position haute + table de saut à 1 m + tapis de réception de 1 m de haut (2 m × 6 m).",
+   "Course d’élan : 10 m maximum au niveau 1, 15 m maximum aux niveaux 2 et 3.",
+   "Saut nul : rebond supplémentaire ou marche sur le trampo-tremp, appui avec un seul pied, pas d’appui, aide, réception non faite d’abord sur les pieds. Appui d’un seul bras : −2,00."
+  ],
+  "BARRES": [
+   "Un mouvement compose 2 séquences (BI puis BS) ; l’entraîneur positionne la gymnaste en suspension à la BS pour la séquence 2.",
+   "Pas de magnésie entre les deux séquences (sauf au niveau 3) : −0,30 si utilisation incorrecte.",
+   "1 ou 2 tremplins, ou un module en mousse rigide / une caisse de 60 cm, autorisés pour les entrées ; sur-tapis de 10 cm sous les barres obligatoire.",
+   "Non-retrait du tremplin après le début du mouvement : −0,50. Absence de l’entraîneur sous la barre supérieure pendant la séquence 2 : mouvement nul après avertissement."
+  ],
+  "POUTRE": [
+   "Exercice composé d’éléments et de séries imposés, gestuelle chorégraphique libre, 1'30 maximum.",
+   "1 ou 2 tremplins autorisés pour les entrées ; obligation de retirer le tremplin juste après l’entrée (−0,50).",
+   "Maintien de 2 secondes exigé quand il est demandé : l’absence de maintien est pénalisée par le jury E à chaque fois.",
+   "Temps de chute : 10 secondes maximum avant de remonter."
+  ],
+  "SOL": [
+   "Exercice composé d’éléments et de séries imposés, gestuelle chorégraphique libre, musique obligatoire (paroles autorisées), 1'30 maximum.",
+   "Absence de rebond quand il est spécifié : −0,50. Élan ou pas supplémentaire quand la série est exigée du sursaut : −0,50.",
+   "Au niveau 4, l’ordre des éléments ou liaisons acrobatiques est imposé ; celui des passages ou liaisons gymniques est libre."
+  ]
+ }
+}

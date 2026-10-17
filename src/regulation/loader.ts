@@ -8,6 +8,8 @@ import perf79Json from "./data/gaf/performance-79/programmes.json";
 import elementsPFJson from "./data/gaf/performance-12/elements.json";
 import sautsPFJson from "./data/gaf/performance-12/sauts.json";
 import reglesPFJson from "./data/gaf/performance-12/regles.json";
+import referencePFJson from "./data/gaf/performance-12/reference.json";
+import reference79Json from "./data/gaf/performance-79/reference.json";
 import referenceBJson from "./data/gaf/federal-b/reference.json";
 import elementsBJson from "./data/gaf/federal-b/elements.json";
 import sautBJson from "./data/gaf/federal-b/saut.json";
@@ -61,7 +63,9 @@ export const referenceFedB = referenceBJson as unknown as typeof referenceFedA &
 
 // Référence affichée dans le constructeur selon le programme du niveau.
 export function getReference(niveau: NiveauId) {
-  return niveauxJson.niveaux.find((n) => n.id === niveau)?.programme === "B" ? referenceFedB : referenceFedA;
+  const programme = niveauxJson.niveaux.find((n) => n.id === niveau)?.programme;
+  // Chaque programme a sa référence : temps, lexique et informations.
+  return programme === "B" ? referenceFedB : programme === "PF" ? (referencePFJson as unknown as typeof referenceFedA) : programme === "P" ? (reference79Json as unknown as typeof referenceFedA) : referenceFedA;
 }
 
 export const niveauxFed = niveauxJson.niveaux as NiveauFed[];
