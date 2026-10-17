@@ -279,8 +279,8 @@ export default function Accueil() {
         nbGymnastesP={nbGymnastesProgramme(["P", "PF"])}
       />
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-        <section className="md:col-span-2">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_21.5rem]">
+        <section>
           <h2 className={titreSection}>Mes gymnastes — classement par club</h2>
 
           {trie.length === 0 && (
