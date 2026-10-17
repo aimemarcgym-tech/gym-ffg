@@ -15,6 +15,7 @@ import {
   getElementsFedA,
   getElementsFedB,
   getElementsFedPF,
+  groupesSautsPF,
   sautsFedA,
   sautsFedB,
   sautsPF,
@@ -213,31 +214,43 @@ export default function TableElements() {
 
         <div className="space-y-8">
           {agres === "SAUT" && programme === "PF" ? (
-            <Section
-              titre="Sauts"
-              souligne={`${sautsPF.length} sauts · avec le trampo-tremp : valeur du tremplin moins 1 point · le meilleur des deux sauts est pris en compte`}
-            >
-              <table className="min-w-[600px] border-collapse text-sm">
-                <Entete colonnes={["Nom", "Trampo-tremp", "1 tremplin"]} />
-                <tbody>
-                  {sautsPF.map((s) => (
-                    <tr key={s.id} className="border-t border-border-subtle">
-                      <td className="px-4 py-2 text-foreground">{s.nom}</td>
-                      <td className="px-4 py-2">
-                        <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
-                          {fmt(s.valeurTrampoTremp)}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
-                        <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
-                          {fmt(s.valeurTremplin)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </Section>
+            // Sauts Performance : classés par famille (groupes 1 à 5 de la brochure).
+            Object.entries(groupesSautsPF).map(([g, titre]) => {
+              const sauts = sautsPF.filter(
+                (s) => s.id.replace("PF-SA-", "")[0] === g,
+              );
+              return (
+                <Section
+                  key={g}
+                  titre={`Groupe ${g} · ${titre}`}
+                  souligne={`${sauts.length} sauts · avec le trampo-tremp : valeur du tremplin moins 1 point · le meilleur des deux sauts est pris en compte`}
+                >
+                  <table className="min-w-[600px] border-collapse text-sm">
+                    <Entete colonnes={["Nom", "Trampo-tremp", "1 tremplin"]} />
+                    <tbody>
+                      {sauts.map((s) => (
+                        <tr
+                          key={s.id}
+                          className="border-t border-border-subtle"
+                        >
+                          <td className="px-4 py-2 text-foreground">{s.nom}</td>
+                          <td className="px-4 py-2">
+                            <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
+                              {fmt(s.valeurTrampoTremp)}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2">
+                            <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
+                              {fmt(s.valeurTremplin)}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Section>
+              );
+            })
           ) : agres === "SAUT" && programme === "B" ? (
             <Section
               titre="Sauts"
