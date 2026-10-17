@@ -106,6 +106,8 @@ function Section({
 export default function TableElements() {
   const [agres, setAgres] = useState<Agres>("SOL");
   const [programme, setProgramme] = useState<Programme>("A");
+  // Performance 1 et 2 : une famille de sauts par onglet.
+  const [familleSaut, setFamilleSaut] = useState("1");
 
   const sautsB = useMemo(() => {
     const lignes = new Map<
@@ -214,43 +216,64 @@ export default function TableElements() {
 
         <div className="space-y-8">
           {agres === "SAUT" && programme === "PF" ? (
-            // Sauts Performance : classés par famille (groupes 1 à 5 de la brochure).
-            Object.entries(groupesSautsPF).map(([g, titre]) => {
-              const sauts = sautsPF.filter(
-                (s) => s.id.replace("PF-SA-", "")[0] === g,
-              );
-              return (
-                <Section
-                  key={g}
-                  titre={`Groupe ${g} · ${titre}`}
-                  souligne={`${sauts.length} sauts · avec le trampo-tremp : valeur du tremplin moins 1 point · le meilleur des deux sauts est pris en compte`}
-                >
-                  <table className="min-w-[600px] border-collapse text-sm">
-                    <Entete colonnes={["Nom", "Trampo-tremp", "1 tremplin"]} />
-                    <tbody>
-                      {sauts.map((s) => (
-                        <tr
-                          key={s.id}
-                          className="border-t border-border-subtle"
-                        >
-                          <td className="px-4 py-2 text-foreground">{s.nom}</td>
-                          <td className="px-4 py-2">
-                            <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
-                              {fmt(s.valeurTrampoTremp)}
-                            </span>
-                          </td>
-                          <td className="px-4 py-2">
-                            <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
-                              {fmt(s.valeurTremplin)}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Section>
-              );
-            })
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(groupesSautsPF).map(([g, titre]) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setFamilleSaut(g)}
+                    title={titre}
+                    className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+                      familleSaut === g
+                        ? "border-border-strong bg-surface-alt text-white"
+                        : "border-transparent text-muted hover:text-foreground"
+                    }`}
+                  >
+                    Famille {g}
+                  </button>
+                ))}
+              </div>
+              {(() => {
+                const sauts = sautsPF.filter(
+                  (x) => x.id.replace("PF-SA-", "")[0] === familleSaut,
+                );
+                return (
+                  <Section
+                    titre={`Famille ${familleSaut} · ${groupesSautsPF[familleSaut]}`}
+                    souligne={`${sauts.length} sauts · avec le trampo-tremp : valeur du tremplin moins 1 point · le meilleur des deux sauts est pris en compte`}
+                  >
+                    <table className="min-w-[600px] border-collapse text-sm">
+                      <Entete
+                        colonnes={["Nom", "Trampo-tremp", "1 tremplin"]}
+                      />
+                      <tbody>
+                        {sauts.map((x) => (
+                          <tr
+                            key={x.id}
+                            className="border-t border-border-subtle"
+                          >
+                            <td className="px-4 py-2 text-foreground">
+                              {x.nom}
+                            </td>
+                            <td className="px-4 py-2">
+                              <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
+                                {fmt(x.valeurTrampoTremp)}
+                              </span>
+                            </td>
+                            <td className="px-4 py-2">
+                              <span className="rounded-full border border-border-strong px-2 py-0.5 text-xs font-semibold text-foreground">
+                                {fmt(x.valeurTremplin)}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </Section>
+                );
+              })()}
+            </div>
           ) : agres === "SAUT" && programme === "B" ? (
             <Section
               titre="Sauts"
