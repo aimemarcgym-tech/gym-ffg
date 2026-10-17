@@ -68,6 +68,9 @@ export interface NoteD {
   nbDistincts: number;
   // Performance 1 : bonifications de la note finale (note D + éléments), qui ne font pas partie de la note D.
   bonifsFinale: number;
+  // Performance, poutre et sol : éléments gymniques et acrobatiques parmi les éléments retenus (3 et 3 minimum).
+  nbGymRetenus: number;
+  nbAcroRetenus: number;
 }
 
 // Éléments identiques comptés une fois; un élément ne compte que s'il est reconnu, ce que le coach garantit en ne le saisissant pas sinon.
@@ -103,7 +106,18 @@ export function calculerNoteD(
   // Performance : seuls les éléments de valeur 0,10 minimum comptent dans les 8 meilleures valeurs (les autres comptent pour l'exercice trop court).
   const pf = programmeDe(niveau) === "PF";
   const comptables = pf ? distincts.filter((e) => e.valeur >= reglesPF.noteD.valeurMin) : distincts;
-  const elementsRetenus = [...comptables].sort((a, b) => b.valeur - a.valeur).slice(0, nbElementsMax);
+  // Poutre et sol (Performance) : parmi les 8 éléments pris en compte, 3 gymniques, 3 acrobatiques et 2 au choix au minimum, de valeur 0,10 minimum.
+  const parValeur = (l: ElementFedA[]) => [...l].sort((a, b) => b.valeur - a.valeur);
+  const elementsRetenus =
+    pf && (agres === "POUTRE" || agres === "SOL")
+      ? (() => {
+          const gym = parValeur(comptables.filter((e) => e.nature === "g")).slice(0, 3);
+          const acro = parValeur(comptables.filter((e) => e.nature === "a" || e.nature === "s" || e.nature === "o")).slice(0, 3);
+          const pris = new Set([...gym, ...acro]);
+          const choix = parValeur(comptables.filter((e) => !pris.has(e))).slice(0, Math.max(0, nbElementsMax - pris.size));
+          return parValeur([...gym, ...acro, ...choix]);
+        })()
+      : parValeur(comptables).slice(0, nbElementsMax);
   const totalElements = round2(elementsRetenus.reduce((s, e) => s + e.valeur, 0));
 
   // Les bonifications que les éléments prouvent (eligible) sont retenues d'office, dans l'ordre du règlement, jusqu'au maximum ;
@@ -124,7 +138,7 @@ export function calculerNoteD(
   const brut = round2(totalElements + totalBonifications);
   const total = Math.min(brut, plafond);
   const penalite = pf ? (reglesPF.penalitesNbElements.find((p) => distincts.length >= p.min)?.penalite ?? 0) : nbElementsMin > 0 && distincts.length < nbElementsMin ? penaliteMin : 0;
-  return { elementsRetenus, totalElements, bonifsRetenues, nbBonifications, totalBonifications, total, plafonne: total < brut, penalite, nbDistincts: distincts.length, bonifsFinale: bonifsFinalePF(niveau, agres, total, idsBonifsValidees) };
+  return { elementsRetenus, totalElements, bonifsRetenues, nbBonifications, totalBonifications, total, plafonne: total < brut, penalite, nbDistincts: distincts.length, bonifsFinale: bonifsFinalePF(niveau, agres, total, idsBonifsValidees), nbGymRetenus: elementsRetenus.filter((e) => e.nature === "g").length, nbAcroRetenus: elementsRetenus.filter((e) => e.nature === "a" || e.nature === "s" || e.nature === "o").length };
 }
 
 // Performance 1 uniquement : bonification sur la note D (selon sa valeur) + bonifications sur éléments confirmées (2 points au maximum, 0,50 au saut) ;
@@ -163,7 +177,13 @@ export function estAcro(e: ElementFedA): boolean {
 
 // Au sol, le mouvement doit finir par une acrobatie : renvoie un avertissement quand le dernier élément n'en est pas une.
 export function avertissementFinMouvement(agres: Agres, elements: ElementFedA[]): string | null {
-  if (agres !== "SOL" || elements.length === 0 || elements[0].grille === "PF") return null;
+  if (elements.length > 0 && elements[0].grille === "PF") {
+    if ((agres === "BARRES" || agres === "POUTRE") && !elements.some((e) => e.famille.endsWith("_6") && e.valeur >= 0.1)) {
+      return "Pas de sortie : 7 éléments seulement sont comptés et −0,50 sur la note finale.";
+    }
+    return null;
+  }
+  if (agres !== "SOL" || elements.length === 0) return null;
   return estAcro(elements[elements.length - 1]) ? null : "Le sol doit finir par une acrobatie : le dernier élément n’en est pas une.";
 }
 

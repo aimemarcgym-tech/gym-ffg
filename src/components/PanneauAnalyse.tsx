@@ -129,6 +129,29 @@ export default function PanneauAnalyse(p: Props) {
                     : ` (${fmt(regles.penaliteMin)} pt si ${regles.nbElementsMin - 1} ou moins)`}
                 </Ligne>
               )}
+              {pf && p.noteD && (p.agres === "POUTRE" || p.agres === "SOL") && (
+                <>
+                  <Ligne etat={p.noteD.nbGymRetenus >= 3 ? "ok" : "ko"}>
+                    {Math.min(p.noteD.nbGymRetenus, 3)}/3 élément(s) gymnique(s)
+                    (valeur 0,10 minimum)
+                  </Ligne>
+                  <Ligne etat={p.noteD.nbAcroRetenus >= 3 ? "ok" : "ko"}>
+                    {Math.min(p.noteD.nbAcroRetenus, 3)}/3 élément(s)
+                    acrobatique(s) (valeur 0,10 minimum)
+                  </Ligne>
+                  <Ligne
+                    etat={p.noteD.elementsRetenus.length >= 8 ? "ok" : "ko"}
+                  >
+                    {Math.max(
+                      0,
+                      p.noteD.elementsRetenus.length -
+                        Math.min(p.noteD.nbGymRetenus, 3) -
+                        Math.min(p.noteD.nbAcroRetenus, 3),
+                    )}
+                    /2 élément(s) au choix
+                  </Ligne>
+                </>
+              )}
               {pf && p.noteD && p.noteD.penalite < 0 && (
                 <Ligne etat="ko">
                   Exercice trop court ({p.noteD.nbDistincts} élément(s)) :{" "}

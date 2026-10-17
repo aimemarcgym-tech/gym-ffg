@@ -30,7 +30,7 @@ import {
   ageEnSaison,
   getNiveau,
   niveauxMouvement,
-  niveauxPerf79,
+  niveauxPerf79Autorises,
   estPerf79,
 } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
@@ -123,7 +123,11 @@ export default function FicheGymnaste() {
   const enPerf = equipes.some((e) => estPerf79(e.niveau));
   const enPF = equipes.some((e) => getNiveau(e.niveau).programme === "PF");
   const niveauxChoix = enPerf
-    ? niveauxPerf79(agres).map((id) => getNiveau(id))
+    ? niveauxPerf79Autorises(
+        agres,
+        ageEnSaison(gymnaste.anneeNaissance),
+        equipes.find((e) => estPerf79(e.niveau))?.categorieId,
+      ).map((id) => getNiveau(id))
     : enPF
       ? niveauxMouvement.filter((n) => n.programme === "PF")
       : niveauxMouvement.filter(

@@ -180,6 +180,15 @@ export function niveauxPerf79(agres: Agres): NiveauId[] {
   return (agres === "POUTRE" || agres === "SOL" ? ["P1", "P2", "P3", "P4"] : ["P1", "P2", "P3"]) as NiveauId[];
 }
 
+// Niveau le plus haut autorisé selon l'âge (7 ans : niveau 1 ; 8 ans : niveaux 1 à 3 ; 9 ans : 1 à 3 au saut et aux barres, 1 à 4 à la poutre et au sol)
+// et selon la catégorie de l'équipe (7 ans : 1 ; 7-8 ans : 1 à 3 ; 7-9 ans : 1 à 2 ou 1 à 4).
+export function niveauxPerf79Autorises(agres: Agres, age: number | null, categorieId?: string): NiveauId[] {
+  const parAge = age === null ? 4 : age <= 7 ? 1 : age === 8 ? 3 : 4;
+  const parCategorie = categorieId ? (NIVEAU_HAUT_CATEGORIE[categorieId] ?? 4) : 4;
+  const haut = Math.min(parAge, parCategorie);
+  return niveauxPerf79(agres).filter((id) => Number(id.slice(1)) <= haut);
+}
+
 export function sequencesPerf79(agres: Agres, niveau: NiveauId): SequencePerf79[] {
   if (agres === "SAUT") return [];
   return perf79[agres === "BARRES" ? "barres" : agres === "POUTRE" ? "poutre" : "sol"][niveau] ?? [];

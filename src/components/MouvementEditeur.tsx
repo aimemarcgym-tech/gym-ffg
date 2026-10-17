@@ -41,9 +41,10 @@ import {
   elementsChoisis,
   getElementFedA,
   getElementsNiveau,
+  ageEnSaison,
   getNiveau,
   niveauxMouvement,
-  niveauxPerf79,
+  niveauxPerf79Autorises,
   estPerf79,
   noteDPerf79,
   optionsPerf79,
@@ -323,7 +324,17 @@ export default function MouvementEditeur() {
               className="rounded border border-border-strong bg-surface-alt px-2 py-0.5 text-xs text-foreground focus:border-accent-solid focus:outline-none"
             >
               {(perf
-                ? niveauxPerf79(agres).map((id) => getNiveau(id))
+                ? [
+                    ...new Set([
+                      ...niveauxPerf79Autorises(
+                        agres,
+                        gymnaste ? ageEnSaison(gymnaste.anneeNaissance) : null,
+                      ),
+                      niveauId,
+                    ]),
+                  ]
+                    .sort()
+                    .map((id) => getNiveau(id))
                 : niveauxMouvement.filter((n) =>
                     getNiveau(niveauId).programme === "PF"
                       ? n.programme === "PF"
