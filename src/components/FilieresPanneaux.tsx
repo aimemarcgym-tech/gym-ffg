@@ -95,8 +95,7 @@ export default function FilieresPanneaux({
         </div>
         <div className="mt-1 text-xs text-muted">
           {nbEquipesP} équipe{nbEquipesP > 1 ? "s" : ""} · {nbGymnastesP}{" "}
-          gymnaste{nbGymnastesP > 1 ? "s" : ""} · 7-9 ans seulement pour
-          l’instant
+          gymnaste{nbGymnastesP > 1 ? "s" : ""}
         </div>
       </button>
     </section>
