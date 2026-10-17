@@ -409,6 +409,11 @@ export default function Accueil() {
                             className="border-b border-dashed border-border-strong pb-4 last:border-b-0 last:pb-0"
                           >
                             <EquipeGroupe
+                              equipesDe={(gid) =>
+                                equipes.filter((e) =>
+                                  e.gymnasteIds.includes(gid),
+                                )
+                              }
                               key={eq.id}
                               equipe={eq}
                               rang={equipesClub.indexOf(eq) + 1}
