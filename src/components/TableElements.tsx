@@ -36,9 +36,6 @@ function Ligne({ e }: { e: ElementFedA }) {
       </td>
       <td className="px-4 py-2 text-foreground">
         {e.nom}
-        {!e.verified && (
-          <span className="ml-1.5 text-xs text-warning">⚠ à confirmer</span>
-        )}
         {e.sortie && (
           <span className="ml-1.5 rounded-full border border-orange-400/40 bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-300">
             Sortie
