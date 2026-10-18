@@ -71,6 +71,8 @@ export default function FicheGymnaste() {
   const [nom, setNom] = useState("");
   const [agres, setAgres] = useState<Agres>("SOL");
   const [niveau, setNiveau] = useState<NiveauId>("A");
+  // Pastille allumée (équipe « e:id » ou individuelle « i:id ») : l'autre s'éteint ; elle filtre les mouvements et les niveaux proposés.
+  const [actif, setActif] = useState<string | null>(null);
 
   const charger = useCallback(async () => {
     // Le paramètre d'URL n'est lisible que côté client avec l'export statique.
@@ -130,7 +132,27 @@ export default function FicheGymnaste() {
 
   // Niveaux proposés : ceux de Performance 7-9 ans si la gymnaste est dans une équipe de ce programme, sinon les niveaux Fédéral.
   // Les équipes et les individuelles de la gymnaste comptent de la même façon : on propose les niveaux de chacun de ces programmes.
-  const contextes = [...equipes, ...individuelles];
+  const tous = [
+    ...equipes.map((e) => ({
+      cle: `e:${e.id}`,
+      niveau: e.niveau,
+      categorieId: e.categorieId,
+    })),
+    ...individuelles.map((i) => ({
+      cle: `i:${i.id}`,
+      niveau: i.niveau,
+      categorieId: i.categorieId,
+    })),
+  ];
+  const contexteActif = tous.find((c) => c.cle === actif);
+  const contextes = contexteActif ? [contexteActif] : tous;
+  const mouvementsAffiches = contexteActif
+    ? mouvements.filter((m) =>
+        estPerf79(contexteActif.niveau)
+          ? getNiveau(m.niveau).programme === "P"
+          : m.niveau === contexteActif.niveau,
+      )
+    : mouvements;
   const perf79 = contextes.find((e) => estPerf79(e.niveau));
   const enPF = contextes.some((e) => getNiveau(e.niveau).programme === "PF");
   const enFederal = contextes.some(
@@ -152,8 +174,15 @@ export default function FicheGymnaste() {
   const niveauEffectif = niveauxChoix.some((n) => n.id === niveau)
     ? niveau
     : niveauxChoix[0].id;
+  // Allumée : c'est le contexte choisi ; éteinte : un autre l'est ; sans choix, toutes restent normales.
+  const pastille = (cle: string) =>
+    actif === null
+      ? "border-border-strong text-muted hover:border-accent-solid/60 hover:text-foreground"
+      : actif === cle
+        ? "border-accent-solid bg-accent-from/15 font-semibold text-foreground"
+        : "border-border-subtle text-muted opacity-40 hover:opacity-70";
   const libelleAgres = AGRES.find((a) => a.id === agres)!.label;
-  const nomParDefaut = `${libelleAgres} — compétition ${mouvements.filter((m) => m.agres === agres).length + 1}`;
+  const nomParDefaut = `${libelleAgres} — compétition ${mouvementsAffiches.filter((m) => m.agres === agres).length + 1}`;
 
   async function creer(e: FormEvent) {
     e.preventDefault();
@@ -295,29 +324,39 @@ export default function FicheGymnaste() {
             ).map((t) => (
               <button
                 key={t.cle}
-                onClick={() =>
+                onClick={() => {
+                  setActif(
+                    actif === `e:${t.e?.id}`
+                      ? null
+                      : t.e
+                        ? `e:${t.e.id}`
+                        : null,
+                  );
                   setEdition(
                     edition?.type === "equipe" &&
                       edition.equipeId === (t.e?.id ?? null)
                       ? null
                       : { type: "equipe", equipeId: t.e?.id ?? null },
-                  )
-                }
+                  );
+                }}
                 title="Changer le niveau ou l’équipe"
-                className="rounded-full border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+                className={`rounded-full border px-2 py-0.5 text-xs ${pastille(t.e ? `e:${t.e.id}` : "")}`}
               >
                 {t.texte}
               </button>
             ))}
             {individuelles.map((i) => (
-              <span
+              <button
                 key={i.id}
-                title="Modifiable depuis l’accueil, dans Individuelles"
-                className="rounded-full border border-accent-solid/40 bg-accent-from/10 px-2 py-0.5 text-xs text-foreground"
+                onClick={() =>
+                  setActif(actif === `i:${i.id}` ? null : `i:${i.id}`)
+                }
+                title="Niveau et catégorie modifiables depuis l’accueil, dans Individuelles"
+                className={`rounded-full border px-2 py-0.5 text-xs ${pastille(`i:${i.id}`)}`}
               >
                 Individuelle · {getNiveau(i.niveau).label} ·{" "}
                 {getCategorie(i.niveau, i.categorieId)?.label ?? ""}
-              </span>
+              </button>
             ))}
           </div>
 
@@ -366,9 +405,9 @@ export default function FicheGymnaste() {
             )}
           </div>
 
-          {mouvements.length > 0 && (
+          {mouvementsAffiches.length > 0 && (
             <ul className="mb-4 space-y-2">
-              {mouvements.map((m) => (
+              {mouvementsAffiches.map((m) => (
                 <li key={m.id} className={carteLigne}>
                   <Link href={`/mouvement/?m=${m.id}`} className="flex-1">
                     <div className="font-medium text-foreground">{m.nom}</div>
