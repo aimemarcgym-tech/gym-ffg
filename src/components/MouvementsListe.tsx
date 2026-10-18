@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getGymnastes, getMouvements, type Gymnaste, type Mouvement } from "@/lib/data";
+import {
+  getGymnastes,
+  getMouvements,
+  type Gymnaste,
+  type Mouvement,
+} from "@/lib/data";
 import { noteDMax, noteDMouvement } from "@/engine/federal-a";
 import { getNiveau } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
@@ -16,12 +21,17 @@ export default function MouvementsListe() {
   useEffect(() => {
     (async () => {
       setGymnastes(await getGymnastes());
-      setMouvements(await getMouvements());
+      setMouvements(await getMouvements(undefined, true));
       setPret(true);
     })();
   }, []);
 
-  if (!pret) return <main className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">Chargement…</main>;
+  if (!pret)
+    return (
+      <main className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">
+        Chargement…
+      </main>
+    );
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -45,7 +55,10 @@ export default function MouvementsListe() {
                   <div className="font-medium text-foreground">{m.nom}</div>
                   <div className="text-xs text-muted">
                     {g ? `${g.prenom} ${g.nom} · ` : ""}
-                    {AGRES.find((a) => a.id === m.agres)?.label} · {getNiveau(m.niveau).label} · note D {fmt(noteDMouvement(m))} / {fmt(noteDMax(m.niveau, m.agres))}
+                    {AGRES.find((a) => a.id === m.agres)?.label} ·{" "}
+                    {getNiveau(m.niveau).label} · note D{" "}
+                    {fmt(noteDMouvement(m))} /{" "}
+                    {fmt(noteDMax(m.niveau, m.agres))}
                   </div>
                 </Link>
                 <Link href={`/mouvement/?m=${m.id}`} className={lienDegrade}>
