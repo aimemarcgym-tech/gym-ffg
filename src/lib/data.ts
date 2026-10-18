@@ -122,7 +122,19 @@ const CLE = "ffg:v1";
 function lire(): Store {
   try {
     const brut = localStorage.getItem(CLE);
-    if (brut) return JSON.parse(brut) as Store;
+    if (brut) {
+      const st = JSON.parse(brut) as Store;
+      // Retire les copies de mouvements créées par une version précédente : l'individuelle partage les mouvements de la gymnaste.
+      if (
+        st.mouvements?.some(
+          (m) => (m as { individuelleId?: string }).individuelleId,
+        )
+      )
+        st.mouvements = st.mouvements.filter(
+          (m) => !(m as { individuelleId?: string }).individuelleId,
+        );
+      return st;
+    }
   } catch {}
   return { clubs: [], gymnastes: [], equipes: [] };
 }
