@@ -561,9 +561,13 @@ export default function MouvementEditeur() {
                   let suite: string[];
                   if (el?.extraFamilles?.includes("ELEMENTS_SERIE")) {
                     // Élément en série : deux cases seulement quand on le choisit depuis la catégorie « Éléments en série » ; sinon une seule.
-                    if (!vueSerie)
-                      suite = n === 0 ? ajouter(l, [id]) : retirerTout();
-                    else if (n === 0) suite = ajouter(l, [id, `${id}#2`]);
+                    if (!vueSerie) {
+                      // Hors de la catégorie « Éléments en série » : une case, et une seconde au clic suivant si l'élément est doublable.
+                      if (n === 0) suite = ajouter(l, [id]);
+                      else if (n === 1 && el.doublable)
+                        suite = ajouter(l, [`${id}#2`]);
+                      else suite = retirerTout();
+                    } else if (n === 0) suite = ajouter(l, [id, `${id}#2`]);
                     else if (n === 1) suite = ajouter(l, [`${id}#2`]);
                     else suite = retirerTout();
                   } else if (!el?.doublable) {
