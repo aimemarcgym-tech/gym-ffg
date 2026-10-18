@@ -28,11 +28,26 @@ import type {
   SautFedA,
 } from "./types";
 
+// Poutre, tous niveaux : les sauts gymniques et les éléments acrobatiques peuvent être doublés (compter deux fois).
+const FAMILLES_POUTRE_DOUBLABLES = new Set([
+  "SAUTS_GYMNIQUES",
+  "ACRO_AVANT",
+  "ACRO_ARRIERE",
+  "B_GYM",
+  "B_ACRO",
+  "PF_PO_2",
+  "PF_PO_3",
+  "PF_PO_5",
+]);
 const elements = [
   ...(elementsJson as ElementFedA[]),
   ...(elementsBJson as ElementFedA[]),
   ...(elementsPFJson.elements as unknown as ElementFedA[]),
-];
+].map((e) =>
+  e.agres === "POUTRE" && FAMILLES_POUTRE_DOUBLABLES.has(e.famille)
+    ? { ...e, doublable: true }
+    : e,
+);
 const parId = new Map(elements.map((e) => [e.id, e]));
 
 export const reglesFedA = reglesJson as unknown as ReglesFedA;
