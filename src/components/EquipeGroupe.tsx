@@ -29,6 +29,9 @@ interface Props {
   onRetirer?: (gymnasteId: string) => void;
   onReordonner?: (ids: string[]) => void;
   onSupprimerGymnaste: (g: Gymnaste) => void;
+  // Mettre une gymnaste en individuelle (niveau et catégorie de l'équipe) ; `aIndividuelle` dit si elle y est déjà.
+  aIndividuelle?: (gymnasteId: string) => boolean;
+  onIndividuelle?: (gymnasteId: string) => void;
   onSupprimer?: () => void;
   // Toutes les équipes où une gymnaste est engagée (pour signaler les participations incompatibles entre programmes).
   equipesDe?: (gymnasteId: string) => Equipe[];
@@ -238,6 +241,14 @@ export default function EquipeGroupe(p: Props) {
                 poignee={equipe ? dnd.poignee(g.id) : undefined}
                 onRetirer={equipe ? () => p.onRetirer?.(g.id) : undefined}
                 onSupprimer={() => p.onSupprimerGymnaste(g)}
+                individuelle={
+                  p.onIndividuelle && p.aIndividuelle
+                    ? {
+                        active: p.aIndividuelle(g.id),
+                        onMettre: () => p.onIndividuelle!(g.id),
+                      }
+                    : undefined
+                }
               />
             ))}
           </ul>

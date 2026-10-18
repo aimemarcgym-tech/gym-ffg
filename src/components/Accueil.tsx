@@ -493,6 +493,20 @@ export default function Accueil() {
                                 await charger();
                               }}
                               onSupprimerGymnaste={supprimerGymnaste}
+                              aIndividuelle={(gid) =>
+                                individuellesClub.some(
+                                  (i) => i.gymnasteId === gid,
+                                )
+                              }
+                              onIndividuelle={async (gid) => {
+                                await createIndividuelle({
+                                  clubId: c.id,
+                                  gymnasteId: gid,
+                                  niveau: eq.niveau,
+                                  categorieId: eq.categorieId,
+                                });
+                                await charger();
+                              }}
                               onPartager={() => partagerEquipe(eq, c.nom)}
                               onSupprimer={async () => {
                                 await deleteEquipe(eq.id);
