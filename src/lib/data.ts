@@ -1,7 +1,6 @@
 import { deleteMusique } from "@/lib/musique";
 import { supprimerResultatsCible } from "@/lib/resultats";
 import { pousserVersCloud } from "@/lib/sync";
-import { programmeDe } from "@/regulation/loader";
 import type { Agres, Appareil, NiveauId } from "@/regulation/types";
 
 export interface Club {
@@ -36,8 +35,6 @@ export interface Mouvement {
   sauts: { idSaut: string; appareil: Appareil }[];
   // Éléments pointés comme faisant partie d'une série : clé de l'élément dans la liste → type de série.
   series?: Record<string, SerieType>;
-  // Mouvement propre à une individuelle (absent = mouvement de l'équipe).
-  individuelleId?: string;
 }
 
 // Réglages du matériel à transmettre à un entraîneur remplaçant (saisis librement, en texte).
@@ -256,28 +253,7 @@ export async function createIndividuelle(
 ): Promise<Individuelle> {
   const s = lire();
   const i = { id: nouvelId(), ...data };
-  // Les mouvements d'équipe de la gymnaste (même programme) sont recopiés : ensuite l'individuelle et l'équipe évoluent séparément.
-  const copies: Mouvement[] = (s.mouvements ?? [])
-    .filter(
-      (m) =>
-        m.gymnasteId === data.gymnasteId &&
-        !m.individuelleId &&
-        programmeDe(m.niveau) === programmeDe(data.niveau),
-    )
-    .map((m) => ({
-      ...m,
-      id: nouvelId(),
-      individuelleId: i.id,
-      elementIds: [...m.elementIds],
-      bonifIds: [...m.bonifIds],
-      sauts: m.sauts.map((x) => ({ ...x })),
-      series: m.series ? { ...m.series } : undefined,
-    }));
-  ecrire({
-    ...s,
-    individuelles: [...(s.individuelles ?? []), i],
-    mouvements: [...(s.mouvements ?? []), ...copies],
-  });
+  ecrire({ ...s, individuelles: [...(s.individuelles ?? []), i] });
   return i;
 }
 
@@ -296,13 +272,10 @@ export async function updateIndividuelle(
 
 export async function deleteIndividuelle(id: string): Promise<void> {
   const s = lire();
-  ecrire(
-    sansOrphelins({
-      ...s,
-      individuelles: (s.individuelles ?? []).filter((i) => i.id !== id),
-      mouvements: (s.mouvements ?? []).filter((m) => m.individuelleId !== id),
-    }),
-  );
+  ecrire({
+    ...s,
+    individuelles: (s.individuelles ?? []).filter((i) => i.id !== id),
+  });
 }
 
 export async function getEquipes(clubId?: string): Promise<Equipe[]> {
@@ -373,14 +346,9 @@ export async function setCompetence(
 // Toujours dans l'ordre des agrès : saut, barres, poutre, sol (quel que soit le programme).
 const ORDRE_AGRES: Agres[] = ["SAUT", "BARRES", "POUTRE", "SOL"];
 
-// Par défaut, seulement les mouvements d'équipe ; `avecIndividuelles` ajoute ceux des individuelles.
-export async function getMouvements(
-  gymnasteId?: string,
-  avecIndividuelles = false,
-): Promise<Mouvement[]> {
+export async function getMouvements(gymnasteId?: string): Promise<Mouvement[]> {
   return (lire().mouvements ?? [])
     .filter((m) => !gymnasteId || m.gymnasteId === gymnasteId)
-    .filter((m) => avecIndividuelles || !m.individuelleId)
     .sort(
       (a, b) => ORDRE_AGRES.indexOf(a.agres) - ORDRE_AGRES.indexOf(b.agres),
     );
@@ -391,8 +359,7 @@ export async function getMouvement(id: string): Promise<Mouvement | undefined> {
 }
 
 export async function createMouvement(
-  data: Pick<Mouvement, "gymnasteId" | "nom" | "agres" | "niveau"> &
-    Partial<Pick<Mouvement, "individuelleId">>,
+  data: Pick<Mouvement, "gymnasteId" | "nom" | "agres" | "niveau">,
 ): Promise<Mouvement> {
   const s = lire();
   const m: Mouvement = {

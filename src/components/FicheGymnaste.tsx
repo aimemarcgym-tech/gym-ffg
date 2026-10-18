@@ -71,8 +71,6 @@ export default function FicheGymnaste() {
   const [nom, setNom] = useState("");
   const [agres, setAgres] = useState<Agres>("SOL");
   const [niveau, setNiveau] = useState<NiveauId>("A");
-  // Pour qui est le nouveau mouvement : l'équipe ("equipe") ou l'une des individuelles (son id).
-  const [pour, setPour] = useState("equipe");
 
   const charger = useCallback(async () => {
     // Le paramètre d'URL n'est lisible que côté client avec l'export statique.
@@ -103,7 +101,7 @@ export default function FicheGymnaste() {
           : contextes[0].niveau
         : n,
     );
-    setMouvements(await getMouvements(g.id, true));
+    setMouvements(await getMouvements(g.id));
     setEtat("ok");
   }, []);
 
@@ -132,12 +130,7 @@ export default function FicheGymnaste() {
 
   // Niveaux proposés : ceux de Performance 7-9 ans si la gymnaste est dans une équipe de ce programme, sinon les niveaux Fédéral.
   // Les équipes et les individuelles de la gymnaste comptent de la même façon : on propose les niveaux de chacun de ces programmes.
-  const pourIndiv =
-    individuelles.find((i) => i.id === pour) ??
-    (equipes.length === 0 ? individuelles[0] : undefined);
-  const contextes = pourIndiv
-    ? [pourIndiv]
-    : [...equipes, ...(equipes.length === 0 ? individuelles : [])];
+  const contextes = [...equipes, ...individuelles];
   const perf79 = contextes.find((e) => estPerf79(e.niveau));
   const enPF = contextes.some((e) => getNiveau(e.niveau).programme === "PF");
   const enFederal = contextes.some(
@@ -169,7 +162,6 @@ export default function FicheGymnaste() {
       nom: nom.trim() || nomParDefaut,
       agres,
       niveau: niveauEffectif,
-      individuelleId: pourIndiv?.id,
     });
     router.push(`/mouvement/?m=${m.id}`);
   }
@@ -178,9 +170,9 @@ export default function FicheGymnaste() {
   async function partagerMouvements() {
     const g = gymnaste!;
     const ordre = AGRES.map((a) => a.id);
-    const liste = mouvements
-      .filter((m) => !m.individuelleId)
-      .sort((a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres));
+    const liste = [...mouvements].sort(
+      (a, b) => ordre.indexOf(a.agres) - ordre.indexOf(b.agres),
+    );
     const id = await createShare("mouvements", {
       gymnaste: `${g.prenom} ${g.nom}`,
       mouvements: await Promise.all(
@@ -385,7 +377,6 @@ export default function FicheGymnaste() {
                       {getNiveau(m.niveau).label} · note D{" "}
                       {fmt(noteDMouvement(m))} /{" "}
                       {fmt(noteDMax(m.niveau, m.agres))}
-                      {m.individuelleId && " · individuelle"}
                     </div>
                   </Link>
                   {supprId === m.id ? (
@@ -432,23 +423,6 @@ export default function FicheGymnaste() {
                 className={champLibre}
               />
             </div>
-            {individuelles.length > 0 && (
-              <div>
-                <label className={etiquette}>Pour</label>
-                <select
-                  value={pourIndiv?.id ?? "equipe"}
-                  onChange={(e) => setPour(e.target.value)}
-                  className={champLibre}
-                >
-                  {equipes.length > 0 && <option value="equipe">Équipe</option>}
-                  {individuelles.map((i) => (
-                    <option key={i.id} value={i.id}>
-                      Individuelle · {getNiveau(i.niveau).label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
             <div>
               <label className={etiquette}>Agrès</label>
               <select
