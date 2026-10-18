@@ -547,6 +547,61 @@ export async function exporterDonnees(): Promise<Store> {
   return lire();
 }
 
+// Récupération : ajoute ce qui manque d'une sauvegarde (par identifiant) sans rien supprimer ni modifier d'existant.
+// Les gymnastes retrouvent aussi leur place dans leurs équipes, et leurs mouvements reviennent.
+export async function fusionnerDonnees(
+  b: Partial<Store>,
+): Promise<{
+  gymnastes: number;
+  mouvements: number;
+  membres: number;
+  equipes: number;
+}> {
+  const s = lire();
+  const ids = <T extends { id: string }>(l: T[] | undefined) =>
+    new Set((l ?? []).map((x) => x.id));
+  const manque = <T extends { id: string }>(
+    deja: T[] | undefined,
+    depuis: T[] | undefined,
+  ) => {
+    const connus = ids(deja);
+    return (depuis ?? []).filter((x) => !connus.has(x.id));
+  };
+  const clubs = [...s.clubs, ...manque(s.clubs, b.clubs)];
+  const gymnastes = [...s.gymnastes, ...manque(s.gymnastes, b.gymnastes)];
+  const equipesNouvelles = manque(s.equipes, b.equipes);
+  const gids = ids(gymnastes);
+  let membres = 0;
+  const equipes = [...s.equipes, ...equipesNouvelles].map((e) => {
+    const sauvee = (b.equipes ?? []).find((x) => x.id === e.id);
+    const ajout = (sauvee?.gymnasteIds ?? []).filter(
+      (id) => gids.has(id) && !e.gymnasteIds.includes(id),
+    );
+    membres += ajout.length;
+    return ajout.length
+      ? { ...e, gymnasteIds: [...e.gymnasteIds, ...ajout] }
+      : e;
+  });
+  const mouvementsNouveaux = manque(s.mouvements, b.mouvements).filter((m) =>
+    gids.has(m.gymnasteId),
+  );
+  const mouvements = [...(s.mouvements ?? []), ...mouvementsNouveaux];
+  const mids = ids(mouvements);
+  const instantanes = [
+    ...(s.instantanes ?? []),
+    ...manque(s.instantanes, b.instantanes).filter((i) =>
+      mids.has(i.mouvementId),
+    ),
+  ];
+  ecrire({ ...s, clubs, gymnastes, equipes, mouvements, instantanes });
+  return {
+    gymnastes: gymnastes.length - s.gymnastes.length,
+    mouvements: mouvementsNouveaux.length,
+    membres,
+    equipes: equipesNouvelles.length,
+  };
+}
+
 export async function remplacerDonnees(s: Partial<Store>): Promise<void> {
   ecrire({
     clubs: s.clubs ?? [],

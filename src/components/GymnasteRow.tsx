@@ -20,6 +20,8 @@ interface Props {
   poignee?: HTMLAttributes<HTMLSpanElement>;
   onRetirer?: () => void;
   onSupprimer: () => void;
+  // Texte de confirmation propre (par défaut : suppression de la gymnaste).
+  question?: string;
   // Engagement en individuelle sans recréer la gymnaste : bouton, ou mention quand elle y est déjà.
   individuelle?: { active: boolean; onMettre: () => void };
 }
@@ -34,6 +36,7 @@ export default function GymnasteRow({
   onRetirer,
   onSupprimer,
   individuelle,
+  question,
 }: Props) {
   const [confirme, setConfirme] = useState(false);
   return (
@@ -62,7 +65,7 @@ export default function GymnasteRow({
           </Link>
           {confirme ? (
             <ConfirmerEnLigne
-              question={`Supprimer ${g.prenom} ${g.nom} ?`}
+              question={question ?? `Supprimer ${g.prenom} ${g.nom} ?`}
               onConfirmer={() => {
                 setConfirme(false);
                 onSupprimer();

@@ -114,8 +114,8 @@ export default function IndividuellesClub(p: Props) {
                             )
                           : false
                       }
-                      onRetirer={() => p.onRetirer(i.id)}
-                      onSupprimer={() => p.onSupprimerGymnaste(g)}
+                      question={`Retirer l’individuelle de ${g.prenom} ${g.nom} ? Son profil et son équipe sont conservés.`}
+                      onSupprimer={() => p.onRetirer(i.id)}
                     />
                   </ul>
                 </li>

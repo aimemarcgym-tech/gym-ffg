@@ -1,7 +1,13 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent } from "react";
-import { exporterSauvegarde, importerSauvegarde, telechargerSauvegarde, type Sauvegarde as Donnees } from "@/lib/backup";
+import { fusionnerDonnees } from "@/lib/data";
+import {
+  exporterSauvegarde,
+  importerSauvegarde,
+  telechargerSauvegarde,
+  type Sauvegarde as Donnees,
+} from "@/lib/backup";
 
 // Lecture du fichier avec repli sur FileReader, comme sur le site UFOLEP (certains stockages cloud échouent avec Blob.text).
 async function lireTexte(fichier: File): Promise<string> {
@@ -16,7 +22,13 @@ async function lireTexte(fichier: File): Promise<string> {
         lecteur.readAsText(fichier);
       });
     } catch (e) {
-      throw new Error(e instanceof Error ? e.message : erreur instanceof Error ? erreur.message : String(e));
+      throw new Error(
+        e instanceof Error
+          ? e.message
+          : erreur instanceof Error
+            ? erreur.message
+            : String(e),
+      );
     }
   }
 }
@@ -26,6 +38,7 @@ export default function Sauvegarde() {
   const [enAttente, setEnAttente] = useState<Donnees | null>(null);
   const [occupe, setOccupe] = useState(false);
   const champ = useRef<HTMLInputElement>(null);
+  const champFusion = useRef<HTMLInputElement>(null);
 
   async function exporter() {
     setOccupe(true);
@@ -57,11 +70,34 @@ export default function Sauvegarde() {
       setMessage(null);
       setEnAttente(s);
     } catch (erreur) {
-      if (erreur instanceof SyntaxError) return setMessage("Fichier illisible : ce n’est pas un JSON de sauvegarde valide.");
+      if (erreur instanceof SyntaxError)
+        return setMessage(
+          "Fichier illisible : ce n’est pas un JSON de sauvegarde valide.",
+        );
       const detail = erreur instanceof Error ? erreur.message : String(erreur);
       setMessage(
         `Impossible de lire ce fichier (${detail || "erreur inconnue"}) — si le problème persiste depuis un stockage cloud, essayez de copier le fichier dans le stockage interne de l’appareil (pas juste « hors ligne » dans l’appli cloud) avant de réimporter.`,
       );
+    }
+  }
+
+  // Récupération sans rien écraser : ne remet que les gymnastes, équipes, membres et mouvements absents.
+  async function recuperer(e: ChangeEvent<HTMLInputElement>) {
+    const fichier = e.target.files?.[0];
+    e.target.value = "";
+    if (!fichier) return;
+    setOccupe(true);
+    setMessage(`Lecture du fichier (${(fichier.size / 1024).toFixed(0)} Ko)…`);
+    try {
+      const s = JSON.parse(await lireTexte(fichier)) as Donnees;
+      const c = await fusionnerDonnees(s);
+      setMessage(
+        `Récupération terminée : ${c.gymnastes} gymnaste(s), ${c.equipes} équipe(s), ${c.membres} retour(s) dans une équipe et ${c.mouvements} mouvement(s) remis. Rien d’existant n’a été modifié ni supprimé.`,
+      );
+    } catch {
+      setMessage("Fichier illisible : ce n’est pas une sauvegarde valide.");
+    } finally {
+      setOccupe(false);
     }
   }
 
@@ -86,11 +122,21 @@ export default function Sauvegarde() {
       <div className="rounded-lg border border-border-subtle bg-surface p-4">
         <h3 className="mb-1 text-sm font-semibold text-foreground">Exporter</h3>
         <p className="mb-3 text-xs text-muted">
-          Télécharge un fichier JSON contenant toutes vos données (clubs, équipes, gymnastes, compétences, mouvements, historique, ordres de passage) ainsi que les musiques, photos, vidéos et documents de résultats{" "}
-          <strong className="text-foreground">de cet appareil</strong> (ces fichiers ne sont pas synchronisés automatiquement entre appareils — ce fichier est le moyen de les transférer vers un autre appareil ou de les
-          sauvegarder sur votre propre stockage : Drive, Dropbox, clé USB…). À faire régulièrement, en particulier avant/après une compétition.
+          Télécharge un fichier JSON contenant toutes vos données (clubs,
+          équipes, gymnastes, compétences, mouvements, historique, ordres de
+          passage) ainsi que les musiques, photos, vidéos et documents de
+          résultats <strong className="text-foreground">de cet appareil</strong>{" "}
+          (ces fichiers ne sont pas synchronisés automatiquement entre appareils
+          — ce fichier est le moyen de les transférer vers un autre appareil ou
+          de les sauvegarder sur votre propre stockage : Drive, Dropbox, clé
+          USB…). À faire régulièrement, en particulier avant/après une
+          compétition.
         </p>
-        <button onClick={exporter} disabled={occupe} className="accent-gradient rounded px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+        <button
+          onClick={exporter}
+          disabled={occupe}
+          className="accent-gradient rounded px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+        >
           Télécharger une sauvegarde
         </button>
       </div>
@@ -98,7 +144,9 @@ export default function Sauvegarde() {
       <div className="rounded-lg border border-border-subtle bg-surface p-4">
         <h3 className="mb-1 text-sm font-semibold text-foreground">Importer</h3>
         <p className="mb-3 text-xs text-muted">
-          Charge un fichier de sauvegarde exporté depuis cet appareil ou un autre. <strong className="text-danger">Remplace entièrement</strong> vos clubs, équipes, gymnastes et mouvements actuels ainsi que les
+          Charge un fichier de sauvegarde exporté depuis cet appareil ou un
+          autre. <strong className="text-danger">Remplace entièrement</strong>{" "}
+          vos clubs, équipes, gymnastes et mouvements actuels ainsi que les
           musiques, photos, vidéos et documents de résultats de cet appareil.
         </p>
         <input
@@ -110,17 +158,51 @@ export default function Sauvegarde() {
         />
       </div>
 
+      <div className="rounded-lg border border-border-subtle bg-surface p-4">
+        <h3 className="mb-1 text-sm font-semibold text-foreground">
+          Récupérer ce qui manque
+        </h3>
+        <p className="mb-3 text-xs text-muted">
+          Choisissez une ancienne sauvegarde : seuls les gymnastes, équipes,
+          mouvements et appartenances à une équipe{" "}
+          <strong className="text-foreground">absents</strong> sont remis. Rien
+          d’existant n’est modifié ni supprimé. Une gymnaste supprimée
+          volontairement depuis la sauvegarde reviendra aussi.
+        </p>
+        <input
+          ref={champFusion}
+          type="file"
+          accept="application/json"
+          onChange={recuperer}
+          disabled={occupe}
+          className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:bg-surface-alt file:px-3 file:py-2 file:text-xs file:text-foreground hover:file:bg-border-strong"
+        />
+      </div>
+
       {enAttente && (
         <div className="rounded-lg border border-danger/40 bg-danger/10 p-4">
           <p className="mb-3 text-sm text-danger">
-            Remplacer toutes vos données par cette sauvegarde ({enAttente.gymnastes?.length ?? 0} gymnaste(s), {enAttente.mouvements?.length ?? 0} mouvement(s), {enAttente.photos?.length ?? 0} photo(s), {enAttente.videos?.length ?? 0} vidéo(s)) ? Cette action est irréversible pour les données
-            actuelles de cet appareil (équipes, gymnastes, mouvements, musiques, photos, vidéos et documents de résultats).
+            Remplacer toutes vos données par cette sauvegarde (
+            {enAttente.gymnastes?.length ?? 0} gymnaste(s),{" "}
+            {enAttente.mouvements?.length ?? 0} mouvement(s),{" "}
+            {enAttente.photos?.length ?? 0} photo(s),{" "}
+            {enAttente.videos?.length ?? 0} vidéo(s)) ? Cette action est
+            irréversible pour les données actuelles de cet appareil (équipes,
+            gymnastes, mouvements, musiques, photos, vidéos et documents de
+            résultats).
           </p>
           <div className="flex gap-2">
-            <button onClick={confirmer} disabled={occupe} className="rounded bg-danger px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50">
+            <button
+              onClick={confirmer}
+              disabled={occupe}
+              className="rounded bg-danger px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
+            >
               {occupe ? "…" : "Confirmer le remplacement"}
             </button>
-            <button onClick={() => setEnAttente(null)} className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:text-foreground">
+            <button
+              onClick={() => setEnAttente(null)}
+              className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:text-foreground"
+            >
               Annuler
             </button>
           </div>
