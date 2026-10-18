@@ -13,6 +13,7 @@ import {
   findOrCreateClub,
   getClubs,
   getEquipes,
+  getIndividuelles,
   getGymnaste,
   getMouvements,
   instantanesPourPartage,
@@ -21,6 +22,7 @@ import {
   updateGymnaste,
   type Club,
   type Equipe,
+  type Individuelle,
   type Gymnaste,
   type Mouvement,
   type StatutCompetence,
@@ -28,6 +30,7 @@ import {
 import { noteDMax, noteDMouvement } from "@/engine/federal-a";
 import {
   ageEnSaison,
+  getCategorie,
   getNiveau,
   niveauxMouvement,
   niveauxPerf79Autorises,
@@ -59,6 +62,7 @@ export default function FicheGymnaste() {
     { type: "profil" } | { type: "equipe"; equipeId: string | null } | null
   >(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
   const [mouvements, setMouvements] = useState<Mouvement[]>([]);
   const [etat, setEtat] = useState<"chargement" | "ok" | "introuvable">(
     "chargement",
@@ -84,12 +88,17 @@ export default function FicheGymnaste() {
     setEquipesClub(duClub);
     const siennes = duClub.filter((e) => e.gymnasteIds.includes(g.id));
     setEquipes(siennes);
-    // Équipe Performance 7-9 ans : les niveaux de mouvement sont P1 à P4 (P79 est le niveau de l'équipe).
+    const sesIndividuelles = (await getIndividuelles(g.clubId)).filter(
+      (i) => i.gymnasteId === g.id,
+    );
+    setIndividuelles(sesIndividuelles);
+    // Équipes et individuelles : même logique pour les niveaux de mouvement. Performance 7-9 ans : P1 à P4 (P79 est le niveau de l'équipe).
+    const contextes = [...siennes, ...sesIndividuelles];
     setNiveau((n) =>
-      siennes.length && !siennes.some((e) => e.niveau === n)
-        ? estPerf79(siennes[0].niveau)
+      contextes.length && !contextes.some((e) => e.niveau === n)
+        ? estPerf79(contextes[0].niveau)
           ? "P1"
-          : siennes[0].niveau
+          : contextes[0].niveau
         : n,
     );
     setMouvements(await getMouvements(g.id));
@@ -120,19 +129,26 @@ export default function FicheGymnaste() {
   }
 
   // Niveaux proposés : ceux de Performance 7-9 ans si la gymnaste est dans une équipe de ce programme, sinon les niveaux Fédéral.
-  const enPerf = equipes.some((e) => estPerf79(e.niveau));
-  const enPF = equipes.some((e) => getNiveau(e.niveau).programme === "PF");
-  const niveauxChoix = enPerf
-    ? niveauxPerf79Autorises(
-        agres,
-        ageEnSaison(gymnaste.anneeNaissance),
-        equipes.find((e) => estPerf79(e.niveau))?.categorieId,
-      ).map((id) => getNiveau(id))
-    : enPF
-      ? niveauxMouvement.filter((n) => n.programme === "PF")
-      : niveauxMouvement.filter(
-          (n) => !estPerf79(n.id) && n.programme !== "PF",
-        );
+  // Les équipes et les individuelles de la gymnaste comptent de la même façon : on propose les niveaux de chacun de ces programmes.
+  const contextes = [...equipes, ...individuelles];
+  const perf79 = contextes.find((e) => estPerf79(e.niveau));
+  const enPF = contextes.some((e) => getNiveau(e.niveau).programme === "PF");
+  const enFederal = contextes.some(
+    (e) => !estPerf79(e.niveau) && getNiveau(e.niveau).programme !== "PF",
+  );
+  const niveauxChoix = [
+    ...(contextes.length === 0 || enFederal
+      ? niveauxMouvement.filter((n) => !estPerf79(n.id) && n.programme !== "PF")
+      : []),
+    ...(perf79
+      ? niveauxPerf79Autorises(
+          agres,
+          ageEnSaison(gymnaste.anneeNaissance),
+          perf79.categorieId,
+        ).map((id) => getNiveau(id))
+      : []),
+    ...(enPF ? niveauxMouvement.filter((n) => n.programme === "PF") : []),
+  ];
   const niveauEffectif = niveauxChoix.some((n) => n.id === niveau)
     ? niveau
     : niveauxChoix[0].id;
@@ -292,6 +308,16 @@ export default function FicheGymnaste() {
               >
                 {t.texte}
               </button>
+            ))}
+            {individuelles.map((i) => (
+              <span
+                key={i.id}
+                title="Modifiable depuis l’accueil, dans Individuelles"
+                className="rounded-full border border-accent-solid/40 bg-accent-from/10 px-2 py-0.5 text-xs text-foreground"
+              >
+                Individuelle · {getNiveau(i.niveau).label} ·{" "}
+                {getCategorie(i.niveau, i.categorieId)?.label ?? ""}
+              </span>
             ))}
           </div>
 

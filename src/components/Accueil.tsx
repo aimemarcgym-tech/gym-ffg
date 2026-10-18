@@ -3,24 +3,30 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import EquipeGroupe from "@/components/EquipeGroupe";
 import FilieresPanneaux, { type Filiere } from "@/components/FilieresPanneaux";
+import IndividuellesClub from "@/components/IndividuellesClub";
 import {
   createEquipe,
   createGymnaste,
+  createIndividuelle,
   deleteClub,
+  deleteIndividuelle,
   deleteEquipe,
   deleteGymnaste,
   findOrCreateClub,
   getClubs,
   getEquipes,
   getGymnastes,
+  getIndividuelles,
   getMouvements,
   instantanesPourPartage,
   renameClub,
   setEquipeMembres,
   updateEquipe,
+  updateIndividuelle,
   type Club,
   type Equipe,
   type Gymnaste,
+  type Individuelle,
   type Mouvement,
 } from "@/lib/data";
 import {
@@ -51,6 +57,7 @@ export default function Accueil() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
   const [mouvements, setMouvements] = useState<Mouvement[]>([]);
   const [ouverts, setOuverts] = useState<string[]>([]);
   const [pret, setPret] = useState(false);
@@ -63,11 +70,16 @@ export default function Accueil() {
   const [annee, setAnnee] = useState("");
   const [niveau, setNiveau] = useState<NiveauId | null>(null);
   const [categorie, setCategorie] = useState("");
+  // Engagement en individuelle, avec son propre niveau et sa propre catégorie.
+  const [indiv, setIndiv] = useState(false);
+  const [indivNiveau, setIndivNiveau] = useState<NiveauId | null>(null);
+  const [indivCategorie, setIndivCategorie] = useState("");
 
   const charger = useCallback(async () => {
     setClubs(await getClubs());
     setGymnastes(await getGymnastes());
     setEquipes(await getEquipes());
+    setIndividuelles(await getIndividuelles());
     setMouvements(await getMouvements());
     setPret(true);
   }, []);
@@ -174,6 +186,20 @@ export default function Accueil() {
   const nbGymnastesProgramme = (p: Programme | Programme[]) =>
     new Set(equipesDuProgramme(p).flatMap((e) => e.gymnasteIds)).size;
 
+  const individuellesFiliere = individuelles.filter((i) =>
+    programmesAffiches.includes(programmeDe(i.niveau)),
+  );
+  const indivNiveauCourant: NiveauId =
+    indivNiveau && niveauxFiliere.some((n) => n.id === indivNiveau)
+      ? indivNiveau
+      : niveauxFiliere[0].id;
+  const indivCategories = getNiveau(indivNiveauCourant).categories;
+  const indivCategorieValide = indivCategories.some(
+    (c) => c.id === indivCategorie,
+  )
+    ? indivCategorie
+    : indivCategories[0].id;
+
   const clubExistant = clubs.find(
     (c) => c.nom.toLowerCase() === club.trim().toLowerCase(),
   );
@@ -238,6 +264,17 @@ export default function Accueil() {
       }
       await setEquipeMembres(cible.id, [...cible.gymnasteIds, g.id]);
     }
+    if (indiv) {
+      await createIndividuelle({
+        clubId: c.id,
+        gymnasteId: g.id,
+        niveau: indivNiveauCourant,
+        categorieId: indivCategorieValide,
+      });
+    }
+    setIndiv(false);
+    setIndivNiveau(null);
+    setIndivCategorie("");
     setPrenom("");
     setNom("");
     setEquipe("");
@@ -314,16 +351,27 @@ export default function Accueil() {
               );
               const ouvert = ouverts.includes(c.id);
               // « Sans équipe » : seulement les gymnastes qui ne sont dans aucune équipe (celles d'une équipe d'un autre programme n'apparaissent pas ici).
+              // Une gymnaste engagée en individuelle (dans n'importe quel panneau) n'est pas « sans équipe » : elle apparaît dans Individuelles.
+              const individuellesClub = individuellesFiliere.filter(
+                (i) => i.clubId === c.id,
+              );
               const sansEquipe = deClub.filter(
-                (g) => !equipes.some((e) => e.gymnasteIds.includes(g.id)),
+                (g) =>
+                  !equipes.some((e) => e.gymnasteIds.includes(g.id)) &&
+                  !individuelles.some((i) => i.gymnasteId === g.id),
               );
               const visibles = deClub.filter(
                 (g) =>
                   sansEquipe.includes(g) ||
-                  equipesClub.some((e) => e.gymnasteIds.includes(g.id)),
+                  equipesClub.some((e) => e.gymnasteIds.includes(g.id)) ||
+                  individuellesClub.some((i) => i.gymnasteId === g.id),
               );
               // Un club sans rien à montrer dans ce panneau n'est pas affiché.
-              if (visibles.length === 0 && equipesClub.length === 0)
+              if (
+                visibles.length === 0 &&
+                equipesClub.length === 0 &&
+                individuellesClub.length === 0
+              )
                 return null;
               return (
                 <div key={c.id}>
@@ -454,6 +502,31 @@ export default function Accueil() {
                           </div>
                         ))}
 
+                      <IndividuellesClub
+                        individuelles={individuellesClub}
+                        gymnastesClub={deClub}
+                        niveaux={niveauxFiliere}
+                        nbMouvements={nbMouvements}
+                        onAjouter={async (gid) => {
+                          await createIndividuelle({
+                            clubId: c.id,
+                            gymnasteId: gid,
+                            niveau: niveauxFiliere[0].id,
+                            categorieId: niveauxFiliere[0].categories[0].id,
+                          });
+                          await charger();
+                        }}
+                        onModifier={async (id, patch) => {
+                          await updateIndividuelle(id, patch);
+                          await charger();
+                        }}
+                        onRetirer={async (id) => {
+                          await deleteIndividuelle(id);
+                          await charger();
+                        }}
+                        onSupprimerGymnaste={supprimerGymnaste}
+                      />
+
                       {sansEquipe.length > 0 && (
                         <EquipeGroupe
                           equipe={null}
@@ -569,6 +642,55 @@ export default function Accueil() {
                 </div>
               </div>
             )}
+
+            <div className="space-y-2 rounded border border-border-subtle bg-surface-alt/40 p-2">
+              <label className="flex items-center gap-2 text-sm text-foreground">
+                <input
+                  type="checkbox"
+                  checked={indiv}
+                  onChange={(e) => setIndiv(e.target.checked)}
+                />
+                Aussi en individuelle
+              </label>
+              {indiv && (
+                <div className="grid grid-cols-2 gap-3">
+                  <p className="col-span-2 text-xs text-muted">
+                    Niveau et catégorie propres à l’individuelle, indépendants
+                    de ceux de l’équipe.
+                  </p>
+                  <div>
+                    <label className={etiquette}>Niveau</label>
+                    <select
+                      value={indivNiveauCourant}
+                      onChange={(e) =>
+                        setIndivNiveau(e.target.value as NiveauId)
+                      }
+                      className={champ}
+                    >
+                      {niveauxFiliere.map((n) => (
+                        <option key={n.id} value={n.id}>
+                          {n.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className={etiquette}>Catégorie</label>
+                    <select
+                      value={indivCategorieValide}
+                      onChange={(e) => setIndivCategorie(e.target.value)}
+                      className={champ}
+                    >
+                      {indivCategories.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
 
             <div>
               <label className={etiquette}>Année de naissance</label>
