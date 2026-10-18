@@ -32,6 +32,8 @@ import {
 import {
   anneeSaison,
   anneesCategorie,
+  categoriesIndividuelles,
+  categorieIndividuelle,
   getCategorie,
   getNiveau,
   niveauxDuProgramme,
@@ -193,12 +195,13 @@ export default function Accueil() {
     indivNiveau && niveauxFiliere.some((n) => n.id === indivNiveau)
       ? indivNiveau
       : niveauxFiliere[0].id;
-  const indivCategories = getNiveau(indivNiveauCourant).categories;
-  const indivCategorieValide = indivCategories.some(
-    (c) => c.id === indivCategorie,
-  )
-    ? indivCategorie
-    : indivCategories[0].id;
+  const indivCategories = categoriesIndividuelles(indivNiveauCourant);
+  const anneeSaisie = parseInt(annee, 10);
+  const indivCategorieValide = categorieIndividuelle(
+    indivNiveauCourant,
+    indivCategorie,
+    Number.isFinite(anneeSaisie) ? anneeSaisie : anneeSaison - 12,
+  ).id;
 
   const clubExistant = clubs.find(
     (c) => c.nom.toLowerCase() === club.trim().toLowerCase(),
@@ -503,7 +506,12 @@ export default function Accueil() {
                                   clubId: c.id,
                                   gymnasteId: gid,
                                   niveau: eq.niveau,
-                                  categorieId: eq.categorieId,
+                                  categorieId: categorieIndividuelle(
+                                    eq.niveau,
+                                    "",
+                                    deClub.find((g) => g.id === gid)
+                                      ?.anneeNaissance ?? anneeSaison - 12,
+                                  ).id,
                                 });
                                 await charger();
                               }}
@@ -526,7 +534,12 @@ export default function Accueil() {
                             clubId: c.id,
                             gymnasteId: gid,
                             niveau: niveauxFiliere[0].id,
-                            categorieId: niveauxFiliere[0].categories[0].id,
+                            categorieId: categorieIndividuelle(
+                              niveauxFiliere[0].id,
+                              "",
+                              deClub.find((g) => g.id === gid)
+                                ?.anneeNaissance ?? anneeSaison - 12,
+                            ).id,
                           });
                           await charger();
                         }}

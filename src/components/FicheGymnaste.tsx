@@ -30,7 +30,7 @@ import {
 import { noteDMax, noteDMouvement } from "@/engine/federal-a";
 import {
   ageEnSaison,
-  getCategorie,
+  categorieIndividuelle,
   getNiveau,
   niveauxMouvement,
   niveauxPerf79Autorises,
@@ -355,7 +355,13 @@ export default function FicheGymnaste() {
                 className={`rounded-full border px-2 py-0.5 text-xs ${pastille(`i:${i.id}`)}`}
               >
                 Individuelle · {getNiveau(i.niveau).label} ·{" "}
-                {getCategorie(i.niveau, i.categorieId)?.label ?? ""}
+                {
+                  categorieIndividuelle(
+                    i.niveau,
+                    i.categorieId,
+                    gymnaste.anneeNaissance,
+                  ).label
+                }
               </button>
             ))}
           </div>

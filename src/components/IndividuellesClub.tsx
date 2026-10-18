@@ -5,8 +5,8 @@ import GymnasteRow from "@/components/GymnasteRow";
 import {
   ageDansCategorie,
   ageEnSaison,
-  getCategorie,
-  getNiveau,
+  categoriesIndividuelles,
+  categorieIndividuelle,
 } from "@/regulation/loader";
 import { champPetit } from "@/lib/styles";
 import type { Gymnaste, Individuelle } from "@/lib/data";
@@ -61,8 +61,11 @@ export default function IndividuellesClub(p: Props) {
             {p.individuelles.map((i) => {
               const g = p.gymnastesClub.find((x) => x.id === i.gymnasteId);
               if (!g) return null;
-              const niveau = getNiveau(i.niveau);
-              const categorie = getCategorie(i.niveau, i.categorieId);
+              const categorie = categorieIndividuelle(
+                i.niveau,
+                i.categorieId,
+                g.anneeNaissance,
+              );
               return (
                 <li key={i.id} className="space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2 pl-12">
@@ -70,12 +73,13 @@ export default function IndividuellesClub(p: Props) {
                       value={i.niveau}
                       onChange={(e) => {
                         const id = e.target.value as NiveauId;
-                        const cats = getNiveau(id).categories;
                         p.onModifier(i.id, {
                           niveau: id,
-                          categorieId: cats.some((c) => c.id === i.categorieId)
-                            ? i.categorieId
-                            : cats[0].id,
+                          categorieId: categorieIndividuelle(
+                            id,
+                            i.categorieId,
+                            g.anneeNaissance,
+                          ).id,
                         });
                       }}
                       className={champPetit}
@@ -88,14 +92,14 @@ export default function IndividuellesClub(p: Props) {
                       ))}
                     </select>
                     <select
-                      value={i.categorieId}
+                      value={categorie.id}
                       onChange={(e) =>
                         p.onModifier(i.id, { categorieId: e.target.value })
                       }
                       className={champPetit}
                       aria-label="Catégorie"
                     >
-                      {niveau.categories.map((c) => (
+                      {categoriesIndividuelles(i.niveau).map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.label}
                         </option>
