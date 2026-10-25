@@ -200,17 +200,17 @@ function BibliothequeSuivi({
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   <button
                     type="button"
-                    onClick={() => onBasculer(e.nom)}
-                    className="rounded border border-border-strong px-2 py-0.5 text-[11px] text-foreground hover:border-accent-solid/60 hover:bg-accent-from/10"
-                  >
-                    {dedans ? "Retirer du tableau" : "+ Tableau"}
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => versSeance(e.nom, e.valeur)}
                     className="rounded border border-border-strong px-2 py-0.5 text-[11px] text-foreground hover:border-accent-solid/60 hover:bg-accent-from/10"
                   >
                     + Séance
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onBasculer(e.nom)}
+                    className="rounded border border-border-strong px-2 py-0.5 text-[11px] text-foreground hover:border-accent-solid/60 hover:bg-accent-from/10"
+                  >
+                    {dedans ? "Retirer du tableau" : "+ Tableau"}
                   </button>
                 </div>
               </div>
