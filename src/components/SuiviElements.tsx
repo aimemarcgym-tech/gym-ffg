@@ -32,10 +32,19 @@ export interface Ouverture {
 
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;
 
+const NIVEAUX_BIBLIOTHEQUE: { id: NiveauId; label: string }[] = [
+  { id: "A", label: "Fédéral A · A, A2, A3" },
+  { id: "B1", label: getNiveau("B1").label },
+  { id: "B2", label: getNiveau("B2").label },
+  { id: "B3", label: getNiveau("B3").label },
+  { id: "PF1", label: getNiveau("PF1").label },
+  { id: "PF2", label: getNiveau("PF2").label },
+];
+
 // Bibliothèque des éléments, comme dans le constructeur : une catégorie au choix, une recherche, et un clic ajoute ou retire la ligne.
 function BibliothequeSuivi({
   agres,
-  niveau,
+  niveau: niveauDepart,
   pris,
   onBasculer,
 }: {
@@ -46,6 +55,14 @@ function BibliothequeSuivi({
 }) {
   const [famille, setFamille] = useState("");
   const [recherche, setRecherche] = useState("");
+  // Niveau de la bibliothèque : celui de l'équipe au départ ; Fédéral A regroupe A, A2 et A3 (mêmes éléments).
+  const [niv, setNiv] = useState<NiveauId>(
+    getNiveau(niveauDepart).programme === "A" ||
+      getNiveau(niveauDepart).programme === "P"
+      ? "A"
+      : niveauDepart,
+  );
+  const niveau = niv;
   const q = recherche.trim().toLowerCase();
   const estSaut = agres === "SAUT";
   const elements = useMemo(
@@ -98,6 +115,21 @@ function BibliothequeSuivi({
   return (
     <div className="space-y-2 rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
       <div className="flex flex-wrap gap-2">
+        <select
+          value={niv}
+          onChange={(e) => {
+            setNiv(e.target.value as NiveauId);
+            setFamille("");
+          }}
+          aria-label="Niveau"
+          className={`${champ} sm:w-60`}
+        >
+          {NIVEAUX_BIBLIOTHEQUE.map((n) => (
+            <option key={n.id} value={n.id}>
+              {n.label}
+            </option>
+          ))}
+        </select>
         {(!estSaut || parFamilleSaut) && (
           <select
             value={famille}
@@ -310,7 +342,7 @@ export function Tableau({
       {modifiable && (
         <div className="space-y-2 print:hidden">
           <div className="flex flex-wrap items-center gap-2">
-            {niveau && getNiveau(niveau).programme !== "P" && (
+            {niveau && (
               <button
                 onClick={() => setBiblio((o) => !o)}
                 aria-expanded={biblio}

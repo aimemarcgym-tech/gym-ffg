@@ -93,18 +93,24 @@ export default function PageProgrammeTechnique() {
 
   return (
     <>
-      <SuiviElements
-        ouverture={ouverture}
-        equipeCommune={equipeCommune}
-        onEquipe={setEquipeCommune}
-      />
-      <ProgrammeEntrainement
-        titre="Programme technique"
-        type="TECHNIQUE"
-        ouverture={ouverture}
-        equipeCommune={equipeCommune}
-        onEquipe={setEquipeCommune}
-      />
+      <div className="grid items-start gap-8 lg:grid-cols-[22rem_minmax(0,1fr)]">
+        <div className="order-2 print:hidden lg:order-1">
+          <ProgrammeEntrainement
+            titre="Programme technique"
+            type="TECHNIQUE"
+            ouverture={ouverture}
+            equipeCommune={equipeCommune}
+            onEquipe={setEquipeCommune}
+          />
+        </div>
+        <div className="order-1 min-w-0 lg:order-2">
+          <SuiviElements
+            ouverture={ouverture}
+            equipeCommune={equipeCommune}
+            onEquipe={setEquipeCommune}
+          />
+        </div>
+      </div>
 
       <div className="print:hidden">
         <button
