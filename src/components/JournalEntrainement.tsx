@@ -205,7 +205,20 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
           }),
         }
       : undefined;
-    const data = { targetLabel: libelle, programType: type, sessions: (seances ?? []).map((x) => ({ date: x.date, content: x.contenu })), ...(pieceJointe ? { attachment: pieceJointe } : {}) };
+    const data = { targetLabel: libelle, programType: type, sessions: (seances ?? []).map((x) => ({
+        date: x.date,
+        content: x.contenu,
+        // Tableaux joints, avec les noms des gymnastes en colonnes : le lien se suffit à lui-même.
+        ...(x.tableaux?.length
+          ? {
+              tables: x.tableaux.map((t) => ({
+                agres: AGRES.find((a) => a.id === t.agres)?.label ?? t.agres,
+                colonnes: membres.map((g) => `${g.prenom} ${g.nom.charAt(0)}.`),
+                lignes: t.lignes.map((l) => ({ libelle: l.libelle, etats: membres.map((g) => t.cases[`${l.id}|${g.id}`] ?? null) })),
+              })),
+            }
+          : {}),
+      })), ...(pieceJointe ? { attachment: pieceJointe } : {}) };
     const taille = new Blob([JSON.stringify(data)]).size;
     if (taille > LIMITE_LIEN) {
       throw new Error(`Le lien serait trop volumineux (${formatTaille(taille)}, max ~${formatTaille(LIMITE_LIEN)}) — retirez la pièce jointe ou raccourcissez l'historique des séances.`);
