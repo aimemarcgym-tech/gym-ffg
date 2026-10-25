@@ -5,7 +5,7 @@ import type { Store } from "@/lib/data";
 // Synchronisation entre appareils : les données (clubs, équipes, gymnastes, mouvements, séances…) restent d'abord dans l'appareil
 // (rapide, marche sans réseau) puis sont recopiées dans Firestore, dans users/{uid}/donnees/{collection}, et reprises sur les autres appareils.
 // Les fichiers lourds (musiques, photos, vidéos, documents de résultats) restent sur l'appareil : la Sauvegarde sert à les transférer.
-const COLLECTIONS = ["clubs", "gymnastes", "equipes", "individuelles", "mouvements", "instantanes", "seances"] as const;
+const COLLECTIONS = ["clubs", "gymnastes", "equipes", "individuelles", "mouvements", "instantanes", "seances", "suivis"] as const;
 type Nom = (typeof COLLECTIONS)[number];
 
 export type EtatSync = "inactif" | "connexion" | "synchronise" | "hors-ligne" | "erreur";

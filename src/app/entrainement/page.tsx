@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProgrammeEntrainement from "@/components/JournalEntrainement";
+import SuiviElements from "@/components/SuiviElements";
 
 export default function EntrainementPage() {
   return (
@@ -15,6 +16,7 @@ export default function EntrainementPage() {
         </div>
       </header>
       <main className="mx-auto max-w-[1600px] space-y-8 px-6 py-10">
+        <SuiviElements />
         <ProgrammeEntrainement titre="Programme technique" type="TECHNIQUE" />
         <ProgrammeEntrainement titre="Programme physique" type="PHYSIQUE" />
       </main>

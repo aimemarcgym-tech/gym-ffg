@@ -92,6 +92,17 @@ export interface Seance {
   createdAt: string;
 }
 
+// Suivi des éléments à travailler : tableau à double entrée (éléments en lignes, gymnastes en colonnes) pour une équipe ou une gymnaste, par agrès.
+export type EtatSuivi = "x" | "ok";
+export interface Suivi {
+  id: string;
+  cible: { genre: "equipe" | "gymnaste"; id: string };
+  agres: Agres;
+  lignes: { id: string; libelle: string }[];
+  // Clé « idLigne|idGymnaste » ; absent = vide, « x » = à travailler, « ok » = validé.
+  cases: Record<string, EtatSuivi>;
+}
+
 export interface Store {
   clubs: Club[];
   gymnastes: Gymnaste[];
@@ -100,6 +111,7 @@ export interface Store {
   mouvements?: Mouvement[];
   instantanes?: Instantane[];
   seances?: Seance[];
+  suivis?: Suivi[];
 }
 
 function sansOrphelins(s: Store): Store {
@@ -112,6 +124,7 @@ function sansOrphelins(s: Store): Store {
     ...s,
     instantanes: (s.instantanes ?? []).filter((i) => ids.has(i.mouvementId)),
     seances: (s.seances ?? []).filter((x) => cibles.has(x.cible.id)),
+    suivis: (s.suivis ?? []).filter((x) => cibles.has(x.cible.id)),
   };
 }
 
@@ -549,9 +562,7 @@ export async function exporterDonnees(): Promise<Store> {
 
 // Récupération : ajoute ce qui manque d'une sauvegarde (par identifiant) sans rien supprimer ni modifier d'existant.
 // Les gymnastes retrouvent aussi leur place dans leurs équipes, et leurs mouvements reviennent.
-export async function fusionnerDonnees(
-  b: Partial<Store>,
-): Promise<{
+export async function fusionnerDonnees(b: Partial<Store>): Promise<{
   gymnastes: number;
   mouvements: number;
   membres: number;
@@ -611,7 +622,24 @@ export async function remplacerDonnees(s: Partial<Store>): Promise<void> {
     mouvements: s.mouvements ?? [],
     instantanes: s.instantanes ?? [],
     seances: s.seances ?? [],
+    suivis: s.suivis ?? [],
   });
+}
+
+export async function getSuivis(): Promise<Suivi[]> {
+  return lire().suivis ?? [];
+}
+
+// Enregistre (ajoute ou remplace) un tableau de suivi.
+export async function enregistrerSuivi(suivi: Suivi): Promise<void> {
+  const s = lire();
+  const autres = (s.suivis ?? []).filter((x) => x.id !== suivi.id);
+  ecrire({ ...s, suivis: [...autres, suivi] });
+}
+
+export async function supprimerSuivi(id: string): Promise<void> {
+  const s = lire();
+  ecrire({ ...s, suivis: (s.suivis ?? []).filter((x) => x.id !== id) });
 }
 
 export async function getSeances(

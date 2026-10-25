@@ -98,3 +98,31 @@ body[data-filiere="PERFORMANCE"] {
     radial-gradient(circle at 90% 0%, #f43f5e30, transparent 45%),
     #12080e;
 }
+
+/* Impression du suivi des éléments : seul le tableau est imprimé, sur fond blanc. */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  body:has(.suivi-impression) * {
+    visibility: hidden;
+  }
+  .suivi-impression,
+  .suivi-impression * {
+    visibility: visible;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .suivi-impression {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #000;
+  }
+}
