@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import PartageBouton from "@/components/PartageBouton";
 import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, getSuivis, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
 import { Tableau } from "@/components/SuiviElements";
-import ContenuSeance from "@/components/ContenuSeance";
+import ContenuSeance, { EditeurSeance } from "@/components/ContenuSeance";
 import { AGRES } from "@/regulation/libelles";
 import { formatTaille } from "@/lib/format";
 import { createShare } from "@/lib/shares";
@@ -65,15 +65,7 @@ function Formulaire({
       className="rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none"
     />
   );
-  const zone = (
-    <textarea
-      value={contenu}
-      onChange={(e) => onContenu(e.target.value)}
-      rows={3}
-      placeholder={variante === "add" ? "Exercices, objectifs, remarques pour cette séance…" : undefined}
-      className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
-    />
-  );
+  const zone = <EditeurSeance valeur={contenu} onChange={onContenu} placeholder={variante === "add" ? "Exercices, objectifs, remarques pour cette séance…" : undefined} />;
   const tableauxChamp =
     disponibles.length > 0 ? (
       <fieldset className="rounded border border-border-subtle p-2">
