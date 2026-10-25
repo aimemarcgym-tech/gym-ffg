@@ -14,7 +14,7 @@ import {
   type Suivi,
 } from "@/lib/data";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
-import { btnDanger, btnDegrade } from "@/lib/styles";
+import { btnDanger, btnDegrade, champ } from "@/lib/styles";
 import { AGRES } from "@/regulation/libelles";
 import { getNiveau } from "@/regulation/loader";
 import type { NiveauId } from "@/regulation/types";
@@ -37,6 +37,7 @@ export default function PageProgrammeTechnique() {
   const [ouverture, setOuverture] = useState<Ouverture | null>(null);
   const [liste, setListe] = useState<Existant[] | null>(null);
   const [suppression, setSuppression] = useState<string | null>(null);
+  const [choixTableau, setChoixTableau] = useState("");
   // Équipe sélectionnée, partagée entre le suivi et le programme technique.
   const [equipeCommune, setEquipeCommune] = useState<string | undefined>();
   const [seances, setSeances] = useState<SeanceListee[] | null>(null);
@@ -142,63 +143,61 @@ export default function PageProgrammeTechnique() {
           </button>
         </div>
         {seances && (
-          <ul className="mt-3 space-y-1">
-            {seances.length === 0 && (
-              <li className="text-xs text-muted">
+          <div className="mt-3">
+            {seances.length === 0 ? (
+              <p className="text-xs text-muted">
                 Aucune séance enregistrée pour l’instant.
-              </li>
-            )}
-            {seances.map((x) => (
-              <li key={x.seance.id}>
-                <button
-                  onClick={() => {
-                    setOuverture((o) => ({
-                      n: (o?.n ?? 0) + 1,
-                      cible: x.seance.cible,
-                    }));
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="text-left text-sm text-foreground hover:underline"
-                >
-                  <span className="text-xs text-muted">
+              </p>
+            ) : (
+              <select
+                value=""
+                onChange={(e) => {
+                  const x = seances.find((y) => y.seance.id === e.target.value);
+                  if (!x) return;
+                  setOuverture((o) => ({
+                    n: (o?.n ?? 0) + 1,
+                    cible: x.seance.cible,
+                  }));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                aria-label="Mes séances"
+                className={`${champ} max-w-full sm:w-[36rem]`}
+              >
+                <option value="">Choisir une séance…</option>
+                {seances.map((x) => (
+                  <option key={x.seance.id} value={x.seance.id}>
                     {new Date(x.seance.date + "T00:00:00").toLocaleDateString(
                       "fr-FR",
                       { day: "2-digit", month: "long", year: "numeric" },
-                    )}
-                  </span>{" "}
-                  · {x.libelle} ·{" "}
-                  <span className="text-muted">
-                    {x.seance.contenu.length > 60
-                      ? x.seance.contenu.slice(0, 60) + "…"
+                    )}{" "}
+                    · {x.libelle} ·{" "}
+                    {x.seance.contenu.length > 40
+                      ? x.seance.contenu.slice(0, 40) + "…"
                       : x.seance.contenu}
-                  </span>
-                  {x.seance.tableaux?.length ? (
-                    <span className="text-xs text-muted">
-                      {" "}
-                      ({x.seance.tableaux.length} tableau
-                      {x.seance.tableaux.length > 1 ? "x" : ""} joint
-                      {x.seance.tableaux.length > 1 ? "s" : ""})
-                    </span>
-                  ) : null}
-                </button>
-              </li>
-            ))}
-          </ul>
+                    {x.seance.tableaux?.length
+                      ? ` (${x.seance.tableaux.length} tableau${x.seance.tableaux.length > 1 ? "x" : ""})`
+                      : ""}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
         )}
         {liste && (
-          <ul className="mt-2 space-y-1">
-            {liste.length === 0 && (
-              <li className="text-xs text-muted">
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            {liste.length === 0 ? (
+              <p className="text-xs text-muted">
                 Aucun tableau rempli pour l’instant.
-              </li>
-            )}
-            {liste.map((x) => (
-              <li
-                key={x.suivi.id}
-                className="flex flex-wrap items-center gap-3"
-              >
-                <button
-                  onClick={() => {
+              </p>
+            ) : (
+              <>
+                <select
+                  value={choixTableau}
+                  onChange={(e) => {
+                    setChoixTableau(e.target.value);
+                    setSuppression(null);
+                    const x = liste.find((y) => y.suivi.id === e.target.value);
+                    if (!x) return;
                     setOuverture({
                       n: (ouverture?.n ?? 0) + 1,
                       cible: x.suivi.cible,
@@ -206,44 +205,53 @@ export default function PageProgrammeTechnique() {
                     });
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="text-left text-sm text-foreground hover:underline"
+                  aria-label="Mes tableaux"
+                  className={`${champ} max-w-full sm:w-[28rem]`}
                 >
-                  {x.libelle} ·{" "}
-                  {AGRES.find((a) => a.id === x.suivi.agres)?.label}{" "}
-                  <span className="text-xs text-muted">
-                    ({x.suivi.lignes.length} élément
-                    {x.suivi.lignes.length > 1 ? "s" : ""})
-                  </span>
-                </button>
-                {suppression === x.suivi.id ? (
-                  <ConfirmerEnLigne
-                    question="Supprimer ce tableau ?"
-                    onAnnuler={() => setSuppression(null)}
-                    onConfirmer={async () => {
-                      await supprimerSuivi(x.suivi.id);
-                      setSuppression(null);
-                      setListe((l) =>
-                        l ? l.filter((y) => y.suivi.id !== x.suivi.id) : l,
-                      );
-                      // Recharge le suivi affiché (le tableau supprimé, s'il l'était, apparaît vide).
-                      setOuverture((o) => ({
-                        n: (o?.n ?? 0) + 1,
-                        cible: x.suivi.cible,
-                        agres: x.suivi.agres,
-                      }));
-                    }}
-                  />
-                ) : (
-                  <button
-                    onClick={() => setSuppression(x.suivi.id)}
-                    className={btnDanger}
-                  >
-                    Supprimer
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
+                  <option value="">Choisir un tableau…</option>
+                  {liste.map((x) => (
+                    <option key={x.suivi.id} value={x.suivi.id}>
+                      {x.libelle} ·{" "}
+                      {AGRES.find((a) => a.id === x.suivi.agres)?.label} (
+                      {x.suivi.lignes.length} élément
+                      {x.suivi.lignes.length > 1 ? "s" : ""})
+                    </option>
+                  ))}
+                </select>
+                {(() => {
+                  const x = liste.find((y) => y.suivi.id === choixTableau);
+                  if (!x) return null;
+                  return suppression === x.suivi.id ? (
+                    <ConfirmerEnLigne
+                      question="Supprimer ce tableau ?"
+                      onAnnuler={() => setSuppression(null)}
+                      onConfirmer={async () => {
+                        await supprimerSuivi(x.suivi.id);
+                        setSuppression(null);
+                        setChoixTableau("");
+                        setListe((l) =>
+                          l ? l.filter((y) => y.suivi.id !== x.suivi.id) : l,
+                        );
+                        // Recharge le suivi affiché (le tableau supprimé, s'il l'était, apparaît vide).
+                        setOuverture((o) => ({
+                          n: (o?.n ?? 0) + 1,
+                          cible: x.suivi.cible,
+                          agres: x.suivi.agres,
+                        }));
+                      }}
+                    />
+                  ) : (
+                    <button
+                      onClick={() => setSuppression(x.suivi.id)}
+                      className={btnDanger}
+                    >
+                      Supprimer
+                    </button>
+                  );
+                })()}
+              </>
+            )}
+          </div>
         )}
       </div>
     </>
