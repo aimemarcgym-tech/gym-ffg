@@ -2,22 +2,31 @@
 
 import { useState } from "react";
 import ProgrammeEntrainement from "@/components/JournalEntrainement";
-import SuiviElements, { type Ouverture } from "@/components/SuiviElements";
+import SuiviElements, {
+  Tableau,
+  propositions,
+  type Ouverture,
+} from "@/components/SuiviElements";
 import {
+  enregistrerSuivi,
   getEquipes,
   getGymnastes,
   getSuivis,
   supprimerSuivi,
+  type Gymnaste,
   type Suivi,
 } from "@/lib/data";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
 import { btnDanger, btnDegrade } from "@/lib/styles";
 import { AGRES } from "@/regulation/libelles";
 import { getNiveau } from "@/regulation/loader";
+import type { NiveauId } from "@/regulation/types";
 
 interface Existant {
   suivi: Suivi;
   libelle: string;
+  membres: Gymnaste[];
+  niveau: NiveauId;
 }
 
 // Page « Programme technique » : suivi des éléments, consignes (séances) et, en bas, les tableaux déjà créés.
@@ -26,6 +35,23 @@ export default function PageProgrammeTechnique() {
   const [ouverture, setOuverture] = useState<Ouverture | null>(null);
   const [liste, setListe] = useState<Existant[] | null>(null);
   const [suppression, setSuppression] = useState<string | null>(null);
+  const [deplie, setDeplie] = useState<string | null>(null);
+
+  async function modifierSuivi(x: Existant, nouveau: Suivi) {
+    setListe((l) =>
+      l
+        ? l.map((y) =>
+            y.suivi.id === nouveau.id ? { ...y, suivi: nouveau } : y,
+          )
+        : l,
+    );
+    await enregistrerSuivi(nouveau);
+    setOuverture((o) => ({
+      n: (o?.n ?? 0) + 1,
+      cible: x.suivi.cible,
+      agres: x.suivi.agres,
+    }));
+  }
 
   async function basculerListe() {
     if (liste) return setListe(null);
@@ -37,19 +63,28 @@ export default function PageProgrammeTechnique() {
     const existants: Existant[] = [];
     for (const s of suivis) {
       if (s.lignes.length === 0) continue;
-      const libelle =
-        s.cible.genre === "equipe"
-          ? (() => {
-              const e = equipes.find((x) => x.id === s.cible.id);
-              return e
-                ? `Équipe · ${e.nom} (${getNiveau(e.niveau).label})`
-                : null;
-            })()
-          : (() => {
-              const g = gymnastes.find((x) => x.id === s.cible.id);
-              return g ? `Gymnaste · ${g.prenom} ${g.nom}` : null;
-            })();
-      if (libelle) existants.push({ suivi: s, libelle });
+      if (s.cible.genre === "equipe") {
+        const e = equipes.find((x) => x.id === s.cible.id);
+        if (!e) continue;
+        existants.push({
+          suivi: s,
+          libelle: `Équipe · ${e.nom} (${getNiveau(e.niveau).label})`,
+          niveau: e.niveau,
+          membres: e.gymnasteIds
+            .map((id) => gymnastes.find((g) => g.id === id))
+            .filter((g): g is Gymnaste => !!g),
+        });
+      } else {
+        const g = gymnastes.find((x) => x.id === s.cible.id);
+        if (!g) continue;
+        existants.push({
+          suivi: s,
+          libelle: `Gymnaste · ${g.prenom} ${g.nom}`,
+          niveau:
+            equipes.find((e) => e.gymnasteIds.includes(g.id))?.niveau ?? "A",
+          membres: [g],
+        });
+      }
     }
     existants.sort((a, b) => a.libelle.localeCompare(b.libelle, "fr"));
     setListe(existants);
@@ -91,7 +126,7 @@ export default function PageProgrammeTechnique() {
                       cible: x.suivi.cible,
                       agres: x.suivi.agres,
                     });
-                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    setDeplie((d) => (d === x.suivi.id ? null : x.suivi.id));
                   }}
                   className="text-left text-sm text-foreground hover:underline"
                 >
@@ -127,6 +162,17 @@ export default function PageProgrammeTechnique() {
                   >
                     Supprimer
                   </button>
+                )}
+                {deplie === x.suivi.id && (
+                  <div className="w-full">
+                    <Tableau
+                      suivi={x.suivi}
+                      membres={x.membres}
+                      propositionsNoms={propositions(x.suivi.agres, x.niveau)}
+                      modifiable
+                      onChange={(n) => modifierSuivi(x, n)}
+                    />
+                  </div>
                 )}
               </li>
             ))}

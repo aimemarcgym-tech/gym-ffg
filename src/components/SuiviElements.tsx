@@ -32,7 +32,7 @@ export interface Ouverture {
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;
 
 // Liste des éléments proposés (par leur nom) pour un agrès et un niveau.
-function propositions(agres: Agres, niveau: NiveauId): string[] {
+export function propositions(agres: Agres, niveau: NiveauId): string[] {
   const n = getNiveau(niveau);
   if (n.programme === "P") return [];
   const noms =
@@ -42,7 +42,7 @@ function propositions(agres: Agres, niveau: NiveauId): string[] {
   return [...new Set(noms)];
 }
 
-function Tableau({
+export function Tableau({
   suivi,
   membres,
   propositionsNoms,
