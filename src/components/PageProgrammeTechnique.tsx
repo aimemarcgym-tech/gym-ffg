@@ -14,7 +14,8 @@ import {
   type Suivi,
 } from "@/lib/data";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
-import { btnDanger, btnDegrade, champ } from "@/lib/styles";
+import { btnDanger, btnDegrade } from "@/lib/styles";
+import ListeDeroulanteHaut from "@/components/ListeDeroulanteHaut";
 import { AGRES } from "@/regulation/libelles";
 import { getNiveau } from "@/regulation/loader";
 import type { NiveauId } from "@/regulation/types";
@@ -150,10 +151,17 @@ export default function PageProgrammeTechnique() {
                 Aucune séance enregistrée pour l’instant.
               </p>
             ) : (
-              <select
+              <ListeDeroulanteHaut
                 value=""
-                onChange={(e) => {
-                  const x = seances.find((y) => y.seance.id === e.target.value);
+                placeholder="Choisir une séance…"
+                ariaLabel="Mes séances"
+                className="max-w-full sm:w-[36rem]"
+                options={seances.map((x) => ({
+                  value: x.seance.id,
+                  label: `${new Date(x.seance.date + "T00:00:00").toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })} · ${x.libelle} · ${x.seance.contenu.length > 40 ? x.seance.contenu.slice(0, 40) + "…" : x.seance.contenu}${x.seance.tableaux?.length ? ` (${x.seance.tableaux.length} tableau${x.seance.tableaux.length > 1 ? "x" : ""})` : ""}`,
+                }))}
+                onChange={(id) => {
+                  const x = seances.find((y) => y.seance.id === id);
                   if (!x) return;
                   setOuverture((o) => ({
                     n: (o?.n ?? 0) + 1,
@@ -162,26 +170,7 @@ export default function PageProgrammeTechnique() {
                   }));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                aria-label="Mes séances"
-                className={`${champ} max-w-full sm:w-[36rem]`}
-              >
-                <option value="">Choisir une séance…</option>
-                {seances.map((x) => (
-                  <option key={x.seance.id} value={x.seance.id}>
-                    {new Date(x.seance.date + "T00:00:00").toLocaleDateString(
-                      "fr-FR",
-                      { day: "2-digit", month: "long", year: "numeric" },
-                    )}{" "}
-                    · {x.libelle} ·{" "}
-                    {x.seance.contenu.length > 40
-                      ? x.seance.contenu.slice(0, 40) + "…"
-                      : x.seance.contenu}
-                    {x.seance.tableaux?.length
-                      ? ` (${x.seance.tableaux.length} tableau${x.seance.tableaux.length > 1 ? "x" : ""})`
-                      : ""}
-                  </option>
-                ))}
-              </select>
+              />
             )}
           </div>
         )}
@@ -193,12 +182,19 @@ export default function PageProgrammeTechnique() {
               </p>
             ) : (
               <>
-                <select
+                <ListeDeroulanteHaut
                   value={choixTableau}
-                  onChange={(e) => {
-                    setChoixTableau(e.target.value);
+                  placeholder="Choisir un tableau…"
+                  ariaLabel="Mes tableaux"
+                  className="max-w-full sm:w-[28rem]"
+                  options={liste.map((x) => ({
+                    value: x.suivi.id,
+                    label: `${x.libelle} · ${AGRES.find((a) => a.id === x.suivi.agres)?.label} (${x.suivi.lignes.length} élément${x.suivi.lignes.length > 1 ? "s" : ""})`,
+                  }))}
+                  onChange={(id) => {
+                    setChoixTableau(id);
                     setSuppression(null);
-                    const x = liste.find((y) => y.suivi.id === e.target.value);
+                    const x = liste.find((y) => y.suivi.id === id);
                     if (!x) return;
                     setOuverture({
                       n: (ouverture?.n ?? 0) + 1,
@@ -207,19 +203,7 @@ export default function PageProgrammeTechnique() {
                     });
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  aria-label="Mes tableaux"
-                  className={`${champ} max-w-full sm:w-[28rem]`}
-                >
-                  <option value="">Choisir un tableau…</option>
-                  {liste.map((x) => (
-                    <option key={x.suivi.id} value={x.suivi.id}>
-                      {x.libelle} ·{" "}
-                      {AGRES.find((a) => a.id === x.suivi.agres)?.label} (
-                      {x.suivi.lignes.length} élément
-                      {x.suivi.lignes.length > 1 ? "s" : ""})
-                    </option>
-                  ))}
-                </select>
+                />
                 {(() => {
                   const x = liste.find((y) => y.suivi.id === choixTableau);
                   if (!x) return null;
