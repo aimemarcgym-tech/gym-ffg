@@ -637,11 +637,13 @@ export async function enregistrerSuivi(suivi: Suivi): Promise<void> {
   const s = lire();
   const autres = (s.suivis ?? []).filter((x) => x.id !== suivi.id);
   ecrire({ ...s, suivis: [...autres, suivi] });
+  if (typeof window !== "undefined") window.dispatchEvent(new Event("ffg:suivi"));
 }
 
 export async function supprimerSuivi(id: string): Promise<void> {
   const s = lire();
   ecrire({ ...s, suivis: (s.suivis ?? []).filter((x) => x.id !== id) });
+  if (typeof window !== "undefined") window.dispatchEvent(new Event("ffg:suivi"));
 }
 
 export async function getSeances(

@@ -19,6 +19,13 @@ function dateLisible(d: string): string {
   return Number.isNaN(dt.getTime()) ? d : dt.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+// Copie d'un tableau limitée aux lignes (éléments) choisies, avec leurs cases.
+function garder(t: Suivi, ids: string[]): Suivi {
+  const lignes = t.lignes.filter((l) => ids.includes(l.id));
+  const cases = Object.fromEntries(Object.entries(t.cases).filter(([cle]) => lignes.some((l) => cle.startsWith(`${l.id}|`)))) as Suivi["cases"];
+  return { ...t, lignes, cases };
+}
+
 function Formulaire({
   date,
   contenu,
@@ -29,8 +36,8 @@ function Formulaire({
   occupe,
   onCancel,
   disponibles,
-  joints,
-  onJoints,
+  selection,
+  onSelection,
   marquerEquipe,
 }: {
   date: string;
@@ -43,8 +50,9 @@ function Formulaire({
   onCancel?: () => void;
   // Tableaux de suivi qu'on peut joindre à la séance, et ceux qui le sont (par identifiant).
   disponibles: Suivi[];
-  joints: string[];
-  onJoints: (ids: string[]) => void;
+  // Tableaux joints : identifiant du tableau → identifiants des lignes (éléments) choisies. Absent = tableau non joint.
+  selection: Record<string, string[]>;
+  onSelection: (s: Record<string, string[]>) => void;
   // Séance d'une gymnaste : on distingue les tableaux d'équipe de ses propres tableaux.
   marquerEquipe?: boolean;
 }) {
@@ -69,18 +77,49 @@ function Formulaire({
     disponibles.length > 0 ? (
       <fieldset className="rounded border border-border-subtle p-2">
         <legend className="px-1 text-xs text-muted">Joindre des tableaux de suivi (facultatif)</legend>
-        <div className="flex flex-wrap gap-x-4 gap-y-1">
-          {disponibles.map((t) => (
-            <label key={t.id} className="flex cursor-pointer items-center gap-1.5 text-xs text-foreground">
-              <input
-                type="checkbox"
-                checked={joints.includes(t.id)}
-                onChange={(e) => onJoints(e.target.checked ? [...joints, t.id] : joints.filter((x) => x !== t.id))}
-              />
-              {marquerEquipe && t.cible.genre === "equipe" ? "Équipe · " : ""}
-              {AGRES.find((a) => a.id === t.agres)?.label} ({t.lignes.length} élément{t.lignes.length > 1 ? "s" : ""})
-            </label>
-          ))}
+        <div className="space-y-2">
+          {disponibles.map((t) => {
+            const choisies = selection[t.id];
+            const joint = choisies !== undefined;
+            return (
+              <div key={t.id}>
+                <label className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-foreground">
+                  <input
+                    type="checkbox"
+                    checked={joint}
+                    onChange={(e) => {
+                      const reste = { ...selection };
+                      if (e.target.checked) reste[t.id] = t.lignes.map((l) => l.id);
+                      else delete reste[t.id];
+                      onSelection(reste);
+                    }}
+                  />
+                  {marquerEquipe && t.cible.genre === "equipe" ? "Équipe · " : ""}
+                  {AGRES.find((a) => a.id === t.agres)?.label} ({t.lignes.length} élément{t.lignes.length > 1 ? "s" : ""})
+                </label>
+                {joint && t.lignes.length > 1 && (
+                  <div className="mt-1 ml-5 flex flex-wrap gap-x-4 gap-y-1">
+                    {t.lignes.map((l) => (
+                      <label key={l.id} className="flex cursor-pointer items-center gap-1.5 text-xs text-muted">
+                        <input
+                          type="checkbox"
+                          checked={choisies.includes(l.id)}
+                          onChange={(e) => {
+                            const ids = e.target.checked ? [...choisies, l.id] : choisies.filter((x) => x !== l.id);
+                            const reste = { ...selection };
+                            if (ids.length === 0) delete reste[t.id];
+                            else reste[t.id] = ids;
+                            onSelection(reste);
+                          }}
+                        />
+                        {l.libelle}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </fieldset>
     ) : null;
@@ -128,8 +167,8 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
   // Tableaux de suivi de cette équipe ou gymnaste (au moins une ligne) et colonnes à afficher.
   const [suivis, setSuivis] = useState<Suivi[]>([]);
   const [membres, setMembres] = useState<Gymnaste[]>([]);
-  const [joints, setJoints] = useState<string[]>([]);
-  const [jointsEdition, setJointsEdition] = useState<string[]>([]);
+  const [selection, setSelection] = useState<Record<string, string[]>>({});
+  const [selectionEdition, setSelectionEdition] = useState<Record<string, string[]>>({});
 
   function charger() {
     getSeances(cible, type).then(setSeances);
@@ -156,6 +195,13 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
 
   useEffect(() => {
     charger();
+    // Un tableau créé ou modifié ailleurs sur la page (ou depuis un autre appareil) apparaît ici sans recharger.
+    window.addEventListener("ffg:suivi", charger);
+    window.addEventListener("ffg:distant", charger);
+    return () => {
+      window.removeEventListener("ffg:suivi", charger);
+      window.removeEventListener("ffg:distant", charger);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cible.genre, cible.id, type]);
 
@@ -164,9 +210,9 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
     if (!contenu.trim()) return;
     setOccupe(true);
     try {
-      await addSeance(cible, type, date, contenu.trim(), suivis.filter((t) => joints.includes(t.id)));
+      await addSeance(cible, type, date, contenu.trim(), suivis.filter((t) => t.id in selection).map((t) => garder(t, selection[t.id])));
       setContenu("");
-      setJoints([]);
+      setSelection({});
       charger();
     } finally {
       setOccupe(false);
@@ -178,9 +224,11 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
     if (edition && contenuEdition.trim()) {
       // Un tableau déjà joint garde l'état où il a été joint ; un nouveau est copié tel qu'il est maintenant.
       const dejaJoints = seances?.find((x) => x.id === edition)?.tableaux ?? [];
-      const nouveaux = suivis.filter((t) => jointsEdition.includes(t.id) && !dejaJoints.some((d) => d.id === t.id));
-      const gardes = dejaJoints.filter((d) => jointsEdition.includes(d.id));
-      await updateSeance(edition, dateEdition, contenuEdition.trim(), [...gardes, ...nouveaux]);
+      const tableaux = Object.keys(selectionEdition).flatMap((id) => {
+        const source = dejaJoints.find((d) => d.id === id) ?? suivis.find((t) => t.id === id);
+        return source ? [garder(source, selectionEdition[id])] : [];
+      });
+      await updateSeance(edition, dateEdition, contenuEdition.trim(), tableaux);
       setEdition(null);
       charger();
     }
@@ -263,7 +311,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
         <PartageBouton onCreate={creerLien} />
       </div>
       {erreurPiece && <p className="mb-3 text-right text-xs text-danger">{erreurPiece}</p>}
-      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} joints={joints} onJoints={setJoints} marquerEquipe={cible.genre === "gymnaste"} />
+      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} selection={selection} onSelection={setSelection} marquerEquipe={cible.genre === "gymnaste"} />
       {seances === null ? (
         <p className="text-sm text-muted">Chargement…</p>
       ) : seances.length === 0 ? (
@@ -273,7 +321,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
           {seances.map((x) => (
             <li key={x.id} className="rounded-lg border border-border-subtle bg-surface p-3">
               {edition === x.id ? (
-                <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} disponibles={[...suivis, ...(x.tableaux ?? []).filter((t) => !suivis.some((y) => y.id === t.id))]} joints={jointsEdition} onJoints={setJointsEdition} marquerEquipe={cible.genre === "gymnaste"} />
+                <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} disponibles={[...(x.tableaux ?? []), ...suivis.filter((t) => !(x.tableaux ?? []).some((y) => y.id === t.id))]} selection={selectionEdition} onSelection={setSelectionEdition} marquerEquipe={cible.genre === "gymnaste"} />
               ) : (
                 <>
                   <div className="mb-1 flex items-center justify-between gap-2">
@@ -285,7 +333,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
                           setEdition(x.id);
                           setDateEdition(x.date);
                           setContenuEdition(x.contenu);
-                          setJointsEdition((x.tableaux ?? []).map((t) => t.id));
+                          setSelectionEdition(Object.fromEntries((x.tableaux ?? []).map((t) => [t.id, t.lignes.map((l) => l.id)])));
                         }}
                         className="text-xs text-muted hover:text-foreground"
                       >
