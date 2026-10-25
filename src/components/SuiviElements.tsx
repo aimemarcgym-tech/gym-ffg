@@ -356,26 +356,6 @@ export function Tableau({
       {modifiable && (
         <div className="space-y-2 print:hidden">
           <div className="flex flex-wrap items-center gap-2">
-            {titre && (
-              <PartageBouton
-                label="Partager ce tableau"
-                onCreate={async () => {
-                  const id = await createShare("tableaux", {
-                    titre,
-                    agres: libelleAgres,
-                    colonnes: membres.map(nomCourt),
-                    lignes: suivi.lignes.map((l) => ({
-                      libelle: l.libelle,
-                      etats: membres.map(
-                        (g) => suivi.cases[`${l.id}|${g.id}`] ?? null,
-                      ),
-                    })),
-                  });
-                  return `/partage/tableaux/?id=${id}`;
-                }}
-                className="accent-gradient rounded px-3 py-1 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
-              />
-            )}
             {niveau && (
               <button
                 onClick={() => setBiblio((o) => !o)}
@@ -422,6 +402,26 @@ export function Tableau({
             >
               Ajouter
             </button>
+            {titre && (
+              <PartageBouton
+                label="Partager ce tableau"
+                onCreate={async () => {
+                  const id = await createShare("tableaux", {
+                    titre,
+                    agres: libelleAgres,
+                    colonnes: membres.map(nomCourt),
+                    lignes: suivi.lignes.map((l) => ({
+                      libelle: l.libelle,
+                      etats: membres.map(
+                        (g) => suivi.cases[`${l.id}|${g.id}`] ?? null,
+                      ),
+                    })),
+                  });
+                  return `/partage/tableaux/?id=${id}`;
+                }}
+                className="accent-gradient rounded px-3 py-1 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
+              />
+            )}
           </div>
           {biblio && niveau && (
             <BibliothequeSuivi
