@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import PartageBouton from "@/components/PartageBouton";
-import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type TypeProgramme } from "@/lib/data";
+import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, getSuivis, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
+import { Tableau } from "@/components/SuiviElements";
+import { AGRES } from "@/regulation/libelles";
 import { formatTaille } from "@/lib/format";
 import { createShare } from "@/lib/shares";
 
@@ -26,6 +28,9 @@ function Formulaire({
   variante,
   occupe,
   onCancel,
+  disponibles,
+  joints,
+  onJoints,
 }: {
   date: string;
   contenu: string;
@@ -35,6 +40,10 @@ function Formulaire({
   variante: "add" | "edit";
   occupe?: boolean;
   onCancel?: () => void;
+  // Tableaux de suivi qu'on peut joindre à la séance, et ceux qui le sont (par identifiant).
+  disponibles: Suivi[];
+  joints: string[];
+  onJoints: (ids: string[]) => void;
 }) {
   const champDate = (
     <input
@@ -53,6 +62,24 @@ function Formulaire({
       className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
     />
   );
+  const tableauxChamp =
+    disponibles.length > 0 ? (
+      <fieldset className="rounded border border-border-subtle p-2">
+        <legend className="px-1 text-xs text-muted">Joindre des tableaux de suivi (facultatif)</legend>
+        <div className="flex flex-wrap gap-x-4 gap-y-1">
+          {disponibles.map((t) => (
+            <label key={t.id} className="flex cursor-pointer items-center gap-1.5 text-xs text-foreground">
+              <input
+                type="checkbox"
+                checked={joints.includes(t.id)}
+                onChange={(e) => onJoints(e.target.checked ? [...joints, t.id] : joints.filter((x) => x !== t.id))}
+              />
+              {AGRES.find((a) => a.id === t.agres)?.label} ({t.lignes.length} élément{t.lignes.length > 1 ? "s" : ""})
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    ) : null;
   if (variante === "add") {
     return (
       <form onSubmit={onSubmit} className="mb-4 space-y-2">
@@ -63,6 +90,7 @@ function Formulaire({
           </button>
         </div>
         {zone}
+        {tableauxChamp}
       </form>
     );
   }
@@ -70,6 +98,7 @@ function Formulaire({
     <form onSubmit={onSubmit} className="space-y-2">
       {champDate}
       {zone}
+      {tableauxChamp}
       <div className="flex gap-2">
         <button type="submit" className="accent-gradient-text text-xs font-medium underline">
           Enregistrer
@@ -92,9 +121,25 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
   const [contenuEdition, setContenuEdition] = useState("");
   const [piece, setPiece] = useState<File | null>(null);
   const [erreurPiece, setErreurPiece] = useState<string | null>(null);
+  // Tableaux de suivi de cette équipe ou gymnaste (au moins une ligne) et colonnes à afficher.
+  const [suivis, setSuivis] = useState<Suivi[]>([]);
+  const [membres, setMembres] = useState<Gymnaste[]>([]);
+  const [joints, setJoints] = useState<string[]>([]);
+  const [jointsEdition, setJointsEdition] = useState<string[]>([]);
 
   function charger() {
     getSeances(cible, type).then(setSeances);
+    (async () => {
+      const tous = await getSuivis();
+      setSuivis(tous.filter((t) => t.cible.genre === cible.genre && t.cible.id === cible.id && t.lignes.length > 0));
+      const gs = await getGymnastes();
+      if (cible.genre === "equipe") {
+        const e = (await getEquipes()).find((x) => x.id === cible.id);
+        setMembres((e?.gymnasteIds ?? []).map((id) => gs.find((g) => g.id === id)).filter((g): g is Gymnaste => !!g));
+      } else {
+        setMembres(gs.filter((g) => g.id === cible.id));
+      }
+    })();
   }
 
   useEffect(() => {
@@ -107,8 +152,9 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
     if (!contenu.trim()) return;
     setOccupe(true);
     try {
-      await addSeance(cible, type, date, contenu.trim());
+      await addSeance(cible, type, date, contenu.trim(), suivis.filter((t) => joints.includes(t.id)));
       setContenu("");
+      setJoints([]);
       charger();
     } finally {
       setOccupe(false);
@@ -118,7 +164,11 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
   async function enregistrer(e: FormEvent) {
     e.preventDefault();
     if (edition && contenuEdition.trim()) {
-      await updateSeance(edition, dateEdition, contenuEdition.trim());
+      // Un tableau déjà joint garde l'état où il a été joint ; un nouveau est copié tel qu'il est maintenant.
+      const dejaJoints = seances?.find((x) => x.id === edition)?.tableaux ?? [];
+      const nouveaux = suivis.filter((t) => jointsEdition.includes(t.id) && !dejaJoints.some((d) => d.id === t.id));
+      const gardes = dejaJoints.filter((d) => jointsEdition.includes(d.id));
+      await updateSeance(edition, dateEdition, contenuEdition.trim(), [...gardes, ...nouveaux]);
       setEdition(null);
       charger();
     }
@@ -188,7 +238,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
         <PartageBouton onCreate={creerLien} />
       </div>
       {erreurPiece && <p className="mb-3 text-right text-xs text-danger">{erreurPiece}</p>}
-      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} />
+      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} joints={joints} onJoints={setJoints} />
       {seances === null ? (
         <p className="text-sm text-muted">Chargement…</p>
       ) : seances.length === 0 ? (
@@ -198,7 +248,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
           {seances.map((x) => (
             <li key={x.id} className="rounded-lg border border-border-subtle bg-surface p-3">
               {edition === x.id ? (
-                <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} />
+                <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} disponibles={[...suivis, ...(x.tableaux ?? []).filter((t) => !suivis.some((y) => y.id === t.id))]} joints={jointsEdition} onJoints={setJointsEdition} />
               ) : (
                 <>
                   <div className="mb-1 flex items-center justify-between gap-2">
@@ -210,6 +260,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
                           setEdition(x.id);
                           setDateEdition(x.date);
                           setContenuEdition(x.contenu);
+                          setJointsEdition((x.tableaux ?? []).map((t) => t.id));
                         }}
                         className="text-xs text-muted hover:text-foreground"
                       >
@@ -221,6 +272,13 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
                     </div>
                   </div>
                   <p className="text-sm whitespace-pre-wrap text-foreground">{x.contenu}</p>
+                  {x.tableaux && x.tableaux.length > 0 && (
+                    <div className="mt-3 space-y-3">
+                      {x.tableaux.map((t) => (
+                        <Tableau key={t.id} suivi={t} membres={membres} propositionsNoms={[]} modifiable={false} onChange={() => undefined} />
+                      ))}
+                    </div>
+                  )}
                 </>
               )}
             </li>

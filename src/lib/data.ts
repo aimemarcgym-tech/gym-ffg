@@ -90,6 +90,8 @@ export interface Seance {
   date: string;
   contenu: string;
   createdAt: string;
+  // Tableaux de suivi joints à la séance : copie de leur état au moment où ils ont été joints.
+  tableaux?: Suivi[];
 }
 
 // Suivi des éléments à travailler : tableau à double entrée (éléments en lignes, gymnastes en colonnes) pour une équipe ou une gymnaste, par agrès.
@@ -664,6 +666,7 @@ export async function addSeance(
   type: TypeProgramme,
   date: string,
   contenu: string,
+  tableaux?: Suivi[],
 ): Promise<Seance> {
   const s = lire();
   const x = {
@@ -673,6 +676,7 @@ export async function addSeance(
     date,
     contenu,
     createdAt: new Date().toISOString(),
+    ...(tableaux?.length ? { tableaux } : {}),
   };
   ecrire({ ...s, seances: [...(s.seances ?? []), x] });
   return x;
@@ -682,12 +686,20 @@ export async function updateSeance(
   id: string,
   date: string,
   contenu: string,
+  tableaux?: Suivi[],
 ): Promise<void> {
   const s = lire();
   ecrire({
     ...s,
     seances: (s.seances ?? []).map((x) =>
-      x.id === id ? { ...x, date, contenu } : x,
+      x.id === id
+        ? {
+            ...x,
+            date,
+            contenu,
+            tableaux: tableaux?.length ? tableaux : undefined,
+          }
+        : x,
     ),
   });
 }
