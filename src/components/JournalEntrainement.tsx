@@ -31,6 +31,7 @@ function Formulaire({
   disponibles,
   joints,
   onJoints,
+  marquerEquipe,
 }: {
   date: string;
   contenu: string;
@@ -44,6 +45,8 @@ function Formulaire({
   disponibles: Suivi[];
   joints: string[];
   onJoints: (ids: string[]) => void;
+  // Séance d'une gymnaste : on distingue les tableaux d'équipe de ses propres tableaux.
+  marquerEquipe?: boolean;
 }) {
   const champDate = (
     <input
@@ -74,6 +77,7 @@ function Formulaire({
                 checked={joints.includes(t.id)}
                 onChange={(e) => onJoints(e.target.checked ? [...joints, t.id] : joints.filter((x) => x !== t.id))}
               />
+              {marquerEquipe && t.cible.genre === "equipe" ? "Équipe · " : ""}
               {AGRES.find((a) => a.id === t.agres)?.label} ({t.lignes.length} élément{t.lignes.length > 1 ? "s" : ""})
             </label>
           ))}
@@ -131,8 +135,16 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
     getSeances(cible, type).then(setSeances);
     (async () => {
       const tous = await getSuivis();
-      setSuivis(tous.filter((t) => t.cible.genre === cible.genre && t.cible.id === cible.id && t.lignes.length > 0));
       const gs = await getGymnastes();
+      const equipesDeLaGym = cible.genre === "gymnaste" ? (await getEquipes()).filter((e) => e.gymnasteIds.includes(cible.id)).map((e) => e.id) : [];
+      // Pour une gymnaste : ses propres tableaux et ceux de ses équipes (seule sa colonne est alors affichée).
+      setSuivis(
+        tous.filter(
+          (t) =>
+            t.lignes.length > 0 &&
+            ((t.cible.genre === cible.genre && t.cible.id === cible.id) || (t.cible.genre === "equipe" && equipesDeLaGym.includes(t.cible.id))),
+        ),
+      );
       if (cible.genre === "equipe") {
         const e = (await getEquipes()).find((x) => x.id === cible.id);
         setMembres((e?.gymnasteIds ?? []).map((id) => gs.find((g) => g.id === id)).filter((g): g is Gymnaste => !!g));
@@ -251,7 +263,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
         <PartageBouton onCreate={creerLien} />
       </div>
       {erreurPiece && <p className="mb-3 text-right text-xs text-danger">{erreurPiece}</p>}
-      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} joints={joints} onJoints={setJoints} />
+      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} joints={joints} onJoints={setJoints} marquerEquipe={cible.genre === "gymnaste"} />
       {seances === null ? (
         <p className="text-sm text-muted">Chargement…</p>
       ) : seances.length === 0 ? (
@@ -261,7 +273,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
           {seances.map((x) => (
             <li key={x.id} className="rounded-lg border border-border-subtle bg-surface p-3">
               {edition === x.id ? (
-                <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} disponibles={[...suivis, ...(x.tableaux ?? []).filter((t) => !suivis.some((y) => y.id === t.id))]} joints={jointsEdition} onJoints={setJointsEdition} />
+                <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} disponibles={[...suivis, ...(x.tableaux ?? []).filter((t) => !suivis.some((y) => y.id === t.id))]} joints={jointsEdition} onJoints={setJointsEdition} marquerEquipe={cible.genre === "gymnaste"} />
               ) : (
                 <>
                   <div className="mb-1 flex items-center justify-between gap-2">
