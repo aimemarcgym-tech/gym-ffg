@@ -134,7 +134,7 @@ function Tableau({
                       <button
                         onClick={() => cycle(l.id, g.id)}
                         aria-label={`${l.libelle} — ${g.prenom} : ${etat === "ok" ? "validé" : etat === "x" ? "à travailler" : "vide"}`}
-                        className="h-8 w-10 rounded text-base leading-none hover:bg-surface-alt print:hover:bg-transparent"
+                        className="h-8 w-10 rounded border border-border-strong text-base leading-none hover:border-accent-solid hover:bg-surface-alt print:border-black print:hover:bg-transparent"
                       >
                         {etat === "x" && (
                           <span className="font-bold text-danger print:text-black">
