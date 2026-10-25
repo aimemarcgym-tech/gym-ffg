@@ -203,6 +203,7 @@ export function Tableau({
   membres,
   niveau,
   titre,
+  agresChoix,
   modifiable,
   onChange,
 }: {
@@ -212,6 +213,11 @@ export function Tableau({
   niveau?: NiveauId;
   // Nom de l'équipe ou de la gymnaste, affiché sur la page partagée ; sans lui, pas de bouton Partager.
   titre?: string;
+  // Choix de l'agrès affiché, placé à droite du bouton de la bibliothèque.
+  agresChoix?: {
+    valeur: Agres | "TOUS";
+    onChange: (v: Agres | "TOUS") => void;
+  };
   modifiable: boolean;
   onChange: (s: Suivi) => void;
 }) {
@@ -379,6 +385,23 @@ export function Tableau({
                   : "Bibliothèque des éléments"}
               </button>
             )}
+            {agresChoix && (
+              <select
+                value={agresChoix.valeur}
+                onChange={(e) =>
+                  agresChoix.onChange(e.target.value as Agres | "TOUS")
+                }
+                className={champPetit}
+                aria-label="Agrès"
+              >
+                {AGRES.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.label}
+                  </option>
+                ))}
+                <option value="TOUS">Les 4 agrès</option>
+              </select>
+            )}
             <input
               value={saisie}
               onChange={(e) => setSaisie(e.target.value)}
@@ -533,19 +556,6 @@ export default function SuiviElements({
               </option>
             ))}
           </select>
-          <select
-            value={agres}
-            onChange={(e) => setAgres(e.target.value as Agres | "TOUS")}
-            className={champPetit}
-            aria-label="Agrès"
-          >
-            {AGRES.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.label}
-              </option>
-            ))}
-            <option value="TOUS">Les 4 agrès</option>
-          </select>
           <button
             onClick={() => window.print()}
             className="accent-gradient rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
@@ -575,6 +585,7 @@ export default function SuiviElements({
             membres={choix.membres}
             niveau={choix.niveau}
             titre={choix.libelle}
+            agresChoix={{ valeur: agres, onChange: setAgres }}
             modifiable
             onChange={modifier}
           />
