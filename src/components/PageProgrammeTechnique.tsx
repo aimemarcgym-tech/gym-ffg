@@ -128,24 +128,8 @@ export default function PageProgrammeTechnique() {
       </div>
 
       <div className="print:hidden">
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={basculerListe}
-            aria-expanded={liste !== null}
-            className={`${btnDegrade} px-5 py-2.5 text-sm shadow`}
-          >
-            Mes tableaux
-          </button>
-          <button
-            onClick={basculerSeances}
-            aria-expanded={seances !== null}
-            className={`${btnDegrade} px-5 py-2.5 text-sm shadow`}
-          >
-            Mes séances
-          </button>
-        </div>
         {seances && (
-          <div className="mt-3">
+          <div className="mb-3">
             {seances.length === 0 ? (
               <p className="text-xs text-muted">
                 Aucune séance enregistrée pour l’instant.
@@ -175,7 +159,7 @@ export default function PageProgrammeTechnique() {
           </div>
         )}
         {liste && (
-          <div className="mt-3 flex flex-wrap items-center gap-3">
+          <div className="mb-3 flex flex-wrap items-center gap-3">
             {liste.length === 0 ? (
               <p className="text-xs text-muted">
                 Aucun tableau rempli pour l’instant.
@@ -239,6 +223,22 @@ export default function PageProgrammeTechnique() {
             )}
           </div>
         )}
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={basculerListe}
+            aria-expanded={liste !== null}
+            className={`${btnDegrade} px-5 py-2.5 text-sm shadow`}
+          >
+            Mes tableaux
+          </button>
+          <button
+            onClick={basculerSeances}
+            aria-expanded={seances !== null}
+            className={`${btnDegrade} px-5 py-2.5 text-sm shadow`}
+          >
+            Mes séances
+          </button>
+        </div>
       </div>
     </>
   );
