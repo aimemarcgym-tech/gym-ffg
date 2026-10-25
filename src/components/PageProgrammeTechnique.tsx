@@ -76,7 +76,7 @@ export default function PageProgrammeTechnique() {
         x.cible.genre === "equipe"
           ? (() => {
               const e = equipes.find((y) => y.id === x.cible.id);
-              return e ? `Équipe · ${e.nom}` : null;
+              return e ? `${e.nom}` : null;
             })()
           : (() => {
               const g = gymnastes.find((y) => y.id === x.cible.id);
@@ -102,7 +102,7 @@ export default function PageProgrammeTechnique() {
         if (!e) continue;
         existants.push({
           suivi: s,
-          libelle: `Équipe · ${e.nom} (${getNiveau(e.niveau).label})`,
+          libelle: `${e.nom} (${getNiveau(e.niveau).label})`,
           niveau: e.niveau,
           membres: e.gymnasteIds
             .map((id) => gymnastes.find((g) => g.id === id))
@@ -113,7 +113,7 @@ export default function PageProgrammeTechnique() {
         if (!g) continue;
         existants.push({
           suivi: s,
-          libelle: `Gymnaste · ${g.prenom} ${g.nom}`,
+          libelle: `${g.prenom} ${g.nom}`,
           niveau:
             equipes.find((e) => e.gymnasteIds.includes(g.id))?.niveau ?? "A",
           membres: [g],
