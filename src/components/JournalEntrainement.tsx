@@ -154,7 +154,7 @@ function Formulaire({
   );
 }
 
-function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type: TypeProgramme }) {
+function Journal({ cible, libelle, type, seanceUnique, onSortir }: { cible: Cible; libelle: string; type: TypeProgramme; seanceUnique?: string | null; onSortir?: () => void }) {
   const [seances, setSeances] = useState<Seance[] | null>(null);
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [contenu, setContenu] = useState("");
@@ -311,14 +311,20 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
         <PartageBouton onCreate={creerLien} />
       </div>
       {erreurPiece && <p className="mb-3 text-right text-xs text-danger">{erreurPiece}</p>}
-      <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} selection={selection} onSelection={setSelection} marquerEquipe={cible.genre === "gymnaste"} />
+      {seanceUnique ? (
+        <button type="button" onClick={onSortir} className="mb-3 rounded border border-border-strong px-3 py-1.5 text-xs text-foreground hover:border-accent-solid/60">
+          ← Nouvelle séance et toutes les séances
+        </button>
+      ) : (
+        <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} selection={selection} onSelection={setSelection} marquerEquipe={cible.genre === "gymnaste"} />
+      )}
       {seances === null ? (
         <p className="text-sm text-muted">Chargement…</p>
       ) : seances.length === 0 ? (
         <p className="text-sm text-muted">Aucune séance enregistrée pour l&apos;instant.</p>
       ) : (
         <ul className="space-y-2">
-          {seances.map((x) => (
+          {seances.filter((x) => !seanceUnique || x.id === seanceUnique).map((x) => (
             <li key={x.id} className="rounded-lg border border-border-subtle bg-surface p-3">
               {edition === x.id ? (
                 <Formulaire variante="edit" date={dateEdition} contenu={contenuEdition} onDate={setDateEdition} onContenu={setContenuEdition} onSubmit={enregistrer} onCancel={() => setEdition(null)} disponibles={[...(x.tableaux ?? []), ...suivis.filter((t) => !(x.tableaux ?? []).some((y) => y.id === t.id))]} selection={selectionEdition} onSelection={setSelectionEdition} marquerEquipe={cible.genre === "gymnaste"} />
@@ -363,12 +369,14 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
 }
 
 // Programme technique ou physique : on choisit une équipe puis « Toute l'équipe » ou une gymnaste, comme sur le site UFOLEP.
-export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible } | null; equipeCommune?: string; onEquipe?: (id: string) => void }) {
+export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible; seanceId?: string } | null; equipeCommune?: string; onEquipe?: (id: string) => void }) {
   const [clubs, setClubs] = useState<Club[] | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
   const [equipeId, setEquipeId] = useState("");
   const [choix, setChoix] = useState<{ cible: Cible; libelle: string } | null>(null);
+  // Séance ouverte depuis « Mes séances » : seule elle est affichée, à la place du formulaire de création.
+  const [seanceUnique, setSeanceUnique] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -391,10 +399,11 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
   useEffect(() => {
     if (!ouverture) return;
     const { cible } = ouverture;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSeanceUnique(ouverture.seanceId ?? null);
     if (cible.genre === "equipe") {
       const e = equipes.find((x) => x.id === cible.id);
       if (!e) return;
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setEquipeId(e.id);
       setChoix({ cible, libelle: `Toute l'équipe ${e.nom}` });
     } else {
@@ -428,6 +437,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
           onChange={(e) => {
             setEquipeId(e.target.value);
             setChoix(null);
+            setSeanceUnique(null);
             onEquipe?.(e.target.value);
           }}
           className="w-full max-w-xs rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
@@ -445,7 +455,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
         <div className="mt-4 flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => setChoix((c) => (c?.cible.genre === "equipe" && c.cible.id === equipeId ? null : { cible: { genre: "equipe", id: equipeId }, libelle: libelleEquipe }))}
+            onClick={() => (setSeanceUnique(null), setChoix((c) => (c?.cible.genre === "equipe" && c.cible.id === equipeId ? null : { cible: { genre: "equipe", id: equipeId }, libelle: libelleEquipe })))}
             className={`rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
               equipeActive ? "border-accent-solid bg-accent-from/10 text-white" : "border-accent-solid/60 bg-surface-alt text-foreground hover:bg-accent-from/10"
             }`}
@@ -458,7 +468,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
               <button
                 key={g.id}
                 type="button"
-                onClick={() => setChoix((c) => (c?.cible.genre === "gymnaste" && c.cible.id === g.id ? null : { cible: { genre: "gymnaste", id: g.id }, libelle: `${g.prenom} ${g.nom}` }))}
+                onClick={() => (setSeanceUnique(null), setChoix((c) => (c?.cible.genre === "gymnaste" && c.cible.id === g.id ? null : { cible: { genre: "gymnaste", id: g.id }, libelle: `${g.prenom} ${g.nom}` })))}
                 className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                   actif ? "border-accent-solid bg-accent-from/10 text-white" : "border-border-strong bg-surface-alt text-foreground hover:border-accent-solid hover:text-white"
                 }`}
@@ -470,7 +480,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
         </div>
       )}
 
-      {choix && <Journal key={`${choix.cible.genre}:${choix.cible.id}:${type}`} cible={choix.cible} libelle={choix.libelle} type={type} />}
+      {choix && <Journal key={`${choix.cible.genre}:${choix.cible.id}:${type}`} cible={choix.cible} libelle={choix.libelle} type={type} seanceUnique={seanceUnique} onSortir={() => setSeanceUnique(null)} />}
     </div>
   );
 }

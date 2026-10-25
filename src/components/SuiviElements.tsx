@@ -31,6 +31,8 @@ export interface Ouverture {
   cible: Cible;
   // Absent quand on ouvre une séance : le tableau affiché garde son agrès.
   agres?: Agres;
+  // Séance à afficher seule dans le programme technique.
+  seanceId?: string;
 }
 
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;

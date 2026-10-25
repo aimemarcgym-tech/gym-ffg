@@ -157,6 +157,7 @@ export default function PageProgrammeTechnique() {
                   setOuverture((o) => ({
                     n: (o?.n ?? 0) + 1,
                     cible: x.seance.cible,
+                    seanceId: x.seance.id,
                   }));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
