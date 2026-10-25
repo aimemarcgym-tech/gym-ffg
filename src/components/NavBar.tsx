@@ -18,7 +18,7 @@ const COMPETITION = [
   { href: "/competition/resultats", label: "Résultats" },
 ];
 const ENTRAINEMENT = [
-  { href: "/entrainement/programme", label: "Programme d’entraînement" },
+  { href: "/entrainement/programme", label: "Programme technique" },
   { href: "/entrainement/physique", label: "Programme physique" },
 ];
 const MEDIA = [

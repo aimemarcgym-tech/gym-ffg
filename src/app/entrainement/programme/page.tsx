@@ -12,7 +12,7 @@ export default function ProgrammeEntrainementPage() {
           </Link>
           <h1 className="mt-1 text-xl font-bold text-foreground">
             <span className="accent-gradient-text">
-              Programme d’entraînement
+              Programme technique
             </span>
           </h1>
         </div>
