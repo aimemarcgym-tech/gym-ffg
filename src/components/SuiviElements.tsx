@@ -209,7 +209,12 @@ export function Tableau({
 // Suivi des éléments à travailler : une croix quand une gymnaste doit les travailler, un rond vert quand c'est validé.
 export default function SuiviElements({
   ouverture,
+  equipeCommune,
+  onEquipe,
 }: {
+  // Équipe partagée avec le bloc « Programme technique » : choisir l'une choisit l'autre.
+  equipeCommune?: string;
+  onEquipe?: (id: string) => void;
   // Demande d'ouverture d'un tableau (équipe ou gymnaste et agrès) venue de la liste « Tableaux déjà créés ».
   ouverture?: Ouverture | null;
 }) {
@@ -229,6 +234,12 @@ export default function SuiviElements({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     charger();
   }, [charger]);
+
+  useEffect(() => {
+    if (!equipeCommune) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCle(`equipe:${equipeCommune}`);
+  }, [equipeCommune]);
 
   useEffect(() => {
     if (!ouverture) return;
@@ -302,7 +313,11 @@ export default function SuiviElements({
         <div className="flex flex-wrap items-center gap-2">
           <select
             value={choix.cle}
-            onChange={(e) => setCle(e.target.value)}
+            onChange={(e) => {
+              setCle(e.target.value);
+              if (e.target.value.startsWith("equipe:"))
+                onEquipe?.(e.target.value.slice(7));
+            }}
             className={champPetit}
             aria-label="Équipe ou gymnaste"
           >

@@ -232,7 +232,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
 }
 
 // Programme technique ou physique : on choisit une équipe puis « Toute l'équipe » ou une gymnaste, comme sur le site UFOLEP.
-export default function ProgrammeEntrainement({ titre, type, ouverture }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible } | null }) {
+export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible } | null; equipeCommune?: string; onEquipe?: (id: string) => void }) {
   const [clubs, setClubs] = useState<Club[] | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
@@ -246,6 +246,15 @@ export default function ProgrammeEntrainement({ titre, type, ouverture }: { titr
       setClubs(await getClubs());
     })();
   }, []);
+
+  // Équipe choisie ailleurs sur la page (suivi des éléments) : même sélection ici.
+  useEffect(() => {
+    if (equipeCommune === undefined || equipeCommune === equipeId) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEquipeId(equipeCommune);
+    setChoix(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [equipeCommune]);
 
   // Ouverture demandée depuis « Tableaux déjà créés » : sélectionne l'équipe et affiche ses consignes (ou celles de la gymnaste).
   useEffect(() => {
@@ -288,6 +297,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture }: { titr
           onChange={(e) => {
             setEquipeId(e.target.value);
             setChoix(null);
+            onEquipe?.(e.target.value);
           }}
           className="w-full max-w-xs rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
         >

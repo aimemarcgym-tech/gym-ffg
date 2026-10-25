@@ -35,6 +35,8 @@ export default function PageProgrammeTechnique() {
   const [ouverture, setOuverture] = useState<Ouverture | null>(null);
   const [liste, setListe] = useState<Existant[] | null>(null);
   const [suppression, setSuppression] = useState<string | null>(null);
+  // Équipe sélectionnée, partagée entre le suivi et le programme technique.
+  const [equipeCommune, setEquipeCommune] = useState<string | undefined>();
   const [deplie, setDeplie] = useState<string | null>(null);
 
   async function modifierSuivi(x: Existant, nouveau: Suivi) {
@@ -92,11 +94,17 @@ export default function PageProgrammeTechnique() {
 
   return (
     <>
-      <SuiviElements ouverture={ouverture} />
+      <SuiviElements
+        ouverture={ouverture}
+        equipeCommune={equipeCommune}
+        onEquipe={setEquipeCommune}
+      />
       <ProgrammeEntrainement
         titre="Programme technique"
         type="TECHNIQUE"
         ouverture={ouverture}
+        equipeCommune={equipeCommune}
+        onEquipe={setEquipeCommune}
       />
 
       <div className="print:hidden">
