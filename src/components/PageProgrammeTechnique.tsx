@@ -129,16 +129,16 @@ export default function PageProgrammeTechnique() {
           <button
             onClick={basculerListe}
             aria-expanded={liste !== null}
-            className={`${btnDegrade} px-6 py-3 text-base shadow`}
+            className={`${btnDegrade} px-5 py-2.5 text-sm shadow`}
           >
-            Tableaux
+            Mes tableaux
           </button>
           <button
             onClick={basculerSeances}
             aria-expanded={seances !== null}
-            className={`${btnDegrade} px-6 py-3 text-base shadow`}
+            className={`${btnDegrade} px-5 py-2.5 text-sm shadow`}
           >
-            Séances
+            Mes séances
           </button>
         </div>
         {seances && (
