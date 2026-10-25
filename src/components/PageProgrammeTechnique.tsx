@@ -3,7 +3,15 @@
 import { useState } from "react";
 import ProgrammeEntrainement from "@/components/JournalEntrainement";
 import SuiviElements, { type Ouverture } from "@/components/SuiviElements";
-import { getEquipes, getGymnastes, getSuivis, type Suivi } from "@/lib/data";
+import {
+  getEquipes,
+  getGymnastes,
+  getSuivis,
+  supprimerSuivi,
+  type Suivi,
+} from "@/lib/data";
+import { ConfirmerEnLigne } from "@/components/EnLigne";
+import { btnDanger, btnDegrade } from "@/lib/styles";
 import { AGRES } from "@/regulation/libelles";
 import { getNiveau } from "@/regulation/loader";
 
@@ -17,6 +25,7 @@ interface Existant {
 export default function PageProgrammeTechnique() {
   const [ouverture, setOuverture] = useState<Ouverture | null>(null);
   const [liste, setListe] = useState<Existant[] | null>(null);
+  const [suppression, setSuppression] = useState<string | null>(null);
 
   async function basculerListe() {
     if (liste) return setListe(null);
@@ -59,7 +68,7 @@ export default function PageProgrammeTechnique() {
         <button
           onClick={basculerListe}
           aria-expanded={liste !== null}
-          className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+          className={`${btnDegrade} px-6 py-3 text-base shadow`}
         >
           Tableaux déjà créés
         </button>
@@ -71,7 +80,10 @@ export default function PageProgrammeTechnique() {
               </li>
             )}
             {liste.map((x) => (
-              <li key={x.suivi.id}>
+              <li
+                key={x.suivi.id}
+                className="flex flex-wrap items-center gap-3"
+              >
                 <button
                   onClick={() => {
                     setOuverture({
@@ -90,6 +102,32 @@ export default function PageProgrammeTechnique() {
                     {x.suivi.lignes.length > 1 ? "s" : ""})
                   </span>
                 </button>
+                {suppression === x.suivi.id ? (
+                  <ConfirmerEnLigne
+                    question="Supprimer ce tableau ?"
+                    onAnnuler={() => setSuppression(null)}
+                    onConfirmer={async () => {
+                      await supprimerSuivi(x.suivi.id);
+                      setSuppression(null);
+                      setListe((l) =>
+                        l ? l.filter((y) => y.suivi.id !== x.suivi.id) : l,
+                      );
+                      // Recharge le suivi affiché (le tableau supprimé, s'il l'était, apparaît vide).
+                      setOuverture((o) => ({
+                        n: (o?.n ?? 0) + 1,
+                        cible: x.suivi.cible,
+                        agres: x.suivi.agres,
+                      }));
+                    }}
+                  />
+                ) : (
+                  <button
+                    onClick={() => setSuppression(x.suivi.id)}
+                    className={btnDanger}
+                  >
+                    Supprimer
+                  </button>
+                )}
               </li>
             ))}
           </ul>
