@@ -281,7 +281,7 @@ export function Tableau({
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-surface-alt text-left text-xs text-muted print:bg-white print:text-black">
-              <th className="min-w-[16rem] px-3 py-2 font-medium">Élément</th>
+              <th className="min-w-[13rem] px-3 py-2 font-medium">Élément</th>
               {membres.map((g) => (
                 <th
                   key={g.id}

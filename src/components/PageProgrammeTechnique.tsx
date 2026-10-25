@@ -106,7 +106,7 @@ export default function PageProgrammeTechnique() {
 
   return (
     <>
-      <div className="grid items-start gap-8 lg:grid-cols-[31rem_minmax(0,1fr)]">
+      <div className="grid items-start gap-8 lg:grid-cols-[40rem_minmax(0,1fr)]">
         <div className="order-2 print:hidden lg:order-1">
           <ProgrammeEntrainement
             titre="Programme technique"
