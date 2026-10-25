@@ -232,7 +232,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
 }
 
 // Programme technique ou physique : on choisit une équipe puis « Toute l'équipe » ou une gymnaste, comme sur le site UFOLEP.
-export default function ProgrammeEntrainement({ titre, type }: { titre: string; type: TypeProgramme }) {
+export default function ProgrammeEntrainement({ titre, type, ouverture }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible } | null }) {
   const [clubs, setClubs] = useState<Club[] | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
@@ -246,6 +246,25 @@ export default function ProgrammeEntrainement({ titre, type }: { titre: string; 
       setClubs(await getClubs());
     })();
   }, []);
+
+  // Ouverture demandée depuis « Tableaux déjà créés » : sélectionne l'équipe et affiche ses consignes (ou celles de la gymnaste).
+  useEffect(() => {
+    if (!ouverture) return;
+    const { cible } = ouverture;
+    if (cible.genre === "equipe") {
+      const e = equipes.find((x) => x.id === cible.id);
+      if (!e) return;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setEquipeId(e.id);
+      setChoix({ cible, libelle: `Toute l'équipe ${e.nom}` });
+    } else {
+      const g = gymnastes.find((x) => x.id === cible.id);
+      const e = equipes.find((x) => x.gymnasteIds.includes(cible.id));
+      if (!g || !e) return;
+      setEquipeId(e.id);
+      setChoix({ cible, libelle: `${g.prenom} ${g.nom}` });
+    }
+  }, [ouverture, equipes, gymnastes]);
 
   const options = useMemo(() => {
     const nomClub = (id: string) => clubs?.find((c) => c.id === id)?.nom ?? "Sans club";

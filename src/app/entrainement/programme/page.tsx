@@ -1,8 +1,7 @@
 import Link from "next/link";
-import ProgrammeEntrainement from "@/components/JournalEntrainement";
-import SuiviElements from "@/components/SuiviElements";
+import PageProgrammeTechnique from "@/components/PageProgrammeTechnique";
 
-export default function ProgrammeEntrainementPage() {
+export default function ProgrammeTechniquePage() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
@@ -11,15 +10,12 @@ export default function ProgrammeEntrainementPage() {
             ← Accueil
           </Link>
           <h1 className="mt-1 text-xl font-bold text-foreground">
-            <span className="accent-gradient-text">
-              Programme technique
-            </span>
+            <span className="accent-gradient-text">Programme technique</span>
           </h1>
         </div>
       </header>
       <main className="mx-auto max-w-[1600px] space-y-8 px-6 py-10">
-        <SuiviElements />
-        <ProgrammeEntrainement titre="Programme technique" type="TECHNIQUE" />
+        <PageProgrammeTechnique />
       </main>
     </div>
   );

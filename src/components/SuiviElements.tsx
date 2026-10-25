@@ -23,6 +23,12 @@ import { champPetit, titreSection } from "@/lib/styles";
 
 type Cible = Suivi["cible"];
 
+export interface Ouverture {
+  n: number;
+  cible: Cible;
+  agres: Agres;
+}
+
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;
 
 // Liste des éléments proposés (par leur nom) pour un agrès et un niveau.
@@ -201,13 +207,17 @@ function Tableau({
 }
 
 // Suivi des éléments à travailler : une croix quand une gymnaste doit les travailler, un rond vert quand c'est validé.
-export default function SuiviElements() {
+export default function SuiviElements({
+  ouverture,
+}: {
+  // Demande d'ouverture d'un tableau (équipe ou gymnaste et agrès) venue de la liste « Tableaux déjà créés ».
+  ouverture?: Ouverture | null;
+}) {
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
   const [suivis, setSuivis] = useState<Suivi[]>([]);
   const [cle, setCle] = useState("");
   const [agres, setAgres] = useState<Agres | "TOUS">("POUTRE");
-  const [listeOuverte, setListeOuverte] = useState(false);
 
   const charger = useCallback(async () => {
     setEquipes(await getEquipes());
@@ -219,6 +229,14 @@ export default function SuiviElements() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     charger();
   }, [charger]);
+
+  useEffect(() => {
+    if (!ouverture) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCle(`${ouverture.cible.genre}:${ouverture.cible.id}`);
+    setAgres(ouverture.agres);
+    charger();
+  }, [ouverture, charger]);
 
   const cibles = useMemo(
     () => [
@@ -261,20 +279,6 @@ export default function SuiviElements() {
     );
   }
 
-  // Tableaux déjà remplis (au moins une ligne), pour les rouvrir.
-  const existants = suivis
-    .filter((x) => x.lignes.length > 0)
-    .map((x) => ({
-      suivi: x,
-      cle: `${x.cible.genre}:${x.cible.id}`,
-      libelle: cibles.find(
-        (c) => c.cible.genre === x.cible.genre && c.cible.id === x.cible.id,
-      )?.libelle,
-    }))
-    .filter(
-      (x): x is { suivi: Suivi; cle: string; libelle: string } => !!x.libelle,
-    )
-    .sort((a, b) => a.libelle.localeCompare(b.libelle, "fr"));
   const agresAffiches: Agres[] =
     agres === "TOUS" ? AGRES.map((a) => a.id) : [agres];
   const suiviPour = (a: Agres): Suivi =>
@@ -353,44 +357,6 @@ export default function SuiviElements() {
             onChange={modifier}
           />
         ))}
-      </div>
-
-      <div className="mt-6 print:hidden">
-        <button
-          onClick={() => setListeOuverte((o) => !o)}
-          aria-expanded={listeOuverte}
-          className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
-        >
-          Tableaux déjà créés ({existants.length})
-        </button>
-        {listeOuverte && (
-          <ul className="mt-2 space-y-1">
-            {existants.length === 0 && (
-              <li className="text-xs text-muted">
-                Aucun tableau rempli pour l’instant.
-              </li>
-            )}
-            {existants.map((x) => (
-              <li key={x.suivi.id}>
-                <button
-                  onClick={() => {
-                    setCle(x.cle);
-                    setAgres(x.suivi.agres);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="text-left text-sm text-foreground hover:underline"
-                >
-                  {x.libelle} ·{" "}
-                  {AGRES.find((a) => a.id === x.suivi.agres)?.label}{" "}
-                  <span className="text-xs text-muted">
-                    ({x.suivi.lignes.length} élément
-                    {x.suivi.lignes.length > 1 ? "s" : ""})
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
     </section>
   );
