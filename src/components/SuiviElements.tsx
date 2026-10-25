@@ -306,7 +306,7 @@ export function Tableau({
                       <button
                         onClick={() => cycle(l.id, g.id)}
                         aria-label={`${l.libelle} — ${g.prenom} : ${etat === "ok" ? "validé" : etat === "or" ? "réalisé, pas maîtrisé" : etat === "x" ? "à travailler" : "vide"}`}
-                        className="h-8 w-10 rounded border border-border-strong text-base leading-none hover:border-accent-solid hover:bg-surface-alt print:border-black print:hover:bg-transparent"
+                        className="h-6 w-8 rounded border border-border-strong text-sm leading-none hover:border-accent-solid hover:bg-surface-alt print:border-black print:hover:bg-transparent"
                       >
                         {etat === "x" && (
                           <span className="font-bold text-danger print:text-black">
@@ -314,10 +314,10 @@ export function Tableau({
                           </span>
                         )}
                         {etat === "or" && (
-                          <span className="inline-block h-4 w-4 rounded-full bg-orange-500 print:bg-orange-500" />
+                          <span className="inline-block h-3 w-3 rounded-full bg-orange-500 print:bg-orange-500" />
                         )}
                         {etat === "ok" && (
-                          <span className="inline-block h-4 w-4 rounded-full bg-emerald-500 print:bg-emerald-600" />
+                          <span className="inline-block h-3 w-3 rounded-full bg-emerald-500 print:bg-emerald-600" />
                         )}
                       </button>
                     </td>
