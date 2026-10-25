@@ -60,6 +60,20 @@ function BibliothequeSuivi({
 }) {
   const [famille, setFamille] = useState("");
   const [recherche, setRecherche] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+
+  // Envoie l'élément, avec sa valeur, à la séance en construction (bloc « Programme technique »).
+  function versSeance(nom: string, valeur: string) {
+    const detail = { texte: `• ${nom} (${valeur})`, pris: false };
+    window.dispatchEvent(new CustomEvent("ffg:ajout-seance", { detail }));
+    setMessage(
+      detail.pris
+        ? `Ajouté à la séance : ${nom}`
+        : "Ouvrez d’abord une équipe ou une gymnaste dans « Programme technique » pour construire une séance.",
+    );
+    setTimeout(() => setMessage(null), 3500);
+  }
+
   // Niveau de la bibliothèque : celui de l'équipe au départ ; Fédéral A regroupe A, A2 et A3 (mêmes éléments).
   const [niv, setNiv] = useState<NiveauId>(
     getNiveau(niveauDepart).programme === "A" ||
@@ -170,12 +184,9 @@ function BibliothequeSuivi({
           {cartes.map((e) => {
             const dedans = pris.has(e.nom);
             return (
-              <button
+              <div
                 key={e.cle}
-                type="button"
-                onClick={() => onBasculer(e.nom)}
-                title={e.nom}
-                className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10"
+                className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2"
               >
                 <span
                   className={`rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] ${dedans ? "text-success" : "text-muted"}`}
@@ -186,10 +197,27 @@ function BibliothequeSuivi({
                 <span className="text-xs leading-snug text-foreground">
                   {e.nom}
                 </span>
-              </button>
+                <div className="mt-1 flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => onBasculer(e.nom)}
+                    className="rounded border border-border-strong px-2 py-0.5 text-[11px] text-foreground hover:border-accent-solid/60 hover:bg-accent-from/10"
+                  >
+                    {dedans ? "Retirer du tableau" : "+ Tableau"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => versSeance(e.nom, e.valeur)}
+                    className="rounded border border-border-strong px-2 py-0.5 text-[11px] text-foreground hover:border-accent-solid/60 hover:bg-accent-from/10"
+                  >
+                    + Séance
+                  </button>
+                </div>
+              </div>
             );
           })}
         </div>
+        {message && <p className="mb-2 text-xs text-foreground">{message}</p>}
         {cartes.length === 0 && (
           <p className="text-xs text-muted">
             Aucun élément ne correspond à ce filtre.

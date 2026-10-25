@@ -194,6 +194,19 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir, listeMasquee }:
     })();
   }
 
+  // Élément envoyé depuis la bibliothèque du suivi : il s'ajoute au texte de la séance en construction, avec sa valeur.
+  useEffect(() => {
+    if (seanceUnique) return;
+    const ajouterTexte = (e: Event) => {
+      const detail = (e as CustomEvent<{ texte: string; pris: boolean }>).detail;
+      setContenu((t) => (t.trim() ? `${t.replace(/\s+$/, "")}
+${detail.texte}` : detail.texte));
+      detail.pris = true;
+    };
+    window.addEventListener("ffg:ajout-seance", ajouterTexte);
+    return () => window.removeEventListener("ffg:ajout-seance", ajouterTexte);
+  }, [seanceUnique]);
+
   useEffect(() => {
     charger();
     // Un tableau créé ou modifié ailleurs sur la page (ou depuis un autre appareil) apparaît ici sans recharger.
