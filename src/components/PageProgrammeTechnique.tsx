@@ -111,6 +111,7 @@ export default function PageProgrammeTechnique() {
           <ProgrammeEntrainement
             titre="Programme technique"
             type="TECHNIQUE"
+            listeMasquee
             ouverture={ouverture}
             equipeCommune={equipeCommune}
             onEquipe={setEquipeCommune}

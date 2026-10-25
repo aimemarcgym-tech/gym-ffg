@@ -154,11 +154,12 @@ function Formulaire({
   );
 }
 
-function Journal({ cible, libelle, type, seanceUnique, onSortir }: { cible: Cible; libelle: string; type: TypeProgramme; seanceUnique?: string | null; onSortir?: () => void }) {
+function Journal({ cible, libelle, type, seanceUnique, onSortir, listeMasquee }: { cible: Cible; libelle: string; type: TypeProgramme; seanceUnique?: string | null; onSortir?: () => void; listeMasquee?: boolean }) {
   const [seances, setSeances] = useState<Seance[] | null>(null);
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [contenu, setContenu] = useState("");
   const [occupe, setOccupe] = useState(false);
+  const [ajoutee, setAjoutee] = useState(false);
   const [edition, setEdition] = useState<string | null>(null);
   const [dateEdition, setDateEdition] = useState("");
   const [contenuEdition, setContenuEdition] = useState("");
@@ -213,6 +214,8 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir }: { cible: Cibl
       await addSeance(cible, type, date, contenu.trim(), suivis.filter((t) => t.id in selection).map((t) => garder(t, selection[t.id])));
       setContenu("");
       setSelection({});
+      setAjoutee(true);
+      setTimeout(() => setAjoutee(false), 3000);
       charger();
     } finally {
       setOccupe(false);
@@ -318,7 +321,8 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir }: { cible: Cibl
       ) : (
         <Formulaire variante="add" date={date} contenu={contenu} onDate={setDate} onContenu={setContenu} onSubmit={ajouter} occupe={occupe} disponibles={suivis} selection={selection} onSelection={setSelection} marquerEquipe={cible.genre === "gymnaste"} />
       )}
-      {seances === null ? (
+      {ajoutee && <p className="mb-2 text-sm text-success">Séance ajoutée ✓ — retrouvez-la dans « Mes séances ».</p>}
+      {listeMasquee && !seanceUnique ? null : seances === null ? (
         <p className="text-sm text-muted">Chargement…</p>
       ) : seances.length === 0 ? (
         <p className="text-sm text-muted">Aucune séance enregistrée pour l&apos;instant.</p>
@@ -369,7 +373,7 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir }: { cible: Cibl
 }
 
 // Programme technique ou physique : on choisit une équipe puis « Toute l'équipe » ou une gymnaste, comme sur le site UFOLEP.
-export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible; seanceId?: string } | null; equipeCommune?: string; onEquipe?: (id: string) => void }) {
+export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe, listeMasquee }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible; seanceId?: string } | null; equipeCommune?: string; onEquipe?: (id: string) => void; listeMasquee?: boolean }) {
   const [clubs, setClubs] = useState<Club[] | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
@@ -480,7 +484,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
         </div>
       )}
 
-      {choix && <Journal key={`${choix.cible.genre}:${choix.cible.id}:${type}`} cible={choix.cible} libelle={choix.libelle} type={type} seanceUnique={seanceUnique} onSortir={() => setSeanceUnique(null)} />}
+      {choix && <Journal key={`${choix.cible.genre}:${choix.cible.id}:${type}`} cible={choix.cible} libelle={choix.libelle} type={type} seanceUnique={seanceUnique} onSortir={() => setSeanceUnique(null)} listeMasquee={listeMasquee} />}
     </div>
   );
 }
