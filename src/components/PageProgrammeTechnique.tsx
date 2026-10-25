@@ -152,7 +152,7 @@ export default function PageProgrammeTechnique() {
             aria-expanded={liste !== null}
             className={`${btnDegrade} px-6 py-3 text-base shadow`}
           >
-            Tableaux déjà créés
+            Tableaux
           </button>
           <button
             onClick={basculerSeances}
