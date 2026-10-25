@@ -373,7 +373,7 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir, listeMasquee }:
 }
 
 // Programme technique ou physique : on choisit une équipe puis « Toute l'équipe » ou une gymnaste, comme sur le site UFOLEP.
-export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe, listeMasquee }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible; seanceId?: string } | null; equipeCommune?: string; onEquipe?: (id: string) => void; listeMasquee?: boolean }) {
+export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCommune, onEquipe, listeMasquee }: { titre: string; type: TypeProgramme; ouverture?: { n: number; cible: Cible; seanceId?: string; agres?: string } | null; equipeCommune?: string; onEquipe?: (id: string) => void; listeMasquee?: boolean }) {
   const [clubs, setClubs] = useState<Club[] | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
@@ -401,7 +401,8 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
 
   // Ouverture demandée depuis « Tableaux déjà créés » : sélectionne l'équipe et affiche ses consignes (ou celles de la gymnaste).
   useEffect(() => {
-    if (!ouverture) return;
+    // Un tableau ouvert depuis « Mes tableaux » (il a un agrès) n'ouvre que le suivi, pas le programme technique.
+    if (!ouverture || ouverture.agres) return;
     const { cible } = ouverture;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSeanceUnique(ouverture.seanceId ?? null);
