@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import PartageBouton from "@/components/PartageBouton";
 import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, getSuivis, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
 import { Tableau } from "@/components/SuiviElements";
+import ContenuSeance from "@/components/ContenuSeance";
 import { AGRES } from "@/regulation/libelles";
 import { formatTaille } from "@/lib/format";
 import { createShare } from "@/lib/shares";
@@ -367,7 +368,7 @@ ${detail.texte}` : detail.texte));
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm whitespace-pre-wrap text-foreground">{x.contenu}</p>
+                  <ContenuSeance texte={x.contenu} />
                   {x.tableaux && x.tableaux.length > 0 && (
                     <div className="mt-3 space-y-3">
                       {x.tableaux.map((t) => (

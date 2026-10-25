@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getShare } from "@/lib/shares";
+import ContenuSeance from "@/components/ContenuSeance";
 
 interface TableJointe {
   agres: string;
@@ -90,9 +91,7 @@ export default function PartageProgramme() {
               <div className="mb-1 text-xs font-semibold tracking-wide text-muted uppercase">
                 {dateLisible(x.date)}
               </div>
-              <p className="text-sm whitespace-pre-wrap text-foreground">
-                {x.content}
-              </p>
+              <ContenuSeance texte={x.content} />
               {x.tables?.map((t, k) => (
                 <div key={k} className="mt-3">
                   <div className="mb-1 text-sm font-semibold text-foreground">
@@ -102,7 +101,9 @@ export default function PartageProgramme() {
                     <table className="w-full border-collapse text-sm">
                       <thead>
                         <tr className="bg-surface-alt text-left text-xs text-muted">
-                          <th className="min-w-[16rem] px-3 py-2 font-medium">Élément</th>
+                          <th className="min-w-[16rem] px-3 py-2 font-medium">
+                            Élément
+                          </th>
                           {t.colonnes.map((n, j) => (
                             <th
                               key={j}
