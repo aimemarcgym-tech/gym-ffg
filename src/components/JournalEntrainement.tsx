@@ -348,7 +348,7 @@ function Journal({ cible, libelle, type }: { cible: Cible; libelle: string; type
                   {x.tableaux && x.tableaux.length > 0 && (
                     <div className="mt-3 space-y-3">
                       {x.tableaux.map((t) => (
-                        <Tableau key={t.id} suivi={t} membres={membres} propositionsNoms={[]} modifiable={false} onChange={() => undefined} />
+                        <Tableau key={t.id} suivi={t} membres={membres} modifiable={false} onChange={() => undefined} />
                       ))}
                     </div>
                   )}

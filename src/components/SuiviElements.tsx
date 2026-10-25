@@ -11,15 +11,16 @@ import {
   type Gymnaste,
   type Suivi,
 } from "@/lib/data";
-import { AGRES } from "@/regulation/libelles";
+import { AGRES, LIBELLE_FAMILLE, fmt, fmtValeur } from "@/regulation/libelles";
 import {
   getElementsNiveau,
   getNiveau,
   getSautsNiveau,
+  groupesSautsPF,
   niveauxFed,
 } from "@/regulation/loader";
 import type { Agres, NiveauId } from "@/regulation/types";
-import { champPetit, titreSection } from "@/lib/styles";
+import { champ, champPetit, titreSection } from "@/lib/styles";
 
 type Cible = Suivi["cible"];
 
@@ -31,33 +32,155 @@ export interface Ouverture {
 
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;
 
-// Liste des éléments proposés (par leur nom) pour un agrès et un niveau.
-export function propositions(agres: Agres, niveau: NiveauId): string[] {
-  const n = getNiveau(niveau);
-  if (n.programme === "P") return [];
-  const noms =
-    agres === "SAUT"
-      ? getSautsNiveau(niveau).map((s) => s.nom)
-      : getElementsNiveau(agres, niveau).map((e) => e.nom);
-  return [...new Set(noms)];
+// Bibliothèque des éléments, comme dans le constructeur : une catégorie au choix, une recherche, et un clic ajoute ou retire la ligne.
+function BibliothequeSuivi({
+  agres,
+  niveau,
+  pris,
+  onBasculer,
+}: {
+  agres: Agres;
+  niveau: NiveauId;
+  pris: Set<string>;
+  onBasculer: (libelle: string) => void;
+}) {
+  const [famille, setFamille] = useState("");
+  const [recherche, setRecherche] = useState("");
+  const q = recherche.trim().toLowerCase();
+  const estSaut = agres === "SAUT";
+  const elements = useMemo(
+    () =>
+      estSaut ? [] : getElementsNiveau(agres as Exclude<Agres, "SAUT">, niveau),
+    [estSaut, agres, niveau],
+  );
+  const sauts = useMemo(
+    () => (estSaut ? getSautsNiveau(niveau) : []),
+    [estSaut, niveau],
+  );
+  const familles = useMemo(
+    () => [
+      ...new Set([
+        ...elements.map((e) => e.famille),
+        ...elements.flatMap((e) => e.extraFamilles ?? []),
+      ]),
+    ],
+    [elements],
+  );
+  const parFamilleSaut = estSaut && getNiveau(niveau).programme === "PF";
+
+  const cartes = estSaut
+    ? sauts
+        .filter((s) => !famille || s.id.replace("PF-SA-", "")[0] === famille)
+        .filter((s) => !q || s.nom.toLowerCase().includes(q))
+        .map((s) => ({
+          cle: s.id,
+          nom: s.nom,
+          valeur: s.unique
+            ? fmt(s.valeurTremplin)
+            : `${fmt(s.valeurTrampoTremp)} / ${fmt(s.valeurTremplin)}`,
+        }))
+    : elements
+        .filter(
+          (e) =>
+            !famille ||
+            e.famille === famille ||
+            !!e.extraFamilles?.includes(famille),
+        )
+        .filter(
+          (e) =>
+            !q ||
+            e.nom.toLowerCase().includes(q) ||
+            e.id.toLowerCase().includes(q),
+        )
+        .sort((a, b) => a.valeur - b.valeur)
+        .map((e) => ({ cle: e.id, nom: e.nom, valeur: fmtValeur(e) }));
+
+  return (
+    <div className="space-y-2 rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
+      <div className="flex flex-wrap gap-2">
+        {(!estSaut || parFamilleSaut) && (
+          <select
+            value={famille}
+            onChange={(e) => setFamille(e.target.value)}
+            aria-label="Catégorie"
+            className={`${champ} sm:w-72`}
+          >
+            <option value="">
+              {estSaut ? "Tous les sauts" : "Toutes les catégories"}
+            </option>
+            {estSaut
+              ? Object.entries(groupesSautsPF).map(([g, titre]) => (
+                  <option key={g} value={g}>
+                    Famille {g} · {titre}
+                  </option>
+                ))
+              : familles.map((f) => (
+                  <option key={f} value={f}>
+                    {LIBELLE_FAMILLE[f] ?? f}
+                  </option>
+                ))}
+          </select>
+        )}
+        <input
+          value={recherche}
+          onChange={(e) => setRecherche(e.target.value)}
+          placeholder="Rechercher (nom, code)…"
+          className={`${champ} sm:w-72`}
+        />
+      </div>
+      <div className="max-h-[26rem] overflow-y-auto pr-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {cartes.map((e) => {
+            const dedans = pris.has(e.nom);
+            return (
+              <button
+                key={e.cle}
+                type="button"
+                onClick={() => onBasculer(e.nom)}
+                title={e.nom}
+                className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10"
+              >
+                <span
+                  className={`rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] ${dedans ? "text-success" : "text-muted"}`}
+                >
+                  {dedans ? "✓ " : ""}
+                  {e.valeur}
+                </span>
+                <span className="text-xs leading-snug text-foreground">
+                  {e.nom}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {cartes.length === 0 && (
+          <p className="text-xs text-muted">
+            Aucun élément ne correspond à ce filtre.
+          </p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export function Tableau({
   suivi,
   membres,
-  propositionsNoms,
+  niveau,
   modifiable,
   onChange,
 }: {
   suivi: Suivi;
   membres: Gymnaste[];
-  propositionsNoms: string[];
+  // Niveau de l'équipe ou de la gymnaste : détermine les éléments de la bibliothèque.
+  niveau?: NiveauId;
   modifiable: boolean;
   onChange: (s: Suivi) => void;
 }) {
   const [saisie, setSaisie] = useState("");
   const libelleAgres = AGRES.find((a) => a.id === suivi.agres)!.label;
-  const listeId = `suivi-${suivi.id}`;
+  const [biblio, setBiblio] = useState(false);
+  const prisParNom = new Set(suivi.lignes.map((l) => l.libelle));
 
   function ajouter() {
     const texte = saisie.trim();
@@ -90,6 +213,16 @@ export function Tableau({
       ...suivi,
       lignes: suivi.lignes.filter((l) => l.id !== ligneId),
       cases,
+    });
+  }
+
+  // Clic dans la bibliothèque : ajoute la ligne, ou la retire si l'élément y est déjà.
+  function basculer(libelle: string) {
+    const existante = suivi.lignes.find((l) => l.libelle === libelle);
+    if (existante) return retirer(existante.id);
+    onChange({
+      ...suivi,
+      lignes: [...suivi.lignes, { id: crypto.randomUUID(), libelle }],
     });
   }
 
@@ -175,31 +308,46 @@ export function Tableau({
         </table>
       </div>
       {modifiable && (
-        <div className="flex flex-wrap items-center gap-2 print:hidden">
-          <input
-            value={saisie}
-            onChange={(e) => setSaisie(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                ajouter();
-              }
-            }}
-            list={listeId}
-            placeholder="Choisir un élément ou écrire une ligne libre…"
-            className={`${champPetit} w-full sm:w-96`}
-          />
-          <datalist id={listeId}>
-            {propositionsNoms.map((n) => (
-              <option key={n} value={n} />
-            ))}
-          </datalist>
-          <button
-            onClick={ajouter}
-            className="rounded border border-border-strong px-2.5 py-1 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
-          >
-            Ajouter
-          </button>
+        <div className="space-y-2 print:hidden">
+          <div className="flex flex-wrap items-center gap-2">
+            {niveau && getNiveau(niveau).programme !== "P" && (
+              <button
+                onClick={() => setBiblio((o) => !o)}
+                aria-expanded={biblio}
+                className="rounded border border-accent-solid/60 bg-accent-from/10 px-3 py-1 text-xs font-medium text-foreground hover:bg-accent-from/20"
+              >
+                {biblio
+                  ? "Fermer la bibliothèque"
+                  : "Bibliothèque des éléments"}
+              </button>
+            )}
+            <input
+              value={saisie}
+              onChange={(e) => setSaisie(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  ajouter();
+                }
+              }}
+              placeholder="Ou écrire une ligne libre…"
+              className={`${champPetit} w-full sm:w-72`}
+            />
+            <button
+              onClick={ajouter}
+              className="rounded border border-border-strong px-2.5 py-1 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+            >
+              Ajouter
+            </button>
+          </div>
+          {biblio && niveau && (
+            <BibliothequeSuivi
+              agres={suivi.agres}
+              niveau={niveau}
+              pris={prisParNom}
+              onBasculer={basculer}
+            />
+          )}
         </div>
       )}
     </div>
@@ -367,7 +515,7 @@ export default function SuiviElements({
             key={`${choix.cle}-${a}`}
             suivi={suiviPour(a)}
             membres={choix.membres}
-            propositionsNoms={propositions(a, choix.niveau)}
+            niveau={choix.niveau}
             modifiable
             onChange={modifier}
           />

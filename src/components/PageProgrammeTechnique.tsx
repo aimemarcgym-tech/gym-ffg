@@ -4,7 +4,6 @@ import { useState } from "react";
 import ProgrammeEntrainement from "@/components/JournalEntrainement";
 import SuiviElements, {
   Tableau,
-  propositions,
   type Ouverture,
 } from "@/components/SuiviElements";
 import {
@@ -176,7 +175,7 @@ export default function PageProgrammeTechnique() {
                     <Tableau
                       suivi={x.suivi}
                       membres={x.membres}
-                      propositionsNoms={propositions(x.suivi.agres, x.niveau)}
+                      niveau={x.niveau}
                       modifiable
                       onChange={(n) => modifierSuivi(x, n)}
                     />
