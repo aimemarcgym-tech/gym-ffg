@@ -637,13 +637,24 @@ export async function enregistrerSuivi(suivi: Suivi): Promise<void> {
   const s = lire();
   const autres = (s.suivis ?? []).filter((x) => x.id !== suivi.id);
   ecrire({ ...s, suivis: [...autres, suivi] });
-  if (typeof window !== "undefined") window.dispatchEvent(new Event("ffg:suivi"));
+  if (typeof window !== "undefined")
+    window.dispatchEvent(new Event("ffg:suivi"));
 }
 
 export async function supprimerSuivi(id: string): Promise<void> {
   const s = lire();
   ecrire({ ...s, suivis: (s.suivis ?? []).filter((x) => x.id !== id) });
-  if (typeof window !== "undefined") window.dispatchEvent(new Event("ffg:suivi"));
+  if (typeof window !== "undefined")
+    window.dispatchEvent(new Event("ffg:suivi"));
+}
+
+export async function getToutesSeances(type: TypeProgramme): Promise<Seance[]> {
+  return (lire().seances ?? [])
+    .filter((x) => x.type === type)
+    .sort(
+      (a, b) =>
+        b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt),
+    );
 }
 
 export async function getSeances(

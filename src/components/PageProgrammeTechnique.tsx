@@ -11,6 +11,8 @@ import {
   getEquipes,
   getGymnastes,
   getSuivis,
+  getToutesSeances,
+  type Seance,
   supprimerSuivi,
   type Gymnaste,
   type Suivi,
@@ -20,6 +22,11 @@ import { btnDanger, btnDegrade } from "@/lib/styles";
 import { AGRES } from "@/regulation/libelles";
 import { getNiveau } from "@/regulation/loader";
 import type { NiveauId } from "@/regulation/types";
+
+interface SeanceListee {
+  seance: Seance;
+  libelle: string;
+}
 
 interface Existant {
   suivi: Suivi;
@@ -36,6 +43,7 @@ export default function PageProgrammeTechnique() {
   const [suppression, setSuppression] = useState<string | null>(null);
   // Équipe sélectionnée, partagée entre le suivi et le programme technique.
   const [equipeCommune, setEquipeCommune] = useState<string | undefined>();
+  const [seances, setSeances] = useState<SeanceListee[] | null>(null);
   const [deplie, setDeplie] = useState<string | null>(null);
 
   async function modifierSuivi(x: Existant, nouveau: Suivi) {
@@ -52,6 +60,31 @@ export default function PageProgrammeTechnique() {
       cible: x.suivi.cible,
       agres: x.suivi.agres,
     }));
+  }
+
+  // Séances déjà créées (programme technique), de toutes les équipes et gymnastes, les plus récentes d'abord.
+  async function basculerSeances() {
+    if (seances) return setSeances(null);
+    const [toutes, equipes, gymnastes] = await Promise.all([
+      getToutesSeances("TECHNIQUE"),
+      getEquipes(),
+      getGymnastes(),
+    ]);
+    const liste: SeanceListee[] = [];
+    for (const x of toutes) {
+      const libelle =
+        x.cible.genre === "equipe"
+          ? (() => {
+              const e = equipes.find((y) => y.id === x.cible.id);
+              return e ? `Équipe · ${e.nom}` : null;
+            })()
+          : (() => {
+              const g = gymnastes.find((y) => y.id === x.cible.id);
+              return g ? `${g.prenom} ${g.nom}` : null;
+            })();
+      if (libelle) liste.push({ seance: x, libelle });
+    }
+    setSeances(liste);
   }
 
   async function basculerListe() {
@@ -113,13 +146,66 @@ export default function PageProgrammeTechnique() {
       </div>
 
       <div className="print:hidden">
-        <button
-          onClick={basculerListe}
-          aria-expanded={liste !== null}
-          className={`${btnDegrade} px-6 py-3 text-base shadow`}
-        >
-          Tableaux déjà créés
-        </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={basculerListe}
+            aria-expanded={liste !== null}
+            className={`${btnDegrade} px-6 py-3 text-base shadow`}
+          >
+            Tableaux déjà créés
+          </button>
+          <button
+            onClick={basculerSeances}
+            aria-expanded={seances !== null}
+            className={`${btnDegrade} px-6 py-3 text-base shadow`}
+          >
+            Séances
+          </button>
+        </div>
+        {seances && (
+          <ul className="mt-3 space-y-1">
+            {seances.length === 0 && (
+              <li className="text-xs text-muted">
+                Aucune séance enregistrée pour l’instant.
+              </li>
+            )}
+            {seances.map((x) => (
+              <li key={x.seance.id}>
+                <button
+                  onClick={() => {
+                    setOuverture((o) => ({
+                      n: (o?.n ?? 0) + 1,
+                      cible: x.seance.cible,
+                    }));
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="text-left text-sm text-foreground hover:underline"
+                >
+                  <span className="text-xs text-muted">
+                    {new Date(x.seance.date + "T00:00:00").toLocaleDateString(
+                      "fr-FR",
+                      { day: "2-digit", month: "long", year: "numeric" },
+                    )}
+                  </span>{" "}
+                  · {x.libelle} ·{" "}
+                  <span className="text-muted">
+                    {x.seance.contenu.length > 60
+                      ? x.seance.contenu.slice(0, 60) + "…"
+                      : x.seance.contenu}
+                  </span>
+                  {x.seance.tableaux?.length ? (
+                    <span className="text-xs text-muted">
+                      {" "}
+                      ({x.seance.tableaux.length} tableau
+                      {x.seance.tableaux.length > 1 ? "x" : ""} joint
+                      {x.seance.tableaux.length > 1 ? "s" : ""})
+                    </span>
+                  ) : null}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
         {liste && (
           <ul className="mt-2 space-y-1">
             {liste.length === 0 && (

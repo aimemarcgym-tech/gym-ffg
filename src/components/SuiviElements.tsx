@@ -27,7 +27,8 @@ type Cible = Suivi["cible"];
 export interface Ouverture {
   n: number;
   cible: Cible;
-  agres: Agres;
+  // Absent quand on ouvre une séance : le tableau affiché garde son agrès.
+  agres?: Agres;
 }
 
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;
@@ -425,7 +426,7 @@ export default function SuiviElements({
     if (!ouverture) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCle(`${ouverture.cible.genre}:${ouverture.cible.id}`);
-    setAgres(ouverture.agres);
+    if (ouverture.agres) setAgres(ouverture.agres);
     charger();
   }, [ouverture, charger]);
 
