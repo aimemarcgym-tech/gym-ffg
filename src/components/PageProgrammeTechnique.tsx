@@ -268,6 +268,7 @@ export default function PageProgrammeTechnique() {
                       suivi={x.suivi}
                       membres={x.membres}
                       niveau={x.niveau}
+                      titre={x.libelle}
                       modifiable
                       onChange={(n) => modifierSuivi(x, n)}
                     />

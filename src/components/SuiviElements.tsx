@@ -21,6 +21,8 @@ import {
 } from "@/regulation/loader";
 import type { Agres, NiveauId } from "@/regulation/types";
 import { champ, champPetit, titreSection } from "@/lib/styles";
+import PartageBouton from "@/components/PartageBouton";
+import { createShare } from "@/lib/shares";
 
 type Cible = Suivi["cible"];
 
@@ -200,6 +202,7 @@ export function Tableau({
   suivi,
   membres,
   niveau,
+  titre,
   modifiable,
   onChange,
 }: {
@@ -207,6 +210,8 @@ export function Tableau({
   membres: Gymnaste[];
   // Niveau de l'équipe ou de la gymnaste : détermine les éléments de la bibliothèque.
   niveau?: NiveauId;
+  // Nom de l'équipe ou de la gymnaste, affiché sur la page partagée ; sans lui, pas de bouton Partager.
+  titre?: string;
   modifiable: boolean;
   onChange: (s: Suivi) => void;
 }) {
@@ -343,6 +348,26 @@ export function Tableau({
       {modifiable && (
         <div className="space-y-2 print:hidden">
           <div className="flex flex-wrap items-center gap-2">
+            {titre && (
+              <PartageBouton
+                label="Partager ce tableau"
+                onCreate={async () => {
+                  const id = await createShare("tableaux", {
+                    titre,
+                    agres: libelleAgres,
+                    colonnes: membres.map(nomCourt),
+                    lignes: suivi.lignes.map((l) => ({
+                      libelle: l.libelle,
+                      etats: membres.map(
+                        (g) => suivi.cases[`${l.id}|${g.id}`] ?? null,
+                      ),
+                    })),
+                  });
+                  return `/partage/tableaux/?id=${id}`;
+                }}
+                className="accent-gradient rounded px-3 py-1 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
+              />
+            )}
             {niveau && (
               <button
                 onClick={() => setBiblio((o) => !o)}
@@ -549,6 +574,7 @@ export default function SuiviElements({
             suivi={suiviPour(a)}
             membres={choix.membres}
             niveau={choix.niveau}
+            titre={choix.libelle}
             modifiable
             onChange={modifier}
           />
