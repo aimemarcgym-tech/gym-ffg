@@ -558,7 +558,7 @@ export default function SuiviElements({
           </select>
           <button
             onClick={() => window.print()}
-            className="accent-gradient rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+            className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
           >
             Imprimer
           </button>
