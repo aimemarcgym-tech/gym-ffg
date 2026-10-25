@@ -93,7 +93,7 @@ export default function PageProgrammeTechnique() {
 
   return (
     <>
-      <div className="grid items-start gap-8 lg:grid-cols-[28rem_minmax(0,1fr)]">
+      <div className="grid items-start gap-8 lg:grid-cols-[31rem_minmax(0,1fr)]">
         <div className="order-2 print:hidden lg:order-1">
           <ProgrammeEntrainement
             titre="Programme technique"
@@ -103,7 +103,7 @@ export default function PageProgrammeTechnique() {
             onEquipe={setEquipeCommune}
           />
         </div>
-        <div className="order-1 min-w-0 max-w-5xl lg:order-2">
+        <div className="order-1 min-w-0 max-w-[60rem] lg:order-2">
           <SuiviElements
             ouverture={ouverture}
             equipeCommune={equipeCommune}
