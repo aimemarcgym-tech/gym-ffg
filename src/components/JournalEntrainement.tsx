@@ -274,7 +274,7 @@ ${detail.texte}` : detail.texte));
           }),
         }
       : undefined;
-    const data = { targetLabel: libelle, programType: type, sessions: (seances ?? []).map((x) => ({
+    const data = { targetLabel: libelle, programType: type, sessions: (seances ?? []).filter((x) => !seanceUnique || x.id === seanceUnique).map((x) => ({
         date: x.date,
         content: x.contenu,
         // Tableaux joints, avec les noms des gymnastes en colonnes : le lien se suffit à lui-même.
