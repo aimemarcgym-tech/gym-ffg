@@ -93,13 +93,13 @@ export interface Seance {
 }
 
 // Suivi des éléments à travailler : tableau à double entrée (éléments en lignes, gymnastes en colonnes) pour une équipe ou une gymnaste, par agrès.
-export type EtatSuivi = "x" | "ok";
+export type EtatSuivi = "x" | "or" | "ok";
 export interface Suivi {
   id: string;
   cible: { genre: "equipe" | "gymnaste"; id: string };
   agres: Agres;
   lignes: { id: string; libelle: string }[];
-  // Clé « idLigne|idGymnaste » ; absent = vide, « x » = à travailler, « ok » = validé.
+  // Clé « idLigne|idGymnaste » ; absent = vide, « x » = à travailler, « or » = sait le réaliser sans le maîtriser, « ok » = validé.
   cases: Record<string, EtatSuivi>;
 }
 

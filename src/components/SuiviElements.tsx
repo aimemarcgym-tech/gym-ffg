@@ -68,7 +68,8 @@ function Tableau({
     const actuel = suivi.cases[cle];
     const cases = { ...suivi.cases };
     if (!actuel) cases[cle] = "x";
-    else if (actuel === "x") cases[cle] = "ok";
+    else if (actuel === "x") cases[cle] = "or";
+    else if (actuel === "or") cases[cle] = "ok";
     else delete cases[cle];
     onChange({ ...suivi, cases });
   }
@@ -133,13 +134,16 @@ function Tableau({
                     <td key={g.id} className="px-1 py-1 text-center">
                       <button
                         onClick={() => cycle(l.id, g.id)}
-                        aria-label={`${l.libelle} — ${g.prenom} : ${etat === "ok" ? "validé" : etat === "x" ? "à travailler" : "vide"}`}
+                        aria-label={`${l.libelle} — ${g.prenom} : ${etat === "ok" ? "validé" : etat === "or" ? "réalisé, pas maîtrisé" : etat === "x" ? "à travailler" : "vide"}`}
                         className="h-8 w-10 rounded border border-border-strong text-base leading-none hover:border-accent-solid hover:bg-surface-alt print:border-black print:hover:bg-transparent"
                       >
                         {etat === "x" && (
                           <span className="font-bold text-danger print:text-black">
                             ✕
                           </span>
+                        )}
+                        {etat === "or" && (
+                          <span className="inline-block h-4 w-4 rounded-full bg-orange-500 print:bg-orange-500" />
                         )}
                         {etat === "ok" && (
                           <span className="inline-block h-4 w-4 rounded-full bg-emerald-500 print:bg-emerald-600" />
@@ -312,9 +316,11 @@ export default function SuiviElements() {
       </div>
 
       <p className="mb-3 text-xs text-muted print:hidden">
-        Cliquez sur une case : <span className="text-danger">✕</span> à
-        travailler, <span className="text-emerald-400">●</span> validé, un
-        troisième clic la vide.
+        Cliquez sur une case, plusieurs fois de suite :{" "}
+        <span className="text-danger">✕</span> à travailler,{" "}
+        <span className="text-orange-400">●</span> sait le réaliser mais ne le
+        maîtrise pas, <span className="text-emerald-400">●</span> validé, puis
+        la case se vide.
       </p>
 
       <h2 className="hidden text-lg font-bold text-black print:block">
