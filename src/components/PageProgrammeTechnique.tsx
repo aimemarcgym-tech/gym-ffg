@@ -2,12 +2,8 @@
 
 import { useState } from "react";
 import ProgrammeEntrainement from "@/components/JournalEntrainement";
-import SuiviElements, {
-  Tableau,
-  type Ouverture,
-} from "@/components/SuiviElements";
+import SuiviElements, { type Ouverture } from "@/components/SuiviElements";
 import {
-  enregistrerSuivi,
   getEquipes,
   getGymnastes,
   getSuivis,
@@ -44,23 +40,6 @@ export default function PageProgrammeTechnique() {
   // Équipe sélectionnée, partagée entre le suivi et le programme technique.
   const [equipeCommune, setEquipeCommune] = useState<string | undefined>();
   const [seances, setSeances] = useState<SeanceListee[] | null>(null);
-  const [deplie, setDeplie] = useState<string | null>(null);
-
-  async function modifierSuivi(x: Existant, nouveau: Suivi) {
-    setListe((l) =>
-      l
-        ? l.map((y) =>
-            y.suivi.id === nouveau.id ? { ...y, suivi: nouveau } : y,
-          )
-        : l,
-    );
-    await enregistrerSuivi(nouveau);
-    setOuverture((o) => ({
-      n: (o?.n ?? 0) + 1,
-      cible: x.suivi.cible,
-      agres: x.suivi.agres,
-    }));
-  }
 
   // Séances déjà créées (programme technique), de toutes les équipes et gymnastes, les plus récentes d'abord.
   async function basculerSeances() {
@@ -225,7 +204,7 @@ export default function PageProgrammeTechnique() {
                       cible: x.suivi.cible,
                       agres: x.suivi.agres,
                     });
-                    setDeplie((d) => (d === x.suivi.id ? null : x.suivi.id));
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="text-left text-sm text-foreground hover:underline"
                 >
@@ -261,18 +240,6 @@ export default function PageProgrammeTechnique() {
                   >
                     Supprimer
                   </button>
-                )}
-                {deplie === x.suivi.id && (
-                  <div className="w-full">
-                    <Tableau
-                      suivi={x.suivi}
-                      membres={x.membres}
-                      niveau={x.niveau}
-                      titre={x.libelle}
-                      modifiable
-                      onChange={(n) => modifierSuivi(x, n)}
-                    />
-                  </div>
                 )}
               </li>
             ))}
