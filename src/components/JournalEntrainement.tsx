@@ -7,6 +7,7 @@ import { Tableau } from "@/components/SuiviElements";
 import ContenuSeance, { EditeurSeance } from "@/components/ContenuSeance";
 import { AGRES } from "@/regulation/libelles";
 import { formatTaille } from "@/lib/format";
+import { compresserPdf } from "@/lib/compresserPdf";
 import { createShare } from "@/lib/shares";
 
 type Cible = Seance["cible"];
@@ -14,6 +15,8 @@ type Cible = Seance["cible"];
 // Tant que les liens sont encodés dans l'adresse (pas de serveur), on borne leur taille ; avec Firestore ces limites sautent.
 const LIMITE_LIEN = 880_000;
 const LIMITE_PJ = 600_000;
+// Au-dessus de ce poids, un PDF est recompressé automatiquement avant d'être joint.
+const SEUIL_COMPRESSION = 250_000;
 
 function dateLisible(d: string): string {
   const dt = new Date(d + "T00:00:00");
@@ -158,6 +161,9 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir, listeMasquee }:
   const [contenuEdition, setContenuEdition] = useState("");
   const [piece, setPiece] = useState<File | null>(null);
   const [erreurPiece, setErreurPiece] = useState<string | null>(null);
+  // Compression d'un PDF : message en cours, et fichier d'origine si on veut le garder tel quel.
+  const [infoPiece, setInfoPiece] = useState<string | null>(null);
+  const [pieceOriginale, setPieceOriginale] = useState<File | null>(null);
   // Tableaux de suivi de cette équipe ou gymnaste (au moins une ligne) et colonnes à afficher.
   const [suivis, setSuivis] = useState<Suivi[]>([]);
   const [membres, setMembres] = useState<Gymnaste[]>([]);
@@ -248,13 +254,36 @@ ${detail.texte}` : detail.texte));
     charger();
   }
 
-  function choisirPiece(fichier: File | null) {
+  async function choisirPiece(fichier: File | null) {
     if (!fichier) return;
+    setErreurPiece(null);
+    setInfoPiece(null);
+    setPieceOriginale(null);
+    const estPdf = fichier.type === "application/pdf" || /\.pdf$/i.test(fichier.name);
+    if (estPdf && fichier.size > SEUIL_COMPRESSION) {
+      setInfoPiece(`Compression de « ${fichier.name} » (${formatTaille(fichier.size)})…`);
+      try {
+        const r = await compresserPdf(fichier, SEUIL_COMPRESSION);
+        if (r.apres < r.avant) {
+          if (r.apres > LIMITE_PJ) {
+            setInfoPiece(null);
+            setErreurPiece(`« ${fichier.name} » fait encore ${formatTaille(r.apres)} après compression, c'est trop volumineux pour être joint au lien (max ${formatTaille(LIMITE_PJ)}).`);
+            return;
+          }
+          setPiece(r.fichier);
+          if (fichier.size <= LIMITE_PJ) setPieceOriginale(fichier);
+          setInfoPiece(`PDF compressé : ${formatTaille(r.avant)} → ${formatTaille(r.apres)} (le texte n'est plus sélectionnable).`);
+          return;
+        }
+      } catch {
+        // Compression impossible : on continue avec le fichier d'origine si sa taille le permet.
+      }
+      setInfoPiece(null);
+    }
     if (fichier.size > LIMITE_PJ) {
       setErreurPiece(`« ${fichier.name} » fait ${formatTaille(fichier.size)}, c'est trop volumineux pour être joint au lien (max ${formatTaille(LIMITE_PJ)}).`);
       return;
     }
-    setErreurPiece(null);
     setPiece(fichier);
   }
 
@@ -313,13 +342,31 @@ ${detail.texte}` : detail.texte));
           />
         </label>
         {piece && (
-          <button type="button" onClick={() => setPiece(null)} className="text-xs text-muted hover:text-foreground">
+          <button type="button" onClick={() => { setPiece(null); setInfoPiece(null); setPieceOriginale(null); }} className="text-xs text-muted hover:text-foreground">
             Retirer
           </button>
         )}
         <PartageBouton onCreate={creerLien} />
       </div>
       {erreurPiece && <p className="mb-3 text-right text-xs text-danger">{erreurPiece}</p>}
+      {infoPiece && (
+        <p className="mb-3 text-right text-xs text-muted">
+          {infoPiece}
+          {pieceOriginale && (
+            <button
+              type="button"
+              onClick={() => {
+                setPiece(pieceOriginale);
+                setPieceOriginale(null);
+                setInfoPiece(`Fichier d'origine conservé (${formatTaille(pieceOriginale.size)}).`);
+              }}
+              className="ml-2 underline hover:text-foreground"
+            >
+              Garder l’original
+            </button>
+          )}
+        </p>
+      )}
       {seanceUnique ? (
         <button type="button" onClick={onSortir} className="mb-3 rounded border border-border-strong px-3 py-1.5 text-xs text-foreground hover:border-accent-solid/60">
           ← Nouvelle séance et toutes les séances
