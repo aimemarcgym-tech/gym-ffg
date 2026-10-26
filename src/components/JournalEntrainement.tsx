@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import PartageBouton from "@/components/PartageBouton";
-import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, getSuivis, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
+import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, getSuivis, getToutesSeances, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
 import { Tableau } from "@/components/SuiviElements";
 import ContenuSeance, { EditeurSeance } from "@/components/ContenuSeance";
 import { AGRES } from "@/regulation/libelles";
@@ -165,7 +165,9 @@ function Journal({ cible, libelle, type, seanceUnique, onSortir, listeMasquee }:
   const [selectionEdition, setSelectionEdition] = useState<Record<string, string[]>>({});
 
   function charger() {
-    getSeances(cible, type).then(setSeances);
+    // Séance ouverte depuis « Mes séances » : on la lit directement par son identifiant.
+    if (seanceUnique) getToutesSeances(type).then((l) => setSeances(l.filter((x) => x.id === seanceUnique)));
+    else getSeances(cible, type).then(setSeances);
     (async () => {
       const tous = await getSuivis();
       const gs = await getGymnastes();
@@ -210,7 +212,7 @@ ${detail.texte}` : detail.texte));
       window.removeEventListener("ffg:distant", charger);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cible.genre, cible.id, type]);
+  }, [cible.genre, cible.id, type, seanceUnique]);
 
   async function ajouter(e: FormEvent) {
     e.preventDefault();
