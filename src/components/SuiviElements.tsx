@@ -506,8 +506,8 @@ export default function SuiviElements({
 
   useEffect(() => {
     if (!ouverture) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     const cibleSuivi = ouverture.suiviCible ?? ouverture.cible;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCle(`${cibleSuivi.genre}:${cibleSuivi.id}`);
     if (ouverture.agres) setAgres(ouverture.agres);
     // Séance avec tableaux joints : un seul agrès → cet agrès ; plusieurs → seulement ces agrès.
