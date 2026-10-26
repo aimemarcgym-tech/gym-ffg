@@ -488,7 +488,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
                 type="button"
                 onClick={() => (setSeanceUnique(null), setChoix((c) => (c?.cible.genre === "gymnaste" && c.cible.id === g.id ? null : { cible: { genre: "gymnaste", id: g.id }, libelle: `${g.prenom} ${g.nom}` })))}
                 className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                  actif ? "border-accent-solid bg-accent-from/10 text-white" : "border-border-strong bg-surface-alt text-foreground hover:border-accent-solid hover:text-white"
+                  actif ? "border-sky-400 bg-sky-400/10 text-white" : "border-border-strong bg-surface-alt text-foreground hover:border-sky-400 hover:text-white"
                 }`}
               >
                 {g.prenom} {g.nom}

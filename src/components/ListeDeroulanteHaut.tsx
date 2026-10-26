@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 interface Option {
   value: string;
   label: string;
+  // Pastille de couleur devant l'entrée : violet pour une équipe, bleu pour une gymnaste.
+  genre?: "equipe" | "gymnaste";
 }
 
 // Menu déroulant qui s'ouvre vers le haut : pour les menus placés en bas de page, où la liste ne doit pas partir sous l'écran.
@@ -90,6 +92,11 @@ export default function ListeDeroulanteHaut({
                     : "text-foreground"
                 }`}
               >
+                {o.genre && (
+                  <span
+                    className={`mr-2 inline-block h-2 w-2 rounded-full align-middle ${o.genre === "gymnaste" ? "bg-sky-400" : "bg-violet-400"}`}
+                  />
+                )}
                 {o.label}
               </button>
             </li>

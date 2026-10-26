@@ -142,6 +142,7 @@ export default function PageProgrammeTechnique() {
                 className="max-w-full sm:w-[36rem]"
                 options={seances.map((x) => ({
                   value: x.seance.id,
+                  genre: x.seance.cible.genre,
                   label: `${new Date(x.seance.date + "T00:00:00").toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })} · ${x.libelle} · ${x.seance.contenu.length > 40 ? x.seance.contenu.slice(0, 40) + "…" : x.seance.contenu}${x.seance.tableaux?.length ? ` (${x.seance.tableaux.length} tableau${x.seance.tableaux.length > 1 ? "x" : ""})` : ""}`,
                 }))}
                 onChange={(id) => {
@@ -173,6 +174,7 @@ export default function PageProgrammeTechnique() {
                   className="max-w-full sm:w-[28rem]"
                   options={liste.map((x) => ({
                     value: x.suivi.id,
+                    genre: x.suivi.cible.genre,
                     label: `${x.libelle} · ${AGRES.find((a) => a.id === x.suivi.agres)?.label} (${x.suivi.lignes.length} élément${x.suivi.lignes.length > 1 ? "s" : ""})`,
                   }))}
                   onChange={(id) => {
