@@ -7,13 +7,13 @@ import { Tableau } from "@/components/SuiviElements";
 import ContenuSeance, { EditeurSeance } from "@/components/ContenuSeance";
 import { AGRES } from "@/regulation/libelles";
 import { formatTaille } from "@/lib/format";
-import { createShare } from "@/lib/shares";
+import { createShare, createShareAvecPiece } from "@/lib/shares";
 
 type Cible = Seance["cible"];
 
 // Tant que les liens sont encodés dans l'adresse (pas de serveur), on borne leur taille ; avec Firestore ces limites sautent.
 const LIMITE_LIEN = 880_000;
-const LIMITE_PJ = 600_000;
+const LIMITE_PJ = 3_000_000;
 
 function dateLisible(d: string): string {
   const dt = new Date(d + "T00:00:00");
@@ -287,12 +287,13 @@ ${detail.texte}` : detail.texte));
               })),
             }
           : {}),
-      })), ...(pieceJointe ? { attachment: pieceJointe } : {}) };
+      })) };
     const taille = new Blob([JSON.stringify(data)]).size;
     if (taille > LIMITE_LIEN) {
       throw new Error(`Le lien serait trop volumineux (${formatTaille(taille)}, max ~${formatTaille(LIMITE_LIEN)}) — retirez la pièce jointe ou raccourcissez l'historique des séances.`);
     }
-    const id = await createShare("programme", data);
+    // Avec un fichier : lien valable 7 jours, fichier rangé en morceaux ; sans fichier : lien habituel.
+    const id = pieceJointe ? await createShareAvecPiece("programme", data, { ...pieceJointe, taille: piece!.size }) : await createShare("programme", data);
     return `/partage/programme/?id=${id}`;
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getShare } from "@/lib/shares";
+import { getShare, lirePiece } from "@/lib/shares";
 import ContenuSeance from "@/components/ContenuSeance";
 
 interface TableJointe {
@@ -14,7 +14,13 @@ interface Donnees {
   targetLabel: string;
   programType: string;
   sessions: { date: string; content: string; tables?: TableJointe[] }[];
-  attachment?: { fileName: string; mimeType: string; dataBase64: string };
+  attachment?: {
+    fileName: string;
+    mimeType: string;
+    dataBase64?: string;
+    morceaux?: number;
+    taille?: number;
+  };
 }
 
 const TITRES: Record<string, string> = {
@@ -36,6 +42,9 @@ function dateLisible(d: string): string {
 // Page publique d'un journal d'entraînement, en lecture seule et sans compte.
 export default function PartageProgramme() {
   const [d, setD] = useState<Donnees | "introuvable" | null>(null);
+  const [telechargement, setTelechargement] = useState<
+    "cours" | "ok" | "erreur" | null
+  >(null);
 
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("id") ?? "";
@@ -71,7 +80,7 @@ export default function PartageProgramme() {
         </div>
       </header>
       <main className="mx-auto max-w-2xl space-y-3 px-6 py-8">
-        {d.attachment && (
+        {d.attachment && d.attachment.dataBase64 && (
           <a
             href={`data:${d.attachment.mimeType};base64,${d.attachment.dataBase64}`}
             download={d.attachment.fileName}
@@ -79,6 +88,52 @@ export default function PartageProgramme() {
           >
             📎 Télécharger « {d.attachment.fileName} »
           </a>
+        )}
+        {d.attachment && d.attachment.morceaux && (
+          <div>
+            <button
+              type="button"
+              disabled={telechargement === "cours"}
+              onClick={async () => {
+                const a = d.attachment!;
+                setTelechargement("cours");
+                try {
+                  const blob = await lirePiece(
+                    new URLSearchParams(window.location.search).get("id") ?? "",
+                    {
+                      fileName: a.fileName,
+                      mimeType: a.mimeType,
+                      morceaux: a.morceaux!,
+                      taille: a.taille ?? 0,
+                    },
+                  );
+                  const url = URL.createObjectURL(blob);
+                  const lien = document.createElement("a");
+                  lien.href = url;
+                  lien.download = a.fileName;
+                  lien.click();
+                  setTimeout(() => URL.revokeObjectURL(url), 10_000);
+                  setTelechargement("ok");
+                } catch {
+                  setTelechargement("erreur");
+                }
+              }}
+              className="accent-gradient-text flex w-full items-center gap-2 rounded-lg border border-accent-solid/40 bg-accent-from/10 p-3 text-left text-sm font-medium disabled:opacity-60"
+            >
+              📎{" "}
+              {telechargement === "cours"
+                ? "Téléchargement…"
+                : `Télécharger « ${d.attachment.fileName} »`}
+              {d.attachment.taille
+                ? ` (${Math.round(d.attachment.taille / 1024)} Ko)`
+                : ""}
+            </button>
+            {telechargement === "erreur" && (
+              <p className="mt-1 text-xs text-danger">
+                Ce fichier n’est plus disponible : le lien a expiré (7 jours).
+              </p>
+            )}
+          </div>
         )}
         {d.sessions.length === 0 ? (
           <p className="text-sm text-muted">Aucune séance enregistrée.</p>

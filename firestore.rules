@@ -5,9 +5,19 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
     match /shares/{shareId} {
-      allow read: if true;
+      // Les liens avec fichier joint ont une date d'expiration (expireAt, en millisecondes) : après, ils ne sont plus servis.
+      allow get: if resource.data.get('expireAt', 0) == 0 || resource.data.expireAt > request.time.toMillis();
+      // Liste réservée au propriétaire (nettoyage de ses liens expirés).
+      allow list: if request.auth != null && resource.data.ownerUid == request.auth.uid;
       allow create: if request.auth != null && request.resource.data.ownerUid == request.auth.uid;
       allow update, delete: if request.auth != null && resource.data.ownerUid == request.auth.uid;
+
+      match /pieces/{piece} {
+        allow read: if get(/databases/$(database)/documents/shares/$(shareId)).data.get('expireAt', 0) == 0
+          || get(/databases/$(database)/documents/shares/$(shareId)).data.expireAt > request.time.toMillis();
+        allow create, update, delete: if request.auth != null
+          && get(/databases/$(database)/documents/shares/$(shareId)).data.ownerUid == request.auth.uid;
+      }
     }
   }
 }
