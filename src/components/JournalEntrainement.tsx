@@ -13,7 +13,7 @@ type Cible = Seance["cible"];
 
 // Tant que les liens sont encodés dans l'adresse (pas de serveur), on borne leur taille ; avec Firestore ces limites sautent.
 const LIMITE_LIEN = 880_000;
-const LIMITE_PJ = 3_000_000;
+const LIMITE_PJ = 5_000_000;
 
 function dateLisible(d: string): string {
   const dt = new Date(d + "T00:00:00");
