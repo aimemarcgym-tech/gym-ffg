@@ -136,7 +136,9 @@ export default function PartageProgramme() {
           </div>
         )}
         {d.sessions.length === 0 ? (
-          <p className="text-sm text-muted">Aucune séance enregistrée.</p>
+          d.attachment ? null : (
+            <p className="text-sm text-muted">Aucune séance enregistrée.</p>
+          )
         ) : (
           d.sessions.map((x, i) => (
             <div

@@ -274,7 +274,11 @@ ${detail.texte}` : detail.texte));
           }),
         }
       : undefined;
-    const data = { targetLabel: libelle, programType: type, sessions: (seances ?? []).filter((x) => !seanceUnique || x.id === seanceUnique).map((x) => ({
+    // Programme technique : depuis le formulaire de création, « Partager » n'envoie que le document joint (les séances se partagent depuis « Mes séances »).
+    if (listeMasquee && !seanceUnique && !piece) {
+      throw new Error("Joignez un document, ou ouvrez une séance dans « Mes séances » pour la partager.");
+    }
+    const data = { targetLabel: libelle, programType: type, sessions: (seances ?? []).filter((x) => (seanceUnique ? x.id === seanceUnique : !listeMasquee)).map((x) => ({
         date: x.date,
         content: x.contenu,
         // Tableaux joints, avec les noms des gymnastes en colonnes : le lien se suffit à lui-même.
