@@ -12,8 +12,8 @@ import { createShare } from "@/lib/shares";
 type Cible = Seance["cible"];
 
 // Tant que les liens sont encodés dans l'adresse (pas de serveur), on borne leur taille ; avec Firestore ces limites sautent.
-const LIMITE_LIEN = 150_000;
-const LIMITE_PJ = 100_000;
+const LIMITE_LIEN = 880_000;
+const LIMITE_PJ = 600_000;
 
 function dateLisible(d: string): string {
   const dt = new Date(d + "T00:00:00");
