@@ -33,6 +33,9 @@ export interface Ouverture {
   agres?: Agres;
   // Séance à afficher seule dans le programme technique.
   seanceId?: string;
+  // Ouverture d'une séance : tableau (équipe ou gymnaste) et agrès des tableaux joints, à afficher à droite.
+  suiviCible?: Cible;
+  agresListe?: Agres[];
 }
 
 const nomCourt = (g: Gymnaste) => `${g.prenom} ${g.nom.charAt(0)}.`;
@@ -482,6 +485,7 @@ export default function SuiviElements({
   const [suivis, setSuivis] = useState<Suivi[]>([]);
   const [cle, setCle] = useState("");
   const [agres, setAgres] = useState<Agres | "TOUS">("POUTRE");
+  const [filtre, setFiltre] = useState<Agres[] | null>(null);
 
   const charger = useCallback(async () => {
     setEquipes(await getEquipes());
@@ -503,8 +507,16 @@ export default function SuiviElements({
   useEffect(() => {
     if (!ouverture) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCle(`${ouverture.cible.genre}:${ouverture.cible.id}`);
+    const cibleSuivi = ouverture.suiviCible ?? ouverture.cible;
+    setCle(`${cibleSuivi.genre}:${cibleSuivi.id}`);
     if (ouverture.agres) setAgres(ouverture.agres);
+    // Séance avec tableaux joints : un seul agrès → cet agrès ; plusieurs → seulement ces agrès.
+    setFiltre(null);
+    if (ouverture.agresListe?.length === 1) setAgres(ouverture.agresListe[0]);
+    else if (ouverture.agresListe && ouverture.agresListe.length > 1) {
+      setAgres("TOUS");
+      setFiltre(ouverture.agresListe);
+    }
     charger();
   }, [ouverture, charger]);
 
@@ -550,7 +562,7 @@ export default function SuiviElements({
   }
 
   const agresAffiches: Agres[] =
-    agres === "TOUS" ? AGRES.map((a) => a.id) : [agres];
+    agres === "TOUS" ? (filtre ?? AGRES.map((a) => a.id)) : [agres];
   const suiviPour = (a: Agres): Suivi =>
     suivis.find(
       (s) =>
@@ -615,7 +627,13 @@ export default function SuiviElements({
             membres={choix.membres}
             niveau={choix.niveau}
             titre={choix.libelle}
-            agresChoix={{ valeur: agres, onChange: setAgres }}
+            agresChoix={{
+              valeur: agres,
+              onChange: (v) => {
+                setFiltre(null);
+                setAgres(v);
+              },
+            }}
             modifiable
             onChange={modifier}
           />

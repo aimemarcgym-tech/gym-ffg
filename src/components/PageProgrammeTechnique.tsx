@@ -148,10 +148,15 @@ export default function PageProgrammeTechnique() {
                 onChange={(id) => {
                   const x = seances.find((y) => y.seance.id === id);
                   if (!x) return;
+                  const tableaux = x.seance.tableaux ?? [];
+                  const agresListe = [...new Set(tableaux.map((t) => t.agres))];
                   setOuverture((o) => ({
                     n: (o?.n ?? 0) + 1,
                     cible: x.seance.cible,
                     seanceId: x.seance.id,
+                    // Le suivi (à droite) se place sur le tableau joint et sur son ou ses agrès.
+                    suiviCible: tableaux[0]?.cible,
+                    agresListe,
                   }));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
