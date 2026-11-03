@@ -64,6 +64,8 @@ export default function Accueil() {
   const [ouverts, setOuverts] = useState<string[]>([]);
   const [pret, setPret] = useState(false);
   const [filiere, setFiliere] = useState<Filiere>("FEDERAL");
+  // Équipe demandée par l'adresse (?equipe=…) : son panneau, son club et elle-même s'ouvrent.
+  const [equipeCible, setEquipeCible] = useState<string | null>(null);
 
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
@@ -150,7 +152,28 @@ export default function Accueil() {
       const f = localStorage.getItem("ffg:filiere");
       if (f === "PERFORMANCE" || f === "FEDERAL_B") setFiliere(f);
     } catch {}
+    const demandee = new URLSearchParams(window.location.search).get("equipe");
+    if (demandee) setEquipeCible(demandee);
   }, [charger]);
+
+  // Une fois les données chargées : bon panneau, club ouvert, puis défilement jusqu'à l'équipe.
+  useEffect(() => {
+    if (!pret || !equipeCible) return;
+    const eq = equipes.find((x) => x.id === equipeCible);
+    if (!eq) return;
+    const p = programmeDe(eq.niveau);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFiliere(p === "B" ? "FEDERAL_B" : p === "A" ? "FEDERAL" : "PERFORMANCE");
+    setOuverts((o) => (o.includes(eq.clubId) ? o : [...o, eq.clubId]));
+    const t = setTimeout(() => {
+      document
+        .getElementById(`equipe-${eq.id}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Fait : l'adresse ne doit plus forcer le panneau si on change de filière ensuite.
+      setEquipeCible(null);
+    }, 250);
+    return () => clearTimeout(t);
+  }, [pret, equipeCible, equipes]);
 
   // Le fond de l'accueil change de teinte en Fédéral B (voir globals.css).
   useEffect(() => {
@@ -457,7 +480,8 @@ export default function Accueil() {
                         .map((eq) => (
                           <div
                             key={eq.id}
-                            className="border-b border-dashed border-border-strong pb-4 last:border-b-0 last:pb-0"
+                            id={`equipe-${eq.id}`}
+                            className="scroll-mt-24 border-b border-dashed border-border-strong pb-4 last:border-b-0 last:pb-0"
                           >
                             <EquipeGroupe
                               equipesDe={(gid) =>
@@ -467,6 +491,7 @@ export default function Accueil() {
                               }
                               key={eq.id}
                               equipe={eq}
+                              ouvertInitial={equipeCible === eq.id}
                               rang={equipesClub.indexOf(eq) + 1}
                               membres={eq.gymnasteIds
                                 .map((id) => deClub.find((g) => g.id === id))

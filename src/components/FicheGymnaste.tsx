@@ -345,6 +345,15 @@ export default function FicheGymnaste() {
                 {t.texte}
               </button>
             ))}
+            {equipes.map((e) => (
+              <Link
+                key={`va-${e.id}`}
+                href={`/?equipe=${e.id}`}
+                className="rounded-full border border-accent-solid/60 bg-accent-from/10 px-2.5 py-0.5 text-xs font-medium text-foreground hover:bg-accent-from/20"
+              >
+                Voir {e.nom} →
+              </Link>
+            ))}
             {individuelles.map((i) => (
               <button
                 key={i.id}

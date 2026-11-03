@@ -18,6 +18,8 @@ import PartageBouton from "@/components/PartageBouton";
 import { conflitsParticipation } from "@/lib/participation";
 
 interface Props {
+  // Équipe ouverte dès l'affichage (arrivée depuis le profil d'une gymnaste).
+  ouvertInitial?: boolean;
   // null = gymnastes du club qui ne sont dans aucune équipe.
   equipe: Equipe | null;
   // Rang de création de l'équipe dans le club, à partir de 1 (repli quand le nom n'a pas de numéro).
@@ -47,7 +49,7 @@ interface Props {
 export default function EquipeGroupe(p: Props) {
   const [renomme, setRenomme] = useState(false);
   const [confSuppr, setConfSuppr] = useState(false);
-  const [ouvert, setOuvert] = useState(false);
+  const [ouvert, setOuvert] = useState(p.ouvertInitial ?? false);
   const { equipe, membres } = p;
   const sans = equipe === null;
   const couleur = couleurEquipe(equipe?.nom ?? "", p.rang ?? 1);
