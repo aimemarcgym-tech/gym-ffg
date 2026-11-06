@@ -9,11 +9,13 @@ import {
   getClubs,
   getEquipes,
   getGymnastes,
+  getIndividuelles,
   getMouvements,
   setOrdrePassage,
   type Club,
   type Equipe,
   type Gymnaste,
+  type Individuelle,
   type Mouvement,
 } from "@/lib/data";
 import { createShare } from "@/lib/shares";
@@ -86,6 +88,7 @@ export default function OrdresPassage() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
   const [mouvements, setMouvements] = useState<Mouvement[]>([]);
   const [choix, setChoix] = useState("");
   const [agres, setAgres] = useState<Agres>(AGRES[0].id);
@@ -95,6 +98,7 @@ export default function OrdresPassage() {
     setClubs(await getClubs());
     setEquipes(await getEquipes());
     setGymnastes(await getGymnastes());
+    setIndividuelles(await getIndividuelles());
     setMouvements(await getMouvements());
     setPret(true);
   }, []);
@@ -104,16 +108,31 @@ export default function OrdresPassage() {
     charger();
   }, [charger]);
 
-  const liste = useMemo(
-    () =>
-      equipes
-        .map((e) => ({
-          equipe: e,
-          club: clubs.find((c) => c.id === e.clubId)?.nom ?? "Sans club",
-        }))
-        .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr")),
-    [equipes, clubs],
-  );
+  // Équipes, puis individuelles : une individuelle devient une « équipe » d'une seule gymnaste (valeur « i:<id> »).
+  const liste = useMemo(() => {
+    const nomClub = (id: string) =>
+      clubs.find((c) => c.id === id)?.nom ?? "Sans club";
+    const eq = equipes
+      .map((e) => ({ equipe: e, club: nomClub(e.clubId), indiv: false }))
+      .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr"));
+    const ind = individuelles
+      .map((i) => {
+        const g = gymnastes.find((x) => x.id === i.gymnasteId);
+        if (!g) return null;
+        const equipe: Equipe = {
+          id: `i:${i.id}`,
+          clubId: i.clubId,
+          nom: `Individuelle · ${g.prenom} ${g.nom}`,
+          niveau: i.niveau,
+          categorieId: i.categorieId,
+          gymnasteIds: [g.id],
+        };
+        return { equipe, club: nomClub(i.clubId), indiv: true };
+      })
+      .filter((x): x is NonNullable<typeof x> => !!x)
+      .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr"));
+    return [...eq, ...ind];
+  }, [equipes, individuelles, gymnastes, clubs]);
   const selection = liste.find((x) => x.equipe.id === choix);
   const membres = selection
     ? selection.equipe.gymnasteIds
@@ -270,12 +289,30 @@ export default function OrdresPassage() {
             className={champ}
             aria-label="Équipe"
           >
-            <option value="">Sélectionner une équipe…</option>
-            {liste.map(({ equipe, club }) => (
-              <option key={equipe.id} value={equipe.id}>
-                {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
-              </option>
-            ))}
+            <option value="">
+              Sélectionner une équipe ou une individuelle…
+            </option>
+            <optgroup label="Équipes">
+              {liste
+                .filter((x) => !x.indiv)
+                .map(({ equipe, club }) => (
+                  <option key={equipe.id} value={equipe.id}>
+                    {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
+                  </option>
+                ))}
+            </optgroup>
+            {liste.some((x) => x.indiv) && (
+              <optgroup label="Individuelles">
+                {liste
+                  .filter((x) => x.indiv)
+                  .map(({ equipe, club }) => (
+                    <option key={equipe.id} value={equipe.id}>
+                      {equipe.nom.replace("Individuelle · ", "")} ({club}) ·{" "}
+                      {getNiveau(equipe.niveau).label}
+                    </option>
+                  ))}
+              </optgroup>
+            )}
           </select>
         )}
 
