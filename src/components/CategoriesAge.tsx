@@ -5,16 +5,20 @@ import {
   getClubs,
   getEquipes,
   getGymnastes,
+  getIndividuelles,
   type Club,
   type Equipe,
   type Gymnaste,
+  type Individuelle,
 } from "@/lib/data";
 import {
   anneeSaison,
   anneesCategorie,
   anneesParAge,
+  ageDansCategorie,
   ageEnSaison,
   categoriesIndividuel,
+  categoriesIndividuelles,
   categoriesPossibles,
   getNiveau,
   niveauxEquipe,
@@ -30,6 +34,7 @@ export default function CategoriesAge() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
   const [choix, setChoix] = useState("");
   const [pret, setPret] = useState(false);
   // Catégorie cliquée : les autres propositions disparaissent jusqu'à ce qu'on revienne à la liste.
@@ -43,6 +48,7 @@ export default function CategoriesAge() {
       setClubs(await getClubs());
       setEquipes(await getEquipes());
       setGymnastes(await getGymnastes());
+      setIndividuelles(await getIndividuelles());
       setChoix(preselection);
       setPret(true);
     })();
@@ -58,23 +64,69 @@ export default function CategoriesAge() {
         .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr")),
     [equipes, clubs],
   );
+  // Une individuelle se choisit avec la valeur « i:<id> » : sa catégorie est celle de l'âge de la gymnaste.
+  const choixIndiv = choix.startsWith("i:")
+    ? individuelles.find((i) => i.id === choix.slice(2))
+    : undefined;
+  const gymIndiv = choixIndiv
+    ? gymnastes.find((g) => g.id === choixIndiv.gymnasteId)
+    : undefined;
+  const listeIndiv = useMemo(
+    () =>
+      individuelles
+        .map((i) => ({
+          indiv: i,
+          g: gymnastes.find((g) => g.id === i.gymnasteId),
+          club: clubs.find((c) => c.id === i.clubId)?.nom ?? "Sans club",
+        }))
+        .filter((x): x is typeof x & { g: Gymnaste } => !!x.g)
+        .sort((a, b) =>
+          `${a.g.nom} ${a.g.prenom}`.localeCompare(
+            `${b.g.nom} ${b.g.prenom}`,
+            "fr",
+          ),
+        ),
+    [individuelles, gymnastes, clubs],
+  );
   const selection = liste.find((x) => x.equipe.id === choix);
-  const membres = selection
-    ? selection.equipe.gymnasteIds
-        .map((id) => gymnastes.find((g) => g.id === id))
-        .filter((g): g is Gymnaste => !!g)
-    : [];
+  const membres = choixIndiv
+    ? gymIndiv
+      ? [gymIndiv]
+      : []
+    : selection
+      ? selection.equipe.gymnasteIds
+          .map((id) => gymnastes.find((g) => g.id === id))
+          .filter((g): g is Gymnaste => !!g)
+      : [];
   const annees = membres.map((g) => g.anneeNaissance);
-  const niveau = selection ? getNiveau(selection.equipe.niveau) : null;
-  const possibles = selection
-    ? categoriesPossibles(selection.equipe.niveau, annees)
-    : [];
+  const niveau = choixIndiv
+    ? getNiveau(choixIndiv.niveau)
+    : selection
+      ? getNiveau(selection.equipe.niveau)
+      : null;
+  const possibles =
+    choixIndiv && gymIndiv
+      ? categoriesIndividuelles(choixIndiv.niveau).filter((c) =>
+          ageDansCategorie(ageEnSaison(gymIndiv.anneeNaissance), c),
+        )
+      : selection
+        ? categoriesPossibles(selection.equipe.niveau, annees)
+        : [];
+  const titreSelection = choixIndiv
+    ? gymIndiv
+      ? `Individuelle · ${gymIndiv.prenom} ${gymIndiv.nom}`
+      : ""
+    : (selection?.equipe.nom ?? "");
+  const clubSelection = choixIndiv
+    ? (clubs.find((c) => c.id === choixIndiv.clubId)?.nom ?? "Sans club")
+    : (selection?.club ?? "");
 
   async function partager() {
-    if (!selection || !niveau) throw new Error("Équipe introuvable");
+    if ((!selection && !choixIndiv) || !niveau)
+      throw new Error("Équipe introuvable");
     const id = await createShare("categories", {
-      club: selection.club,
-      equipe: selection.equipe.nom,
+      club: clubSelection,
+      equipe: titreSelection,
       niveauId: niveau.id,
       niveau: niveau.label,
       membres: membres.map((g) => ({
@@ -124,15 +176,29 @@ export default function CategoriesAge() {
               className={champ}
               aria-label="Équipe"
             >
-              <option value="">Sélectionner une équipe…</option>
-              {liste.map(({ equipe, club }) => (
-                <option key={equipe.id} value={equipe.id}>
-                  {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
-                </option>
-              ))}
+              <option value="">
+                Sélectionner une équipe ou une individuelle…
+              </option>
+              <optgroup label="Équipes">
+                {liste.map(({ equipe, club }) => (
+                  <option key={equipe.id} value={equipe.id}>
+                    {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
+                  </option>
+                ))}
+              </optgroup>
+              {listeIndiv.length > 0 && (
+                <optgroup label="Individuelles">
+                  {listeIndiv.map(({ indiv, g, club }) => (
+                    <option key={indiv.id} value={`i:${indiv.id}`}>
+                      {g.prenom} {g.nom} ({club}) ·{" "}
+                      {getNiveau(indiv.niveau).label}
+                    </option>
+                  ))}
+                </optgroup>
+              )}
             </select>
 
-            {selection && niveau && (
+            {(selection || choixIndiv) && niveau && (
               <div className="mt-4 space-y-4">
                 {membres.length === 0 ? (
                   <p className="text-sm text-muted">
@@ -162,8 +228,11 @@ export default function CategoriesAge() {
                     </p>
                     {possibles.length === 0 ? (
                       <p className="text-sm text-warning">
-                        ⚠ Aucune catégorie ne correspond à l’écart d’âge de
-                        cette équipe en {niveau.label}.
+                        ⚠ Aucune catégorie ne correspond à{" "}
+                        {choixIndiv
+                          ? "l’âge de cette gymnaste"
+                          : "l’écart d’âge de cette équipe"}{" "}
+                        en {niveau.label}.
                       </p>
                     ) : (
                       <>
@@ -203,11 +272,15 @@ export default function CategoriesAge() {
                           )}
                         </div>
                         <div className="mt-3">
-                          <PartageBouton onCreate={partager} className={btnDegrade} />
+                          <PartageBouton
+                            onCreate={partager}
+                            className={btnDegrade}
+                          />
                         </div>
                         <p className="mt-2 text-xs text-muted">
-                          Une catégorie est proposée quand toutes les gymnastes
-                          de l’équipe entrent dans sa tranche d’âge.
+                          {choixIndiv
+                            ? "Catégorie d’âge de la gymnaste en individuelle."
+                            : "Une catégorie est proposée quand toutes les gymnastes de l’équipe entrent dans sa tranche d’âge."}
                         </p>
                       </>
                     )}
