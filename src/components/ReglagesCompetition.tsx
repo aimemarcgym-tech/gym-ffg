@@ -6,11 +6,13 @@ import {
   getClubs,
   getEquipes,
   getGymnastes,
+  getIndividuelles,
   setReglagesEquipe,
   setReglagesGymnaste,
   type Club,
   type Equipe,
   type Gymnaste,
+  type Individuelle,
   type ReglagesCompetition,
 } from "@/lib/data";
 import { createShare } from "@/lib/shares";
@@ -34,6 +36,7 @@ export default function ReglagesCompetition() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
   const [choix, setChoix] = useState("");
   const [pret, setPret] = useState(false);
 
@@ -42,21 +45,38 @@ export default function ReglagesCompetition() {
       setClubs(await getClubs());
       setEquipes(await getEquipes());
       setGymnastes(await getGymnastes());
+      setIndividuelles(await getIndividuelles());
       setPret(true);
     })();
   }, []);
 
-  const liste = useMemo(
-    () =>
-      equipes
-        .map((e) => ({
-          equipe: e,
-          club: clubs.find((c) => c.id === e.clubId)?.nom ?? "Sans club",
-        }))
-        .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr")),
-    [equipes, clubs],
-  );
+  // Équipes, puis individuelles (valeur « i:<id> ») : une individuelle ne montre que la carte de la gymnaste.
+  const liste = useMemo(() => {
+    const nomClub = (id: string) =>
+      clubs.find((c) => c.id === id)?.nom ?? "Sans club";
+    const eq = equipes
+      .map((e) => ({ equipe: e, club: nomClub(e.clubId), indiv: false }))
+      .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr"));
+    const ind = individuelles
+      .map((i) => {
+        const g = gymnastes.find((x) => x.id === i.gymnasteId);
+        if (!g) return null;
+        const equipe: Equipe = {
+          id: `i:${i.id}`,
+          clubId: i.clubId,
+          nom: `Individuelle · ${g.prenom} ${g.nom}`,
+          niveau: i.niveau,
+          categorieId: i.categorieId,
+          gymnasteIds: [g.id],
+        };
+        return { equipe, club: nomClub(i.clubId), indiv: true };
+      })
+      .filter((x): x is NonNullable<typeof x> => !!x)
+      .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr"));
+    return [...eq, ...ind];
+  }, [equipes, individuelles, gymnastes, clubs]);
   const selection = liste.find((x) => x.equipe.id === choix);
+  const estIndiv = !!selection?.indiv;
   const membres = selection
     ? selection.equipe.gymnasteIds
         .map((id) => gymnastes.find((g) => g.id === id))
@@ -100,15 +120,15 @@ export default function ReglagesCompetition() {
   async function partager() {
     if (!selection) throw new Error("Équipe introuvable");
     // Le lien contient la carte « Toute l'équipe » si elle est remplie, puis seulement les gymnastes dont au moins une case est remplie.
-    const individuelles = membres.filter((g) => rempli(g.reglages));
+    const remplies = membres.filter((g) => rempli(g.reglages));
     const id = await createShare("reglages", {
       club: selection.club,
       equipe: selection.equipe.nom,
       equipeEntiere:
-        rempli(reglagesEquipe) || individuelles.length === 0
+        !estIndiv && (rempli(reglagesEquipe) || remplies.length === 0)
           ? reglagesEquipe
           : undefined,
-      gymnastes: individuelles.map((g) => ({
+      gymnastes: remplies.map((g) => ({
         nom: `${g.prenom} ${g.nom}`,
         reglages: g.reglages ?? {},
       })),
@@ -135,12 +155,28 @@ export default function ReglagesCompetition() {
           className={champ}
           aria-label="Équipe"
         >
-          <option value="">Sélectionner une équipe…</option>
-          {liste.map(({ equipe, club }) => (
-            <option key={equipe.id} value={equipe.id}>
-              {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
-            </option>
-          ))}
+          <option value="">Sélectionner une équipe ou une individuelle…</option>
+          <optgroup label="Équipes">
+            {liste
+              .filter((x) => !x.indiv)
+              .map(({ equipe, club }) => (
+                <option key={equipe.id} value={equipe.id}>
+                  {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
+                </option>
+              ))}
+          </optgroup>
+          {liste.some((x) => x.indiv) && (
+            <optgroup label="Individuelles">
+              {liste
+                .filter((x) => x.indiv)
+                .map(({ equipe, club }) => (
+                  <option key={equipe.id} value={equipe.id}>
+                    {equipe.nom.replace("Individuelle · ", "")} ({club}) ·{" "}
+                    {getNiveau(equipe.niveau).label}
+                  </option>
+                ))}
+            </optgroup>
+          )}
         </select>
       )}
 
@@ -152,33 +188,35 @@ export default function ReglagesCompetition() {
 
       {selection && membres.length > 0 && (
         <div className="mt-4 space-y-3">
-          <div className="rounded-lg border border-accent-from/60 bg-accent-from/15 p-4">
-            <div className="mb-3 text-base font-medium text-foreground">
-              Toute l’équipe
+          {!estIndiv && (
+            <div className="rounded-lg border border-accent-from/60 bg-accent-from/15 p-4">
+              <div className="mb-3 text-base font-medium text-foreground">
+                Toute l’équipe
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {CHAMPS.map((c) => (
+                  <label key={c.cle} className="block">
+                    <span className="mb-1 block text-xs font-medium text-muted">
+                      {c.label} ({c.unite})
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={reglagesEquipe[c.cle] ?? ""}
+                      onChange={(e) => modifierEquipe(c.cle, e.target.value)}
+                      placeholder={c.indice}
+                      aria-label={`${c.label} en ${c.unite} — toute l’équipe`}
+                      className={`${champ} !py-2.5`}
+                    />
+                  </label>
+                ))}
+              </div>
+              <p className="mt-2 text-[11px] text-muted">
+                Une valeur saisie ici est appliquée à toutes les gymnastes ; tu
+                peux ensuite l’ajuster pour l’une d’elles.
+              </p>
             </div>
-            <div className="grid grid-cols-3 gap-2">
-              {CHAMPS.map((c) => (
-                <label key={c.cle} className="block">
-                  <span className="mb-1 block text-xs font-medium text-muted">
-                    {c.label} ({c.unite})
-                  </span>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={reglagesEquipe[c.cle] ?? ""}
-                    onChange={(e) => modifierEquipe(c.cle, e.target.value)}
-                    placeholder={c.indice}
-                    aria-label={`${c.label} en ${c.unite} — toute l’équipe`}
-                    className={`${champ} !py-2.5`}
-                  />
-                </label>
-              ))}
-            </div>
-            <p className="mt-2 text-[11px] text-muted">
-              Une valeur saisie ici est appliquée à toutes les gymnastes ; tu
-              peux ensuite l’ajuster pour l’une d’elles.
-            </p>
-          </div>
+          )}
           {membres.map((g) => (
             <div
               key={g.id}
