@@ -500,8 +500,13 @@ export default function SuiviElements({
 
   useEffect(() => {
     if (!equipeCommune) return;
+    // « g:<id> » : une individuelle choisie dans le programme, le suivi se place sur la gymnaste.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCle(`equipe:${equipeCommune}`);
+    setCle(
+      equipeCommune.startsWith("g:")
+        ? `gymnaste:${equipeCommune.slice(2)}`
+        : `equipe:${equipeCommune}`,
+    );
   }, [equipeCommune]);
 
   useEffect(() => {

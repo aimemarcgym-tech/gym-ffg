@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import PartageBouton from "@/components/PartageBouton";
-import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getSeances, getSuivis, getToutesSeances, updateSeance, type Club, type Equipe, type Gymnaste, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
+import { addSeance, deleteSeance, getClubs, getEquipes, getGymnastes, getIndividuelles, getSeances, getSuivis, getToutesSeances, updateSeance, type Club, type Equipe, type Gymnaste, type Individuelle, type Seance, type Suivi, type TypeProgramme } from "@/lib/data";
 import { Tableau } from "@/components/SuiviElements";
 import ContenuSeance, { EditeurSeance } from "@/components/ContenuSeance";
 import { AGRES } from "@/regulation/libelles";
@@ -390,6 +390,7 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
   const [clubs, setClubs] = useState<Club[] | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
   const [equipeId, setEquipeId] = useState("");
   const [choix, setChoix] = useState<{ cible: Cible; libelle: string } | null>(null);
   // Séance ouverte depuis « Mes séances » : seule elle est affichée, à la place du formulaire de création.
@@ -399,13 +400,14 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
     (async () => {
       setEquipes(await getEquipes());
       setGymnastes(await getGymnastes());
+      setIndividuelles(await getIndividuelles());
       setClubs(await getClubs());
     })();
   }, []);
 
   // Équipe choisie ailleurs sur la page (suivi des éléments) : même sélection ici.
   useEffect(() => {
-    if (equipeCommune === undefined || equipeCommune === equipeId) return;
+    if (equipeCommune === undefined || equipeCommune === equipeId || equipeCommune.startsWith("g:")) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setEquipeId(equipeCommune);
     setChoix(null);
@@ -427,16 +429,27 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
     } else {
       const g = gymnastes.find((x) => x.id === cible.id);
       const e = equipes.find((x) => x.gymnasteIds.includes(cible.id));
-      if (!g || !e) return;
-      setEquipeId(e.id);
+      const ind = individuelles.find((x) => x.gymnasteId === cible.id);
+      // Une gymnaste sans équipe n'est joignable que par son individuelle.
+      if (!g || (!e && !ind)) return;
+      setEquipeId(e ? e.id : `i:${ind!.id}`);
       setChoix({ cible, libelle: `${g.prenom} ${g.nom}` });
     }
-  }, [ouverture, equipes, gymnastes]);
+  }, [ouverture, equipes, gymnastes, individuelles]);
 
   const options = useMemo(() => {
     const nomClub = (id: string) => clubs?.find((c) => c.id === id)?.nom ?? "Sans club";
     return equipes.map((e) => ({ ...e, club: nomClub(e.clubId) })).sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
   }, [equipes, clubs]);
+  // Individuelles : choisir l'une ouvre directement le programme de la gymnaste (valeur « i:<id> »).
+  const optionsIndiv = useMemo(
+    () =>
+      individuelles
+        .map((i) => ({ indiv: i, g: gymnastes.find((g) => g.id === i.gymnasteId), club: clubs?.find((c) => c.id === i.clubId)?.nom ?? "Sans club" }))
+        .filter((x): x is typeof x & { g: Gymnaste } => !!x.g)
+        .sort((a, b) => `${a.g.nom} ${a.g.prenom}`.localeCompare(`${b.g.nom} ${b.g.prenom}`, "fr")),
+    [individuelles, gymnastes, clubs],
+  );
   const equipe = options.find((e) => e.id === equipeId);
   const membres = useMemo(() => (equipe ? gymnastes.filter((g) => equipe.gymnasteIds.includes(g.id)) : []), [equipe, gymnastes]);
   const libelleEquipe = equipe ? `Toute l'équipe ${equipe.nom} (${equipe.club})` : "Toute l'équipe";
@@ -447,25 +460,44 @@ export default function ProgrammeEntrainement({ titre, type, ouverture, equipeCo
       <h2 className="mb-4 text-base font-semibold text-foreground">{titre}</h2>
       {clubs === null ? (
         <p className="text-sm text-muted">Chargement…</p>
-      ) : options.length === 0 ? (
+      ) : options.length === 0 && optionsIndiv.length === 0 ? (
         <p className="text-sm text-muted">Aucune équipe trouvée. Créez une équipe depuis l&apos;accueil.</p>
       ) : (
         <select
           value={equipeId}
           onChange={(e) => {
-            setEquipeId(e.target.value);
-            setChoix(null);
+            const v = e.target.value;
+            setEquipeId(v);
             setSeanceUnique(null);
-            onEquipe?.(e.target.value);
+            const ind = v.startsWith("i:") ? optionsIndiv.find((x) => x.indiv.id === v.slice(2)) : undefined;
+            if (ind) {
+              // Individuelle : le programme de la gymnaste s'ouvre tout de suite, le suivi se place sur elle.
+              setChoix({ cible: { genre: "gymnaste", id: ind.g.id }, libelle: `${ind.g.prenom} ${ind.g.nom}` });
+              onEquipe?.(`g:${ind.g.id}`);
+              return;
+            }
+            setChoix(null);
+            onEquipe?.(v);
           }}
           className="w-full max-w-xs rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
         >
           <option value="">Sélectionner une équipe…</option>
-          {options.map((e) => (
-            <option key={e.id} value={e.id}>
-              {e.nom} ({e.club})
-            </option>
-          ))}
+          <optgroup label="Équipes">
+            {options.map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.nom} ({e.club})
+              </option>
+            ))}
+          </optgroup>
+          {optionsIndiv.length > 0 && (
+            <optgroup label="Individuelles">
+              {optionsIndiv.map(({ indiv, g, club }) => (
+                <option key={indiv.id} value={`i:${indiv.id}`}>
+                  {g.prenom} {g.nom} ({club})
+                </option>
+              ))}
+            </optgroup>
+          )}
         </select>
       )}
 
