@@ -7,6 +7,7 @@ export type TypePartage =
   | "ordresPassage"
   | "programme"
   | "tableaux"
+  | "calendrier"
   | "mouvements"
   | "categories"
   | "reglages"

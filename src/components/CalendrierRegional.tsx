@@ -14,6 +14,8 @@ import {
 } from "@/lib/data";
 import { getNiveau, programmeDe } from "@/regulation/loader";
 import { STYLE_NIVEAU, couleurEquipe } from "@/lib/styles";
+import PartageBouton from "@/components/PartageBouton";
+import { createShare } from "@/lib/shares";
 import calendrier from "@/regulation/data/gaf/calendrier-regional.json";
 import lieux from "@/regulation/data/gaf/lieux-competitions.json";
 
@@ -437,6 +439,41 @@ function VerifierEquipe() {
       );
   }, [parcours]);
 
+  // Lien public : dates et lieux de l'équipe ou de l'individuelle choisie (instantané).
+  async function partager(): Promise<string> {
+    if (!niveau || !parcours)
+      throw new Error("Choisissez d’abord une équipe ou une individuelle.");
+    const titre = choixIndiv
+      ? `Individuelle · ${choixIndiv.g.prenom} ${choixIndiv.g.nom} (${choixIndiv.club})`
+      : `${selection!.equipe.nom} (${selection!.club})`;
+    const id = await createShare("calendrier", {
+      titre,
+      niveau: niveau.label,
+      saison: calendrier.saison,
+      dates: dates.map((e) => {
+        const c = lieuxDe(e);
+        return {
+          libelle: e.libelle,
+          date: dateLisible(e.debut, e),
+          cibles: e.colonnes
+            .filter((x) => parcours.colonnes.includes(x))
+            .map((x) => nomColonne(x))
+            .map((x) => x.groupe + " · " + x.libelle)
+            .join(" — "),
+          engagement: e.genre === "engagement",
+          lieu: c
+            ? {
+                intitule: c.intitule,
+                secteurs: c.secteurs,
+                avertissement: lieux.avertissement,
+              }
+            : undefined,
+        };
+      }),
+    });
+    return `/partage/calendrier/?id=${id}`;
+  }
+
   return (
     <div className="max-w-2xl rounded-xl border border-border-subtle bg-surface p-4">
       <h2 className="mb-3 text-sm font-semibold text-foreground">
@@ -500,6 +537,7 @@ function VerifierEquipe() {
               {choixIndiv ? " en individuelle" : ""}.
             </p>
           )}
+          <PartageBouton onCreate={partager} />
           <ul className="space-y-2">
             {dates.map((e, i) => {
               const cibles = e.colonnes
