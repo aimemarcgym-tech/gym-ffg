@@ -2,14 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { getClubs, getEquipes, type Club, type Equipe } from "@/lib/data";
+import {
+  getClubs,
+  getEquipes,
+  getGymnastes,
+  getIndividuelles,
+  type Club,
+  type Equipe,
+  type Gymnaste,
+  type Individuelle,
+} from "@/lib/data";
 import { getNiveau, programmeDe } from "@/regulation/loader";
 import { STYLE_NIVEAU, couleurEquipe } from "@/lib/styles";
 import calendrier from "@/regulation/data/gaf/calendrier-regional.json";
 import lieux from "@/regulation/data/gaf/lieux-competitions.json";
 
 type Colonne = (typeof calendrier.colonnes)[number];
-type Evenement = (typeof calendrier.evenements)[number] & { texte?: string; dateTexte?: string; nbSemaines?: number };
+type Evenement = (typeof calendrier.evenements)[number] & {
+  texte?: string;
+  dateTexte?: string;
+  nbSemaines?: number;
+};
 
 const evenements = calendrier.evenements as Evenement[];
 const { colonnes, semaines } = calendrier;
@@ -32,10 +45,25 @@ const ENTETE: Record<string, string> = {
   neutre: "bg-surface-alt text-foreground",
 };
 
+// Colonnes « Individuelles » du calendrier selon le niveau : Fédéral A (A, A2, A3) → ID ; Performance 1 → NAT ; Performance 2 → NAT C ; Performance 7-9 ans → Perf rég. poussines.
+// Pas de colonne individuelle en Fédéral B dans le calendrier.
+const COLONNES_INDIVIDUELLES: Record<string, string[]> = {
+  A: ["ind_fa_id"],
+  A2: ["ind_fa_id"],
+  A3: ["ind_fa_id"],
+  PF1: ["ind_nat"],
+  PF2: ["ind_natc"],
+  P79: ["ind_reg_p"],
+};
+
 type Competition = (typeof lieux.competitions)[number];
 
 // Lieu d'une compétition du calendrier : même week-end et au moins une colonne en commun.
-const lieuxDe = (e: Evenement): Competition | undefined => lieux.competitions.find((c) => c.debut === e.debut && c.colonnes.some((col) => e.colonnes.includes(col)));
+const lieuxDe = (e: Evenement): Competition | undefined =>
+  lieux.competitions.find(
+    (c) =>
+      c.debut === e.debut && c.colonnes.some((col) => e.colonnes.includes(col)),
+  );
 
 const nomColonne = (id: string) => colonnes.find((c) => c.id === id)!;
 
@@ -44,7 +72,8 @@ function dateLisible(debut: string, e: Evenement): string {
   const s = new Date(debut + "T00:00:00");
   const d = new Date(s);
   d.setDate(d.getDate() + 1);
-  const jour = (x: Date) => x.toLocaleDateString("fr-FR", { day: "numeric" }).replace(/^1$/, "1er");
+  const jour = (x: Date) =>
+    x.toLocaleDateString("fr-FR", { day: "numeric" }).replace(/^1$/, "1er");
   const mois = (x: Date) => x.toLocaleDateString("fr-FR", { month: "long" });
   const annee = d.getFullYear();
   return s.getMonth() === d.getMonth()
@@ -63,7 +92,9 @@ function groupes(section: string) {
   return liste;
 }
 
-const COL_TABLEAU = colonnes.filter((c) => c.section === "EQUIPES" || c.section === "INDIVIDUELLES");
+const COL_TABLEAU = colonnes.filter(
+  (c) => c.section === "EQUIPES" || c.section === "INDIVIDUELLES",
+);
 const cellule = "border border-border-subtle px-1 py-1 text-center text-[11px]";
 
 function Tableau() {
@@ -77,7 +108,9 @@ function Tableau() {
       const c0 = Math.min(...e.colonnes.map(indexCol));
       debut.set(`${r0}:${c0}`, e);
       for (let r = r0; r < r0 + (e.nbSemaines ?? 1); r++)
-        for (const id of e.colonnes) if (!(r === r0 && indexCol(id) === c0)) couvert.add(`${r}:${indexCol(id)}`);
+        for (const id of e.colonnes)
+          if (!(r === r0 && indexCol(id) === c0))
+            couvert.add(`${r}:${indexCol(id)}`);
     }
     return { debut, couvert };
   }, []);
@@ -100,37 +133,62 @@ function Tableau() {
       <table className="w-full min-w-[1100px] border-collapse">
         <thead>
           <tr className="text-xs font-bold tracking-wide uppercase">
-            <th colSpan={2} rowSpan={3} className={`${cellule} bg-surface-alt text-foreground`}>
+            <th
+              colSpan={2}
+              rowSpan={3}
+              className={`${cellule} bg-surface-alt text-foreground`}
+            >
               Version
               <br />
               {calendrier.version}
             </th>
-            <th colSpan={nbEquipes} className={`${cellule} bg-surface-alt py-2 text-sm text-foreground`}>
+            <th
+              colSpan={nbEquipes}
+              className={`${cellule} bg-surface-alt py-2 text-sm text-foreground`}
+            >
               Équipes
             </th>
-            <th colSpan={nbInd} className={`${cellule} bg-surface-alt py-2 text-sm text-foreground`}>
+            <th
+              colSpan={nbInd}
+              className={`${cellule} bg-surface-alt py-2 text-sm text-foreground`}
+            >
               Individuelles
             </th>
-            <th className={`${cellule} bg-surface-alt text-foreground`}>Anim</th>
-            <th rowSpan={3} className={`${cellule} bg-surface-alt text-foreground`}>
+            <th className={`${cellule} bg-surface-alt text-foreground`}>
+              Anim
+            </th>
+            <th
+              rowSpan={3}
+              className={`${cellule} bg-surface-alt text-foreground`}
+            >
               HN
             </th>
           </tr>
           <tr className="text-[10px] font-semibold uppercase">
             {["EQUIPES", "INDIVIDUELLES"].flatMap((s) =>
               groupes(s).map((g, i) => (
-                <th key={`${s}${i}`} colSpan={g.nb} className={`${cellule} ${ENTETE[g.style]}`}>
+                <th
+                  key={`${s}${i}`}
+                  colSpan={g.nb}
+                  className={`${cellule} ${ENTETE[g.style]}`}
+                >
                   {g.groupe}
                 </th>
               )),
             )}
-            <th rowSpan={2} className={`${cellule} bg-surface-alt text-foreground`}>
+            <th
+              rowSpan={2}
+              className={`${cellule} bg-surface-alt text-foreground`}
+            >
               Access
             </th>
           </tr>
           <tr className="text-[10px] font-semibold uppercase">
             {COL_TABLEAU.map((c) => (
-              <th key={c.id} className={`${cellule} bg-surface text-foreground`}>
+              <th
+                key={c.id}
+                className={`${cellule} bg-surface text-foreground`}
+              >
                 {c.libelle}
               </th>
             ))}
@@ -139,12 +197,20 @@ function Tableau() {
         <tbody>
           {semaines.map((s, r) => (
             <tr key={s.debut}>
-              {(mois.find((m) => m.nom === s.mois) && semaines.findIndex((x) => x.mois === s.mois) === r) && (
-                <th rowSpan={mois.find((m) => m.nom === s.mois)!.nb} className={`${cellule} bg-surface text-xs font-bold text-foreground uppercase`}>
-                  {s.mois}
-                </th>
-              )}
-              <th className={`${cellule} bg-surface-alt/60 font-bold whitespace-nowrap text-foreground`}>{s.label}</th>
+              {mois.find((m) => m.nom === s.mois) &&
+                semaines.findIndex((x) => x.mois === s.mois) === r && (
+                  <th
+                    rowSpan={mois.find((m) => m.nom === s.mois)!.nb}
+                    className={`${cellule} bg-surface text-xs font-bold text-foreground uppercase`}
+                  >
+                    {s.mois}
+                  </th>
+                )}
+              <th
+                className={`${cellule} bg-surface-alt/60 font-bold whitespace-nowrap text-foreground`}
+              >
+                {s.label}
+              </th>
               {colonnes.map((c, ci) => {
                 if (plan.couvert.has(`${r}:${ci}`)) return null;
                 const e = plan.debut.get(`${r}:${ci}`);
@@ -161,7 +227,12 @@ function Tableau() {
                     </td>
                   );
                 }
-                return <td key={c.id} className={`${cellule} ${s.grise ? "bg-border-subtle/70" : ""}`} />;
+                return (
+                  <td
+                    key={c.id}
+                    className={`${cellule} ${s.grise ? "bg-border-subtle/70" : ""}`}
+                  />
+                );
               })}
             </tr>
           ))}
@@ -174,13 +245,23 @@ function Tableau() {
 function TableauLieux() {
   return (
     <section>
-      <h2 className="mb-1 text-lg font-semibold text-foreground">{lieux.titre}</h2>
-      <p className="mb-3 text-xs font-semibold text-danger">{lieux.avertissement}</p>
+      <h2 className="mb-1 text-lg font-semibold text-foreground">
+        {lieux.titre}
+      </h2>
+      <p className="mb-3 text-xs font-semibold text-danger">
+        {lieux.avertissement}
+      </p>
       <div className="overflow-x-auto rounded-xl border border-border-subtle">
         <table className="w-full min-w-[800px] border-collapse text-sm">
           <thead>
             <tr className="bg-surface-alt text-left text-xs tracking-wide text-muted uppercase">
-              {["Dates", "Intitulé", "Secteur", "Lieux", "Clubs réservistes"].map((t) => (
+              {[
+                "Dates",
+                "Intitulé",
+                "Secteur",
+                "Lieux",
+                "Clubs réservistes",
+              ].map((t) => (
                 <th key={t} className="px-3 py-2 font-semibold">
                   {t}
                 </th>
@@ -189,37 +270,66 @@ function TableauLieux() {
           </thead>
           <tbody>
             {lieux.competitions.flatMap((c) => {
-              const total = c.secteurs.reduce((n, sec) => n + sec.lieux.length, 0);
+              const total = c.secteurs.reduce(
+                (n, sec) => n + sec.lieux.length,
+                0,
+              );
               let premier = true;
               return c.secteurs.flatMap((sec) =>
                 sec.lieux.map((l, k) => {
                   const debutCompetition = premier;
                   premier = false;
                   return (
-                    <tr key={`${c.debut}-${sec.secteur}-${l.nom}`} className="border-t border-border-subtle align-top">
+                    <tr
+                      key={`${c.debut}-${sec.secteur}-${l.nom}`}
+                      className="border-t border-border-subtle align-top"
+                    >
                       {debutCompetition && (
                         <>
-                          <td rowSpan={total} className="border-r border-border-subtle px-3 py-2 font-semibold text-foreground">
+                          <td
+                            rowSpan={total}
+                            className="border-r border-border-subtle px-3 py-2 font-semibold text-foreground"
+                          >
                             {c.dateTexte}
                           </td>
-                          <td rowSpan={total} className="border-r border-border-subtle px-3 py-2 text-foreground">
+                          <td
+                            rowSpan={total}
+                            className="border-r border-border-subtle px-3 py-2 text-foreground"
+                          >
                             {c.intitule}
-                            {"remarque" in c && c.remarque ? <div className="text-xs text-muted">({c.remarque})</div> : null}
+                            {"remarque" in c && c.remarque ? (
+                              <div className="text-xs text-muted">
+                                ({c.remarque})
+                              </div>
+                            ) : null}
                           </td>
                         </>
                       )}
                       {k === 0 && (
-                        <td rowSpan={sec.lieux.length} className="border-r border-border-subtle px-3 py-2 text-xs text-muted">
+                        <td
+                          rowSpan={sec.lieux.length}
+                          className="border-r border-border-subtle px-3 py-2 text-xs text-muted"
+                        >
                           {sec.secteur}
                         </td>
                       )}
-                      <td className={`border-r border-border-subtle px-3 py-2 font-medium ${"recherche" in l && l.recherche ? "bg-danger/20 text-danger" : "text-foreground"}`}>
+                      <td
+                        className={`border-r border-border-subtle px-3 py-2 font-medium ${"recherche" in l && l.recherche ? "bg-danger/20 text-danger" : "text-foreground"}`}
+                      >
                         {l.nom}
-                        {"note" in l && l.note ? <div className="text-xs font-normal text-muted">({l.note})</div> : null}
+                        {"note" in l && l.note ? (
+                          <div className="text-xs font-normal text-muted">
+                            ({l.note})
+                          </div>
+                        ) : null}
                       </td>
                       <td className="px-3 py-2 text-xs text-foreground">
-                        {"clubs" in l && l.clubs ? (l.clubs as string[]).join(" · ") : ""}
-                        {"noteClubs" in l && l.noteClubs ? <div className="text-muted">({l.noteClubs})</div> : null}
+                        {"clubs" in l && l.clubs
+                          ? (l.clubs as string[]).join(" · ")
+                          : ""}
+                        {"noteClubs" in l && l.noteClubs ? (
+                          <div className="text-muted">({l.noteClubs})</div>
+                        ) : null}
                       </td>
                     </tr>
                   );
@@ -236,6 +346,8 @@ function TableauLieux() {
 function VerifierEquipe() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
+  const [individuelles, setIndividuelles] = useState<Individuelle[]>([]);
+  const [gymnastes, setGymnastes] = useState<Gymnaste[]>([]);
   const [choix, setChoix] = useState("");
   const [pret, setPret] = useState(false);
 
@@ -243,6 +355,8 @@ function VerifierEquipe() {
     (async () => {
       setClubs(await getClubs());
       setEquipes(await getEquipes());
+      setIndividuelles(await getIndividuelles());
+      setGymnastes(await getGymnastes());
       const e = new URLSearchParams(window.location.search).get("e");
       if (e) setChoix(e);
       setPret(true);
@@ -250,84 +364,218 @@ function VerifierEquipe() {
   }, []);
 
   const liste = useMemo(
-    () => equipes.map((e) => ({ equipe: e, club: clubs.find((c) => c.id === e.clubId)?.nom ?? "Sans club" })).sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr")),
+    () =>
+      equipes
+        .map((e) => ({
+          equipe: e,
+          club: clubs.find((c) => c.id === e.clubId)?.nom ?? "Sans club",
+        }))
+        .sort((a, b) => a.equipe.nom.localeCompare(b.equipe.nom, "fr")),
     [equipes, clubs],
   );
+  // Une individuelle se choisit avec la valeur « i:<id> ».
+  const listeIndiv = useMemo(
+    () =>
+      individuelles
+        .map((i) => ({
+          indiv: i,
+          g: gymnastes.find((g) => g.id === i.gymnasteId),
+          club: clubs.find((c) => c.id === i.clubId)?.nom ?? "Sans club",
+        }))
+        .filter((x): x is typeof x & { g: Gymnaste } => !!x.g)
+        .sort((a, b) =>
+          `${a.g.nom} ${a.g.prenom}`.localeCompare(
+            `${b.g.nom} ${b.g.prenom}`,
+            "fr",
+          ),
+        ),
+    [individuelles, gymnastes, clubs],
+  );
+  const choixIndiv = choix.startsWith("i:")
+    ? listeIndiv.find((x) => x.indiv.id === choix.slice(2))
+    : undefined;
   const selection = liste.find((x) => x.equipe.id === choix);
-  const niveau = selection ? getNiveau(selection.equipe.niveau) : null;
-  // Même couleur que le tag de l'équipe sur l'accueil : son numéro, sinon son rang parmi les équipes du club dans le même programme.
-  const couleur = selection
-    ? couleurEquipe(
-        selection.equipe.nom,
-        equipes.filter((x) => x.clubId === selection.equipe.clubId && programmeDe(x.niveau) === programmeDe(selection.equipe.niveau)).indexOf(selection.equipe) + 1,
-      )
-    : null;
-  const parcours = selection ? calendrier.equipes[selection.equipe.niveau as keyof typeof calendrier.equipes] : null;
+  const niveau = choixIndiv
+    ? getNiveau(choixIndiv.indiv.niveau)
+    : selection
+      ? getNiveau(selection.equipe.niveau)
+      : null;
+  // Même couleur que le tag de l'équipe sur l'accueil : son numéro, sinon son rang parmi les équipes du club dans le même programme. Une individuelle est en bleu ciel, comme les gymnastes.
+  const couleur = choixIndiv
+    ? { border: "border-sky-400/40", bg: "bg-sky-400/10", text: "text-sky-100" }
+    : selection
+      ? couleurEquipe(
+          selection.equipe.nom,
+          equipes
+            .filter(
+              (x) =>
+                x.clubId === selection.equipe.clubId &&
+                programmeDe(x.niveau) === programmeDe(selection.equipe.niveau),
+            )
+            .indexOf(selection.equipe) + 1,
+        )
+      : null;
+  const parcours = useMemo(
+    () =>
+      choixIndiv
+        ? { colonnes: COLONNES_INDIVIDUELLES[choixIndiv.indiv.niveau] ?? [] }
+        : selection
+          ? calendrier.equipes[
+              selection.equipe.niveau as keyof typeof calendrier.equipes
+            ]
+          : null,
+    [choixIndiv, selection],
+  );
 
   const dates = useMemo(() => {
     if (!parcours) return [];
     return evenements
       .filter((e) => e.colonnes.some((c) => parcours.colonnes.includes(c)))
-      .sort((a, b) => a.debut.localeCompare(b.debut) || a.libelle.localeCompare(b.libelle));
+      .sort(
+        (a, b) =>
+          a.debut.localeCompare(b.debut) || a.libelle.localeCompare(b.libelle),
+      );
   }, [parcours]);
 
   return (
     <div className="max-w-2xl rounded-xl border border-border-subtle bg-surface p-4">
-      <h2 className="mb-3 text-sm font-semibold text-foreground">Vérifier une équipe</h2>
+      <h2 className="mb-3 text-sm font-semibold text-foreground">
+        Vérifier une équipe
+      </h2>
       {!pret ? (
         <p className="text-sm text-muted">Chargement…</p>
       ) : liste.length === 0 ? (
-        <p className="text-sm text-muted">Aucune équipe trouvée. Créez une équipe depuis l’accueil.</p>
+        <p className="text-sm text-muted">
+          Aucune équipe trouvée. Créez une équipe depuis l’accueil.
+        </p>
       ) : (
         <div>
-          <label className="mb-1 block text-xs font-medium text-muted">Équipe</label>
+          <label className="mb-1 block text-xs font-medium text-muted">
+            Équipe
+          </label>
           <select
             value={choix}
             onChange={(e) => setChoix(e.target.value)}
             className="rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
           >
-            <option value="">Sélectionner une équipe…</option>
-            {liste.map(({ equipe, club }) => (
-              <option key={equipe.id} value={equipe.id}>
-                {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
-              </option>
-            ))}
+            <option value="">
+              Sélectionner une équipe ou une individuelle…
+            </option>
+            <optgroup label="Équipes">
+              {liste.map(({ equipe, club }) => (
+                <option key={equipe.id} value={equipe.id}>
+                  {equipe.nom} ({club}) · {getNiveau(equipe.niveau).label}
+                </option>
+              ))}
+            </optgroup>
+            {listeIndiv.length > 0 && (
+              <optgroup label="Individuelles">
+                {listeIndiv.map(({ indiv, g, club }) => (
+                  <option key={indiv.id} value={`i:${indiv.id}`}>
+                    {g.prenom} {g.nom} ({club}) ·{" "}
+                    {getNiveau(indiv.niveau).label}
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </select>
         </div>
       )}
 
-      {selection && niveau && parcours && couleur && (
+      {(selection || choixIndiv) && niveau && parcours && couleur && (
         <div className="mt-4 space-y-3">
           <p className="text-xs text-muted">
-            Niveau de l’équipe :{" "}
-            <span className={`rounded-lg border px-2 py-0.5 font-semibold ${STYLE_NIVEAU[niveau.id]}`}>{niveau.label}</span>
+            {choixIndiv
+              ? `Niveau de l’individuelle (${choixIndiv.g.prenom} ${choixIndiv.g.nom}) :`
+              : "Niveau de l’équipe :"}{" "}
+            <span
+              className={`rounded-lg border px-2 py-0.5 font-semibold ${STYLE_NIVEAU[niveau.id]}`}
+            >
+              {niveau.label}
+            </span>
           </p>
+          {dates.length === 0 && (
+            <p className="text-sm text-muted">
+              Aucune date au calendrier régional pour ce niveau
+              {choixIndiv ? " en individuelle" : ""}.
+            </p>
+          )}
           <ul className="space-y-2">
             {dates.map((e, i) => {
-              const cibles = e.colonnes.filter((c) => parcours.colonnes.includes(c)).map((c) => nomColonne(c));
+              const cibles = e.colonnes
+                .filter((c) => parcours.colonnes.includes(c))
+                .map((c) => nomColonne(c));
               return (
                 <li
                   key={i}
                   className={`rounded-lg border px-3 py-2 text-sm ${e.genre === "engagement" ? "border-border-subtle bg-background text-white" : `${couleur.border} ${couleur.bg} ${couleur.text}`}`}
                 >
-                  <div className={`font-medium ${e.genre === "engagement" ? "text-white" : "text-foreground"}`}>{e.libelle}</div>
-                  <div className={e.genre === "engagement" ? "text-white" : "text-foreground"}>{dateLisible(e.debut, e)}</div>
-                  <div className={`mt-0.5 text-xs ${e.genre === "engagement" ? "text-white/80" : "text-muted"}`}>{cibles.map((c: Colonne) => c.groupe + " · " + c.libelle).join(" — ")}</div>
+                  <div
+                    className={`font-medium ${e.genre === "engagement" ? "text-white" : "text-foreground"}`}
+                  >
+                    {e.libelle}
+                  </div>
+                  <div
+                    className={
+                      e.genre === "engagement"
+                        ? "text-white"
+                        : "text-foreground"
+                    }
+                  >
+                    {dateLisible(e.debut, e)}
+                  </div>
+                  <div
+                    className={`mt-0.5 text-xs ${e.genre === "engagement" ? "text-white/80" : "text-muted"}`}
+                  >
+                    {cibles
+                      .map((c: Colonne) => c.groupe + " · " + c.libelle)
+                      .join(" — ")}
+                  </div>
                   {(() => {
                     const c = lieuxDe(e);
                     if (!c) return null;
                     return (
                       <div className="mt-2 space-y-1 border-t border-border-subtle pt-2 text-xs">
-                        <div className="font-semibold text-foreground">📍 Lieu{c.secteurs.reduce((n, x) => n + x.lieux.length, 0) > 1 ? "x" : ""} · {c.intitule}</div>
+                        <div className="font-semibold text-foreground">
+                          📍 Lieu
+                          {c.secteurs.reduce((n, x) => n + x.lieux.length, 0) >
+                          1
+                            ? "x"
+                            : ""}{" "}
+                          · {c.intitule}
+                        </div>
                         {c.secteurs.map((sec) => (
                           <div key={sec.secteur} className="text-foreground">
-                            {sec.secteur !== "Région" && <span className="text-muted">Secteur {sec.secteur} : </span>}
+                            {sec.secteur !== "Région" && (
+                              <span className="text-muted">
+                                Secteur {sec.secteur} :{" "}
+                              </span>
+                            )}
                             {sec.lieux.map((l, k) => (
                               <span key={l.nom}>
                                 {k > 0 && " · "}
-                                <span className={"recherche" in l && l.recherche ? "text-danger" : ""}>{l.nom}</span>
-                                {"note" in l && l.note ? <span className="text-muted"> ({l.note})</span> : null}
-                                {"clubs" in l && l.clubs ? <span className="text-muted"> — clubs réservistes : {(l.clubs as string[]).join(", ")}</span> : null}
+                                <span
+                                  className={
+                                    "recherche" in l && l.recherche
+                                      ? "text-danger"
+                                      : ""
+                                  }
+                                >
+                                  {l.nom}
+                                </span>
+                                {"note" in l && l.note ? (
+                                  <span className="text-muted">
+                                    {" "}
+                                    ({l.note})
+                                  </span>
+                                ) : null}
+                                {"clubs" in l && l.clubs ? (
+                                  <span className="text-muted">
+                                    {" "}
+                                    — clubs réservistes :{" "}
+                                    {(l.clubs as string[]).join(", ")}
+                                  </span>
+                                ) : null}
                               </span>
                             ))}
                           </div>
@@ -355,7 +603,9 @@ export default function CalendrierRegional() {
             ← Accueil
           </Link>
           <h1 className="mt-1 text-xl font-bold text-foreground">
-            <span className="accent-gradient-text">Calendrier des compétitions</span>
+            <span className="accent-gradient-text">
+              Calendrier des compétitions
+            </span>
           </h1>
           <p className="mt-1 text-sm text-muted">
             GAF — Saison {calendrier.saison} — {calendrier.source}
@@ -364,8 +614,10 @@ export default function CalendrierRegional() {
       </header>
       <main className="mx-auto max-w-[1600px] space-y-8 px-6 py-10">
         <div className="rounded-xl border border-border-strong bg-surface-alt/50 p-4 text-sm text-muted">
-          Calendrier régional Île-de-France, reproduit à l’identique. DL : date limite · Dép : départemental · ID : interdépartemental · Rég : régional. Les semaines grisées n’ont pas de compétition.
-          Choisissez une équipe pour connaître les dates et les lieux de ses compétitions.
+          Calendrier régional Île-de-France, reproduit à l’identique. DL : date
+          limite · Dép : départemental · ID : interdépartemental · Rég :
+          régional. Les semaines grisées n’ont pas de compétition. Choisissez
+          une équipe pour connaître les dates et les lieux de ses compétitions.
         </div>
         <VerifierEquipe />
         <Tableau />
