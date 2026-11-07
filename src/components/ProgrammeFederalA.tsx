@@ -385,7 +385,124 @@ function FederalB() {
           </div>
         </div>
       </div>
+      <section className="mt-10 space-y-6">
+        <div className="rounded-xl border border-border-strong px-6 py-4 text-center">
+          <h2 className="text-lg font-bold text-foreground">
+            <span className="accent-gradient-text">
+              Réglementation – Contenu – Fédéral B
+            </span>
+          </h2>
+          <p className="text-sm text-muted">Programme Île-de-France</p>
+        </div>
+
+        <RegleBloc titre="Comment noter le Fédéral B ?">
+          <p className="font-medium text-foreground">Calcul de la note finale</p>
+          <Liste
+            items={[
+              "La note finale à chaque agrès est établie à partir de 2 notes séparées : note D et note E.",
+              "Le jury D calcule la note D : contenu de l’exercice (valeurs de difficultés).",
+            ]}
+          />
+          <p>et</p>
+          <Liste
+            items={[
+              "Le jury E calcule la note E : exécution (tableau des fautes générales et/ou des fautes spécifiques à chaque agrès).",
+              "La note finale d’un exercice est établie par l’addition de la note D et la note E. Si nécessaire, soustraction des déductions neutres.",
+            ]}
+          />
+        </RegleBloc>
+
+        <RegleBloc titre="Note D">
+          <p>
+            Au saut, la note D correspond à la valeur de difficulté fixée dans
+            le tableau des sauts.
+          </p>
+          <Liste
+            items={[
+              "Aux barres asymétriques, poutre et sol, la note D correspond à la valeur du mouvement, et éventuellement aux bonifications.",
+            ]}
+          />
+        </RegleBloc>
+
+        <RegleBloc titre="Choix des éléments">
+          <Liste
+            items={[
+              "Seuls les éléments des grilles Fed B – IDF sont autorisés.",
+              <>
+                <strong>Fed B1</strong> : 6 éléments différents choisis dans la
+                grille des éléments Fed B – IDF.
+              </>,
+              <>
+                <strong>Fed B2 et B3</strong> : 5 éléments différents choisis
+                dans la grille des éléments Fed B – IDF.
+              </>,
+              <>
+                La description officielle des éléments est donnée dans le texte (
+                <em>seul le texte fait foi</em>) : un élément est reconnu
+                uniquement si sa réalisation technique est conforme au texte.
+              </>,
+              <>
+                <em>Répétition</em> : si un élément est réalisé 2 fois au cours
+                de l’enchaînement, il n’est comptabilisé qu’une seule fois,{" "}
+                <em>mais les pénalités pour fautes d’exécution sont appliquées.</em>
+              </>,
+              "Un élément ne peut pas être répété.",
+              <>
+                <em>Éléments identiques</em> : les éléments sont considérés
+                comme identiques s’ils sont dans la même case. L’élément n’est
+                donc pris en compte qu’une seule fois.
+              </>,
+              "Élément hors grille IDF : non comptabilisé.",
+              "Élément non reconnu ou réalisé avec aide : non comptabilisé.",
+              "Les éléments avec rotation incomplète ne sont pas comptabilisés.",
+            ]}
+          />
+        </RegleBloc>
+
+        <RegleBloc titre="Bonifications">
+          <Liste
+            items={[
+              <>
+                Les bonifications sont accordées si la réalisation se fait sans
+                chute ou sans s’accrocher à l’agrès <em>(poutre)</em>.
+              </>,
+            ]}
+          />
+        </RegleBloc>
+
+        <RegleBloc titre="Exécution">
+          <Liste
+            items={[
+              "Se reporter aux tableaux des fautes générales et spécifiques de ce programme.",
+            ]}
+          />
+        </RegleBloc>
+      </section>
     </>
+  );
+}
+
+function RegleBloc({ titre, children }: { titre: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border-subtle p-4">
+      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-accent-from">
+        {titre}
+      </h3>
+      <div className="space-y-2 text-sm text-foreground">{children}</div>
+    </div>
+  );
+}
+
+function Liste({ items }: { items: React.ReactNode[] }) {
+  return (
+    <ul className="space-y-1">
+      {items.map((t, i) => (
+        <li key={i} className="flex gap-1.5">
+          <span className="text-muted">–</span>
+          <span>{t}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
