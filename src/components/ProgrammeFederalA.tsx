@@ -1,5 +1,8 @@
 import { STYLE_NIVEAU } from "@/lib/styles";
 
+// Fond des panneaux transparent : on garde seulement la couleur du texte et du contour.
+const sansFond = (c: string) => c.replace(/bg-\S+/g, "").trim();
+
 const NIVEAUX = [
   {
     id: "A" as const,
@@ -39,10 +42,10 @@ const NIVEAUX = [
 // Programme Fédéral A du comité régional Île-de-France : trois niveaux de pratique (source : présentation du comité).
 export default function ProgrammeFederalA() {
   const bloc =
-    "rounded-lg border border-border-subtle bg-surface-alt/40 px-3 py-3 text-center text-sm text-foreground";
+    "rounded-lg border border-border-subtle px-3 py-3 text-center text-sm text-foreground";
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
-      <div className="mb-6 rounded-xl border border-border-strong bg-surface px-6 py-5 text-center">
+      <div className="mb-6 rounded-xl border border-border-strong px-6 py-5 text-center">
         <h1 className="text-xl font-bold text-foreground">
           <span className="accent-gradient-text">
             Fédéral A - IDF - 3 niveaux de pratique
@@ -57,7 +60,7 @@ export default function ProgrammeFederalA() {
       <div className="grid gap-4 md:grid-cols-3">
         {NIVEAUX.map((n) => (
           <div key={n.id} className="space-y-3">
-            <div className={`rounded-xl border p-4 text-center ${STYLE_NIVEAU[n.id]}`}>
+            <div className={`rounded-xl border p-4 text-center ${sansFond(STYLE_NIVEAU[n.id])}`}>
               <div className="text-lg font-bold">{n.nom}</div>
               <div className="text-xs opacity-80">({n.format})</div>
               <div className="mt-2 text-sm font-semibold">Catégories :</div>
@@ -74,7 +77,7 @@ export default function ProgrammeFederalA() {
               <span className="font-semibold">3 bonifications à 0,50</span>
             </div>
             <div
-              className={`rounded-lg border-2 px-3 py-3 text-center text-sm font-semibold text-foreground ${STYLE_NIVEAU[n.id]}`}
+              className={`rounded-lg border-2 px-3 py-3 text-center text-sm font-semibold text-foreground ${sansFond(STYLE_NIVEAU[n.id])}`}
             >
               Note de départ plafonnée à {n.plafond} points
               <div className="text-[11px] font-normal text-muted">
