@@ -289,6 +289,10 @@ const NIVEAUX_B = [
 ];
 
 // Programme Fédéral B du comité régional Île-de-France : trois niveaux de pratique.
+const MATERIEL_AGRES =
+  "border-r border-border-subtle px-3 py-4 text-base font-semibold text-orange-400";
+const MATERIEL_CASE = "border-l border-border-subtle px-3 py-4 italic";
+
 function FederalB() {
   const bloc =
     "rounded-lg border border-border-subtle px-3 py-3 text-center text-sm text-foreground";
@@ -477,6 +481,86 @@ function FederalB() {
             ]}
           />
         </RegleBloc>
+      </section>
+      <section className="mt-10">
+        <div className="mb-4 rounded-xl border border-border-strong px-6 py-4 text-center">
+          <h2 className="text-lg font-bold text-foreground">
+            <span className="accent-gradient-text">
+              Programme Fédéral B – IDF, saison 2026/2027
+            </span>
+          </h2>
+          <p className="text-sm font-semibold text-muted">
+            Réglementation du matériel
+          </p>
+        </div>
+        <div className="overflow-x-auto rounded-xl border border-border-subtle">
+          <table className="w-full min-w-[640px] border-collapse text-center text-sm text-foreground">
+            <thead>
+              <tr className="border-b border-border-subtle">
+                <th className="w-24" />
+                {NIVEAUX_B.map((n) => (
+                  <th
+                    key={n.id}
+                    className={`border-l px-3 py-3 font-bold ${sansFond(STYLE_NIVEAU[n.id])}`}
+                  >
+                    {n.nom}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border-subtle">
+                <th className={MATERIEL_AGRES}>Saut</th>
+                <td colSpan={2} className={MATERIEL_CASE}>
+                  <ul className="mx-auto w-fit space-y-1 text-left">
+                    <li>– Hauteur table de saut 1,15 m</li>
+                    <li>– Tremplin ou TrampoTremp, au choix</li>
+                    <li>– Course 25 mètres</li>
+                  </ul>
+                </td>
+                <td className={MATERIEL_CASE}>
+                  <div className="mb-2 font-semibold">Pas de table de saut</div>
+                  <ul className="mx-auto w-fit space-y-1 text-left">
+                    <li>– 1 TrampoTremp en position basse</li>
+                    <li>– 2 tapis de réception superposés de 6 m x 2 m x 20 cm</li>
+                    <li>– 1 sur tapis de 10 cm de hauteur</li>
+                    <li>– Course 10 mètres</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr className="border-b border-border-subtle">
+                <th className={MATERIEL_AGRES}>Barres</th>
+                <td colSpan={3} className={MATERIEL_CASE}>
+                  Hauteur BI et BS – normes FIG
+                </td>
+              </tr>
+              <tr className="border-b border-border-subtle">
+                <th className={MATERIEL_AGRES}>Poutre</th>
+                <td colSpan={2} className={MATERIEL_CASE}>
+                  Hauteur 1,25 m
+                </td>
+                <td className={MATERIEL_CASE}>Hauteur 1,00 m</td>
+              </tr>
+              <tr className="border-b border-border-subtle">
+                <th rowSpan={2} className={MATERIEL_AGRES}>
+                  Sol
+                </th>
+                <td className={MATERIEL_CASE}>Avec musique</td>
+                <td className={MATERIEL_CASE}>
+                  Musique au choix
+                  <br />
+                  non obligatoire
+                </td>
+                <td className={MATERIEL_CASE}>Sans musique</td>
+              </tr>
+              <tr>
+                <td colSpan={3} className={MATERIEL_CASE}>
+                  Mouvement sur bande de praticable 12 x 2 (non dynamique)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </>
   );
