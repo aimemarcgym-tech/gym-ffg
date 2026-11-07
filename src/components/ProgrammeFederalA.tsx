@@ -293,7 +293,7 @@ const MATERIEL_AGRES =
   "border-r border-border-subtle px-3 py-4 text-base font-semibold text-orange-400";
 const MATERIEL_CASE = "border-l border-border-subtle px-3 py-4 italic";
 
-function FederalB() {
+function FederalBGeneral() {
   const bloc =
     "rounded-lg border border-border-subtle px-3 py-3 text-center text-sm text-foreground";
   const [b1, b2, b3] = NIVEAUX_B;
@@ -587,6 +587,196 @@ function Liste({ items }: { items: React.ReactNode[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+type LigneB1 = {
+  agres: string;
+  specificites: React.ReactNode;
+  bonifs: string[];
+};
+
+const VALEURS_B1 = (
+  <>
+    <div className="font-semibold">FED-B1 : 6 éléments maximum</div>
+    <div className="text-[11px] text-muted">
+      dont la valeur la plus élevée est prise en compte
+    </div>
+    <div>(5 éléments minimum)</div>
+    <div>Pénalité de -2,00 points si 4 éléments ou moins</div>
+    <ul className="mx-auto mt-2 w-fit space-y-0.5 text-left">
+      <li>– Élément sans valeur</li>
+      <li>– A : 0,40</li>
+      <li>– B : 0,60</li>
+      <li>– C : 0,80</li>
+    </ul>
+  </>
+);
+
+const LIGNES_B1: LigneB1[] = [
+  {
+    agres: "Barres",
+    specificites: (
+      <>
+        Possibilité de mouvement en 2 parties : une partie BI et une partie BS.
+        Pour la partie BS, l’entraîneur peut placer la gymnaste en suspension
+        ou en appuis BS.
+        <div className="my-1 font-semibold not-italic">OU</div>
+        Possibilité de mouvement en 1 partie.
+      </>
+    ),
+    bonifs: [
+      "2 éléments de valeur C",
+      "2 appuis OU 2 suspensions OU 1 appui et 1 suspension",
+    ],
+  },
+  {
+    agres: "Poutre",
+    specificites: "Temps : 50 sec max",
+    bonifs: [
+      "1 élément acrobatique sur la poutre de valeur C",
+      "1 élément gymnique de valeur C",
+    ],
+  },
+  {
+    agres: "Sol",
+    specificites: (
+      <>
+        Temps : 50 sec max
+        <div className="mt-2">Musique obligatoire en FED-B1</div>
+      </>
+    ),
+    bonifs: [
+      "1 élément acrobatique de valeur C",
+      "1 série OU un passage gymnique dont un élément de valeur C",
+    ],
+  },
+];
+
+function FederalB1() {
+  const entete = "border-l border-border-subtle px-3 py-3 text-center font-bold text-sky-300";
+  return (
+    <section className="space-y-5">
+      <div className="rounded-xl border border-border-strong px-6 py-4 text-center">
+        <h2 className="text-lg font-bold text-foreground">
+          <span className="accent-gradient-text">
+            Programme Fédéral B1 – IDF, saison 2026/2027
+          </span>
+        </h2>
+        <p className="text-sm font-semibold text-blue-300">
+          Fédéral B1 (anciennement TID)
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-border-subtle text-center text-sm text-foreground">
+        <div className="border-b border-border-subtle px-3 py-2 text-base font-semibold text-orange-400">
+          Saut
+        </div>
+        <ul className="space-y-1 px-3 py-3">
+          <li>2 sauts identiques ou différents. Le meilleur est pris en compte.</li>
+          <li>
+            Une 3<sup>e</sup> course d’élan est autorisée si la gymnaste n’a
+            touché ni le tremplin ou le TrampoTremp, ni la table de saut.
+          </li>
+          <li className="border-t border-border-subtle pt-2">
+            Se référer au tableau des sauts autorisés et aux notes D associées.
+          </li>
+        </ul>
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-border-subtle">
+        <table className="w-full min-w-[720px] border-collapse text-sm text-foreground">
+          <thead>
+            <tr className="border-b border-border-subtle">
+              <th className="w-24" />
+              <th className={entete}>Spécificités</th>
+              <th className={entete}>
+                Valeurs de difficulté
+                <div className="text-xs font-normal opacity-80">
+                  (éléments de la grille FED B – IDF)
+                </div>
+              </th>
+              <th className={entete}>
+                Bonifications
+                <div className="text-xs font-normal opacity-80">
+                  Accordées sans chute
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {LIGNES_B1.map((l) => (
+              <tr key={l.agres} className="border-b border-border-subtle last:border-b-0">
+                <th className={MATERIEL_AGRES}>{l.agres}</th>
+                <td className="border-l border-border-subtle px-3 py-4 text-center italic">
+                  {l.specificites}
+                </td>
+                <td className="border-l border-border-subtle px-3 py-4 text-center">
+                  {VALEURS_B1}
+                  {l.agres === "Barres" && (
+                    <p className="mt-2 text-[11px] font-semibold">
+                      Présence obligatoire de l’entraîneur sous les barres. Si
+                      non-présence de l’entraîneur, la gymnaste n’est pas
+                      autorisée à passer. Si l’entraîneur part en cours de
+                      mouvement : mouvement noté à zéro.
+                    </p>
+                  )}
+                </td>
+                <td className="border-l border-border-subtle px-3 py-4 text-center">
+                  <div className="font-semibold italic">FED-B1 : 2 bonifications</div>
+                  <ul className="mx-auto my-2 w-fit space-y-1 text-left">
+                    {l.bonifs.map((b) => (
+                      <li key={b}>– {b}</li>
+                    ))}
+                  </ul>
+                  <div className="font-semibold italic">
+                    Valeur 0,50 chacune sur ND
+                  </div>
+                  <div className="mt-2 text-xs font-semibold">
+                    Dans le programme FED-B1, les éléments sans valeur ne
+                    peuvent pas valider les bonifications.
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function FederalB() {
+  const [sous, setSous] = useState<"G" | "B1" | "B2" | "B3">("G");
+  const btn = (actif: boolean) =>
+    `rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+      actif
+        ? "border-border-strong bg-surface-alt text-white"
+        : "border-transparent text-muted hover:text-foreground"
+    }`;
+  const liste: { id: "G" | "B1" | "B2" | "B3"; label: string }[] = [
+    { id: "G", label: "Général" },
+    { id: "B1", label: "Fédéral B1" },
+    { id: "B2", label: "Fédéral B2" },
+    { id: "B3", label: "Fédéral B3" },
+  ];
+  return (
+    <>
+      <div className="mb-6 flex flex-wrap gap-2 border-b border-border-subtle pb-3">
+        {liste.map((o) => (
+          <button key={o.id} type="button" onClick={() => setSous(o.id)} className={btn(sous === o.id)}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+      {sous === "G" && <FederalBGeneral />}
+      {sous === "B1" && <FederalB1 />}
+      {(sous === "B2" || sous === "B3") && (
+        <p className="text-sm text-muted">
+          Le détail de Fédéral {sous} sera ajouté prochainement.
+        </p>
+      )}
+    </>
   );
 }
 
