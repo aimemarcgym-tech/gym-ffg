@@ -590,81 +590,134 @@ function Liste({ items }: { items: React.ReactNode[] }) {
   );
 }
 
-type LigneB1 = {
+type LigneNiveauB = {
   agres: string;
   specificites: React.ReactNode;
   bonifs: string[];
 };
 
-const VALEURS_B1 = (
+interface ConfigNiveauB {
+  id: "B1" | "B2";
+  nom: string;
+  ancien: string;
+  couleur: string;
+  maxElements: number;
+  minElements?: number;
+  seuilPenalite: number;
+  valeurs: string[];
+  sansC?: boolean;
+  motBonif: string;
+  lignes: LigneNiveauB[];
+}
+
+const BARRES_SPEC = (
   <>
-    <div className="font-semibold">FED-B1 : 6 éléments maximum</div>
-    <div className="text-[11px] text-muted">
-      dont la valeur la plus élevée est prise en compte
-    </div>
-    <div>(5 éléments minimum)</div>
-    <div>Pénalité de -2,00 points si 4 éléments ou moins</div>
-    <ul className="mx-auto mt-2 w-fit space-y-0.5 text-left">
-      <li>– Élément sans valeur</li>
-      <li>– A : 0,40</li>
-      <li>– B : 0,60</li>
-      <li>– C : 0,80</li>
-    </ul>
+    Possibilité de mouvement en 2 parties : une partie BI et une partie BS.
+    Pour la partie BS, l’entraîneur peut placer la gymnaste en suspension ou en
+    appuis BS.
+    <div className="my-1 font-semibold not-italic">OU</div>
+    Possibilité de mouvement en 1 partie.
   </>
 );
 
-const LIGNES_B1: LigneB1[] = [
-  {
-    agres: "Barres",
-    specificites: (
-      <>
-        Possibilité de mouvement en 2 parties : une partie BI et une partie BS.
-        Pour la partie BS, l’entraîneur peut placer la gymnaste en suspension
-        ou en appuis BS.
-        <div className="my-1 font-semibold not-italic">OU</div>
-        Possibilité de mouvement en 1 partie.
-      </>
-    ),
-    bonifs: [
-      "2 éléments de valeur C",
-      "2 appuis OU 2 suspensions OU 1 appui et 1 suspension",
-    ],
-  },
-  {
-    agres: "Poutre",
-    specificites: "Temps : 50 sec max",
-    bonifs: [
-      "1 élément acrobatique sur la poutre de valeur C",
-      "1 élément gymnique de valeur C",
-    ],
-  },
-  {
-    agres: "Sol",
-    specificites: (
-      <>
-        Temps : 50 sec max
-        <div className="mt-2">Musique obligatoire en FED-B1</div>
-      </>
-    ),
-    bonifs: [
-      "1 élément acrobatique de valeur C",
-      "1 série OU un passage gymnique dont un élément de valeur C",
-    ],
-  },
-];
+const CONFIG_B1: ConfigNiveauB = {
+  id: "B1",
+  nom: "Fédéral B1",
+  ancien: "anciennement TID",
+  couleur: "text-blue-300",
+  maxElements: 6,
+  minElements: 5,
+  seuilPenalite: 4,
+  valeurs: ["Élément sans valeur", "A : 0,40", "B : 0,60", "C : 0,80"],
+  motBonif: "Dans le programme FED-B1, les éléments sans valeur ne peuvent pas valider les bonifications.",
+  lignes: [
+    {
+      agres: "Barres",
+      specificites: BARRES_SPEC,
+      bonifs: [
+        "2 éléments de valeur C",
+        "2 appuis OU 2 suspensions OU 1 appui et 1 suspension",
+      ],
+    },
+    {
+      agres: "Poutre",
+      specificites: "Temps : 50 sec max",
+      bonifs: [
+        "1 élément acrobatique sur la poutre de valeur C",
+        "1 élément gymnique de valeur C",
+      ],
+    },
+    {
+      agres: "Sol",
+      specificites: (
+        <>
+          Temps : 50 sec max
+          <div className="mt-2">Musique obligatoire en FED-B1</div>
+        </>
+      ),
+      bonifs: [
+        "1 élément acrobatique de valeur C",
+        "1 série OU un passage gymnique dont un élément de valeur C",
+      ],
+    },
+  ],
+};
 
-function FederalB1() {
-  const entete = "border-l border-border-subtle px-3 py-3 text-center font-bold text-sky-300";
+const CONFIG_B2: ConfigNiveauB = {
+  id: "B2",
+  nom: "Fédéral B2",
+  ancien: "anciennement Fédéral B à partir de 9 ans",
+  couleur: "text-violet-300",
+  maxElements: 5,
+  seuilPenalite: 3,
+  valeurs: ["Élément sans valeur", "A : 0,40", "B : 0,60"],
+  sansC: true,
+  motBonif: "",
+  lignes: [
+    {
+      agres: "Barres",
+      specificites: BARRES_SPEC,
+      bonifs: [
+        "1 élément de valeur B",
+        "1 élément de valeur B différent de la 1re bonification",
+      ],
+    },
+    {
+      agres: "Poutre",
+      specificites: "Temps : 50 sec max",
+      bonifs: [
+        "1 élément acrobatique sur la poutre de valeur B",
+        "1 élément gymnique de valeur B",
+      ],
+    },
+    {
+      agres: "Sol",
+      specificites: (
+        <>
+          Temps : 50 sec max
+          <div className="mt-2">Au choix avec ou sans musique pour FED-B2</div>
+        </>
+      ),
+      bonifs: [
+        "1 élément acrobatique de valeur B",
+        "1 élément gymnique de valeur B",
+      ],
+    },
+  ],
+};
+
+function FederalBNiveau({ c }: { c: ConfigNiveauB }) {
+  const entete = `border-l border-border-subtle px-3 py-3 text-center font-bold ${c.couleur}`;
   return (
     <section className="space-y-5">
       <div className="rounded-xl border border-border-strong px-6 py-4 text-center">
         <h2 className="text-lg font-bold text-foreground">
           <span className="accent-gradient-text">
-            Programme Fédéral B1 – IDF, saison 2026/2027
+            Programme {c.nom} – IDF, saison 2026/2027
           </span>
         </h2>
-        <p className="text-sm font-semibold text-blue-300">
-          Fédéral B1 (anciennement TID)
+        <p className={`text-sm font-semibold ${c.couleur}`}>
+          {c.nom} ({c.ancien})
         </p>
       </div>
 
@@ -676,7 +729,7 @@ function FederalB1() {
           <li>2 sauts identiques ou différents. Le meilleur est pris en compte.</li>
           <li>
             Une 3<sup>e</sup> course d’élan est autorisée si la gymnaste n’a
-            touché ni le tremplin ou le TrampoTremp, ni la table de saut.
+            touché ni le tremplin, ni le TrampoTremp, ni la table de saut.
           </li>
           <li className="border-t border-border-subtle pt-2">
             Se référer au tableau des sauts autorisés et aux notes D associées.
@@ -705,14 +758,34 @@ function FederalB1() {
             </tr>
           </thead>
           <tbody>
-            {LIGNES_B1.map((l) => (
+            {c.lignes.map((l) => (
               <tr key={l.agres} className="border-b border-border-subtle last:border-b-0">
                 <th className={MATERIEL_AGRES}>{l.agres}</th>
                 <td className="border-l border-border-subtle px-3 py-4 text-center italic">
                   {l.specificites}
                 </td>
                 <td className="border-l border-border-subtle px-3 py-4 text-center">
-                  {VALEURS_B1}
+                  <div className="font-semibold">
+                    FED-{c.id} : {c.maxElements} éléments maximum
+                  </div>
+                  <div className="text-[11px] text-muted">
+                    dont la valeur la plus élevée est prise en compte
+                  </div>
+                  {c.minElements && <div>({c.minElements} éléments minimum)</div>}
+                  <div className="mt-1 text-yellow-300">
+                    Pénalité de -2,00 points si {c.seuilPenalite} éléments ou moins
+                  </div>
+                  <ul className="mx-auto mt-2 w-fit space-y-0.5 text-left">
+                    {c.valeurs.map((v) => (
+                      <li key={v}>– {v}</li>
+                    ))}
+                  </ul>
+                  {c.sansC && (
+                    <p className="mt-2 font-semibold">
+                      Les éléments C ne sont pas autorisés dans le programme
+                      FED-{c.id}.
+                    </p>
+                  )}
                   {l.agres === "Barres" && (
                     <p className="mt-2 text-[11px] font-semibold">
                       Présence obligatoire de l’entraîneur sous les barres. Si
@@ -723,19 +796,18 @@ function FederalB1() {
                   )}
                 </td>
                 <td className="border-l border-border-subtle px-3 py-4 text-center">
-                  <div className="font-semibold italic">FED-B1 : 2 bonifications</div>
+                  <div className="font-semibold italic">FED-{c.id} : 2 bonifications</div>
                   <ul className="mx-auto my-2 w-fit space-y-1 text-left">
-                    {l.bonifs.map((b) => (
-                      <li key={b}>– {b}</li>
+                    {l.bonifs.map((x) => (
+                      <li key={x}>– {x}</li>
                     ))}
                   </ul>
                   <div className="font-semibold italic">
                     Valeur 0,50 chacune sur ND
                   </div>
-                  <div className="mt-2 text-xs font-semibold">
-                    Dans le programme FED-B1, les éléments sans valeur ne
-                    peuvent pas valider les bonifications.
-                  </div>
+                  {c.motBonif && (
+                    <div className="mt-2 text-xs font-semibold">{c.motBonif}</div>
+                  )}
                 </td>
               </tr>
             ))}
@@ -770,10 +842,11 @@ function FederalB() {
         ))}
       </div>
       {sous === "G" && <FederalBGeneral />}
-      {sous === "B1" && <FederalB1 />}
-      {(sous === "B2" || sous === "B3") && (
+      {sous === "B1" && <FederalBNiveau c={CONFIG_B1} />}
+      {sous === "B2" && <FederalBNiveau c={CONFIG_B2} />}
+      {sous === "B3" && (
         <p className="text-sm text-muted">
-          Le détail de Fédéral {sous} sera ajouté prochainement.
+          Le détail de Fédéral B3 sera ajouté prochainement.
         </p>
       )}
     </>
