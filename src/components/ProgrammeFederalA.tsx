@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { STYLE_NIVEAU } from "@/lib/styles";
 
 // Fond des panneaux transparent : on garde seulement la couleur du texte et du contour.
@@ -101,11 +104,11 @@ const GRILLE: { agres: string; colonnes: string[][]; note?: string }[] = [
 ];
 
 // Programme Fédéral A du comité régional Île-de-France : trois niveaux de pratique (source : présentation du comité).
-export default function ProgrammeFederalA() {
+function FederalA() {
   const bloc =
     "rounded-lg border border-border-subtle px-3 py-3 text-center text-sm text-foreground";
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-10">
+    <>
       <div className="mb-6 rounded-xl border border-border-strong px-6 py-5 text-center">
         <h1 className="text-xl font-bold text-foreground">
           <span className="accent-gradient-text">
@@ -262,6 +265,149 @@ export default function ProgrammeFederalA() {
       <p className="mt-6 text-center text-xs text-muted">
         Grille d’éléments FFGYM — voir la brochure des programmes nationaux.
       </p>
+    </>
+  );
+}
+
+const NIVEAUX_B = [
+  {
+    id: "B1" as const,
+    nom: "Fédéral B1",
+    categories: "9-11 ans, 10-13 ans, 10-15 ans et 10 ans et plus",
+    ancien: "TID",
+  },
+  {
+    id: "B2" as const,
+    nom: "Fédéral B2",
+    categories: "9-11 ans, 10-13 ans, 10-15 ans et 10 ans et plus",
+  },
+  {
+    id: "B3" as const,
+    nom: "Fédéral B3",
+    categories: "7 ans, 7-8 ans, 7-9 ans et 8-10 ans",
+  },
+];
+
+// Programme Fédéral B du comité régional Île-de-France : trois niveaux de pratique.
+function FederalB() {
+  const bloc =
+    "rounded-lg border border-border-subtle px-3 py-3 text-center text-sm text-foreground";
+  const [b1, b2, b3] = NIVEAUX_B;
+  const carte = (n: (typeof NIVEAUX_B)[number]) => (
+    <div className={`rounded-xl border p-4 text-center ${sansFond(STYLE_NIVEAU[n.id])}`}>
+      <div className="text-lg font-bold">{n.nom}</div>
+      <div className="text-xs opacity-80">(5/5/3)</div>
+      <div className="mt-2 text-sm font-semibold">Catégories :</div>
+      <div className="mt-1 text-sm text-foreground">{n.categories}</div>
+    </div>
+  );
+  return (
+    <>
+      <div className="mb-6 rounded-xl border border-border-strong px-6 py-5 text-center">
+        <h1 className="text-xl font-bold text-foreground">
+          <span className="accent-gradient-text">
+            Fédéral B - IDF - 3 niveaux de pratique
+          </span>
+        </h1>
+      </div>
+
+      <div className="grid gap-x-4 gap-y-3 md:grid-cols-3">
+        <p className="text-center text-xs font-semibold uppercase tracking-wide text-muted">
+          Anciennement TID
+        </p>
+        <p className="text-center text-xs font-semibold uppercase tracking-wide text-muted md:col-span-2">
+          Anciennement Fed B - FFGym
+        </p>
+
+        {carte(b1)}
+        {carte(b2)}
+        {carte(b3)}
+
+        <div className={`${bloc} md:col-span-3`}>
+          1 grille d’éléments (grille IDF) commune pour tous ces programmes.
+          Éléments sans valeur (sauf aux barres), A, B ou C.
+        </div>
+
+        <div className={bloc}>
+          <div className="font-semibold underline">6 éléments maximum</div>
+          <div className="text-[11px] text-muted">
+            dont la valeur la plus élevée est prise en compte
+          </div>
+          <ul className="mt-2 space-y-0.5">
+            <li>Sans valeur</li>
+            <li>A : 0,40</li>
+            <li>B : 0,60</li>
+            <li>C : 0,80</li>
+          </ul>
+        </div>
+        <div className={`${bloc} md:col-span-2`}>
+          <div className="font-semibold underline">5 éléments maximum</div>
+          <div className="text-[11px] text-muted">
+            dont la valeur la plus élevée est prise en compte
+          </div>
+          <ul className="mt-2 space-y-0.5">
+            <li>Sans valeur</li>
+            <li>A : 0,40</li>
+            <li>B : 0,60</li>
+            <li>Les éléments C ne sont pas autorisés en Fed B2 et B3</li>
+          </ul>
+        </div>
+
+        <div className={bloc}>
+          <div className="font-semibold">2 bonifications à 0,50 chacune</div>
+          <div className="mt-1 text-xs text-muted">
+            Dans le programme Fed B1, les éléments sans valeur ne peuvent pas
+            valider les bonifications.
+          </div>
+        </div>
+        <div className={`${bloc} md:col-span-2`}>
+          <div className="font-semibold">2 bonifications à 0,50 chacune</div>
+          <div className="mt-1 text-xs text-muted">
+            Dans le programme Fed B2 et B3, les éléments sans valeur peuvent
+            valider les bonifications.
+          </div>
+        </div>
+
+        <div
+          className={`rounded-lg border-2 px-3 py-3 text-center text-sm font-semibold text-foreground ${sansFond(STYLE_NIVEAU.B1)}`}
+        >
+          Note de départ plafonnée à 5,80 points
+          <div className="text-[11px] font-normal text-muted">
+            (bonifications comprises)
+          </div>
+        </div>
+        <div
+          className={`rounded-lg border-2 px-3 py-3 text-center text-sm font-semibold text-foreground md:col-span-2 ${sansFond(STYLE_NIVEAU.B2)}`}
+        >
+          Note de départ plafonnée à 4,00 points
+          <div className="text-[11px] font-normal text-muted">
+            (bonifications comprises)
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default function ProgrammeFederalA() {
+  const [onglet, setOnglet] = useState<"A" | "B">("A");
+  const btn = (actif: boolean) =>
+    `rounded-lg border px-4 py-2 text-sm transition-colors ${
+      actif
+        ? "border-border-strong bg-surface-alt text-white"
+        : "border-transparent text-muted hover:text-foreground"
+    }`;
+  return (
+    <div className="mx-auto w-full max-w-5xl px-6 py-10">
+      <div className="mb-6 flex gap-2">
+        <button type="button" onClick={() => setOnglet("A")} className={btn(onglet === "A")}>
+          Fédéral A
+        </button>
+        <button type="button" onClick={() => setOnglet("B")} className={btn(onglet === "B")}>
+          Fédéral B
+        </button>
+      </div>
+      {onglet === "A" ? <FederalA /> : <FederalB />}
     </div>
   );
 }
