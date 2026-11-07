@@ -801,18 +801,18 @@ function FederalBNiveau({ c }: { c: ConfigNiveauB }) {
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-border-subtle">
-        <table className="w-full min-w-[820px] border-collapse text-sm text-foreground">
+        <table className="w-full table-fixed min-w-[760px] border-collapse text-sm text-foreground">
           <thead>
             <tr className="border-b border-border-subtle">
               <th className="w-24" />
-              <th className={`${entete} w-[24%]`}>Spécificités</th>
-              <th className={`${entete} w-[31%]`}>
+              <th className={`${entete}`}>Spécificités</th>
+              <th className={`${entete}`}>
                 Valeurs de difficulté
                 <div className="text-xs font-normal opacity-80">
                   (éléments de la grille FED B – IDF)
                 </div>
               </th>
-              <th className={`${entete} w-[45%]`}>
+              <th className={`${entete}`}>
                 Bonifications
                 <div className="text-xs font-normal opacity-80">
                   Accordées sans chute
