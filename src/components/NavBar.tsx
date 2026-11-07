@@ -15,6 +15,7 @@ const COMPETITION = [
   { href: "/competition/calendrier", label: "Calendrier" },
   { href: "/competition/musiques", label: "Musiques" },
   { href: "/competition/ordres-passage", label: "Ordres de passage" },
+  { href: "/competition/programme", label: "Programme" },
   { href: "/competition/resultats", label: "Résultats" },
 ];
 const ENTRAINEMENT = [
