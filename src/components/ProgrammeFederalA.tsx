@@ -597,7 +597,7 @@ type LigneNiveauB = {
 };
 
 interface ConfigNiveauB {
-  id: "B1" | "B2";
+  id: "B1" | "B2" | "B3";
   nom: string;
   ancien: string;
   couleur: string;
@@ -607,6 +607,8 @@ interface ConfigNiveauB {
   valeurs: string[];
   sansC?: boolean;
   motBonif: string;
+  // Ce que la gymnaste ne doit pas avoir touché pour avoir droit à une 3e course d'élan.
+  courseTouche?: string;
   lignes: LigneNiveauB[];
 }
 
@@ -706,6 +708,67 @@ const CONFIG_B2: ConfigNiveauB = {
   ],
 };
 
+const CONFIG_B3: ConfigNiveauB = {
+  id: "B3",
+  nom: "Fédéral B3",
+  ancien: "anciennement Fédéral B à partir de 7 ans",
+  couleur: "text-teal-300",
+  maxElements: 5,
+  seuilPenalite: 3,
+  valeurs: ["Élément sans valeur", "A : 0,40", "B : 0,60"],
+  sansC: true,
+  motBonif: "",
+  courseTouche: "ni le TrampoTremp, ni le tapis",
+  lignes: [
+    {
+      agres: "Barres",
+      specificites: (
+        <div className="space-y-2 not-italic">
+          <p>
+            <span className="font-semibold underline">Interdiction</span> de
+            passer de BI à BS.
+          </p>
+          <p>
+            <span className="font-semibold underline">Possibilité</span> de
+            mouvement en 2 parties : une partie BI <strong>et</strong> une
+            partie BS.
+          </p>
+          <p>Possibilité de mouvement sur une seule barre (BI ou BS).</p>
+          <p>
+            Pour la BS, l’entraîneur peut placer la gymnaste en suspension ou
+            en appui.
+          </p>
+        </div>
+      ),
+      bonifs: [
+        "1 élément de valeur B",
+        "1 élément de valeur B différent de la 1re bonification",
+      ],
+    },
+    {
+      agres: "Poutre",
+      specificites: "Temps : 50 sec max",
+      bonifs: [
+        "1 élément acrobatique sur la poutre de valeur B",
+        "1 élément gymnique de valeur B",
+      ],
+    },
+    {
+      agres: "Sol",
+      specificites: (
+        <>
+          Temps : 50 sec max
+          <div className="mt-2">Mouvement sans musique</div>
+        </>
+      ),
+      bonifs: [
+        "1 élément acrobatique de valeur B",
+        "1 élément gymnique de valeur B",
+      ],
+    },
+  ],
+};
+
 function FederalBNiveau({ c }: { c: ConfigNiveauB }) {
   const entete = `border-l border-border-subtle px-3 py-3 text-center font-bold ${c.couleur}`;
   return (
@@ -729,7 +792,7 @@ function FederalBNiveau({ c }: { c: ConfigNiveauB }) {
           <li>2 sauts identiques ou différents. Le meilleur est pris en compte.</li>
           <li>
             Une 3<sup>e</sup> course d’élan est autorisée si la gymnaste n’a
-            touché ni le tremplin, ni le TrampoTremp, ni la table de saut.
+            touché {c.courseTouche ?? "ni le tremplin, ni le TrampoTremp, ni la table de saut"}.
           </li>
           <li className="border-t border-border-subtle pt-2">
             Se référer au tableau des sauts autorisés et aux notes D associées.
@@ -844,11 +907,7 @@ function FederalB() {
       {sous === "G" && <FederalBGeneral />}
       {sous === "B1" && <FederalBNiveau c={CONFIG_B1} />}
       {sous === "B2" && <FederalBNiveau c={CONFIG_B2} />}
-      {sous === "B3" && (
-        <p className="text-sm text-muted">
-          Le détail de Fédéral B3 sera ajouté prochainement.
-        </p>
-      )}
+      {sous === "B3" && <FederalBNiveau c={CONFIG_B3} />}
     </>
   );
 }
