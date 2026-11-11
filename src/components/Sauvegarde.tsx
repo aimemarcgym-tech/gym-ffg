@@ -187,7 +187,7 @@ export default function Sauvegarde() {
           accept="application/json"
           onChange={choisirFichier}
           disabled={occupe}
-          className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:bg-surface-alt file:px-3 file:py-2 file:text-xs file:text-foreground hover:file:bg-border-strong"
+          className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:accent-gradient file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:opacity-90 disabled:file:opacity-50"
         />
       </div>
 
@@ -208,7 +208,7 @@ export default function Sauvegarde() {
           accept="application/json"
           onChange={recuperer}
           disabled={occupe}
-          className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:bg-surface-alt file:px-3 file:py-2 file:text-xs file:text-foreground hover:file:bg-border-strong"
+          className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:accent-gradient file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:opacity-90 disabled:file:opacity-50"
         />
       </div>
 
