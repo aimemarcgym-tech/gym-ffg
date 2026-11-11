@@ -33,16 +33,29 @@ async function lireTexte(fichier: File): Promise<string> {
   }
 }
 
+// Petit cercle qui tourne : montre qu'une opération est en cours.
+function Rond({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`inline-block shrink-0 animate-spin rounded-full border-2 border-border-strong border-t-accent-from ${className}`}
+    />
+  );
+}
+
 export default function Sauvegarde() {
   const [message, setMessage] = useState<string | null>(null);
   const [enAttente, setEnAttente] = useState<Donnees | null>(null);
   const [occupe, setOccupe] = useState(false);
+  // Texte de l'opération longue en cours (lecture, import, export) : affiche un bandeau avec une animation.
+  const [activite, setActivite] = useState<string | null>(null);
   const champ = useRef<HTMLInputElement>(null);
   const champFusion = useRef<HTMLInputElement>(null);
 
   async function exporter() {
     setOccupe(true);
     setMessage(null);
+    setActivite("Préparation de la sauvegarde…");
     try {
       const s = await exporterSauvegarde();
       const resultat = await telechargerSauvegarde(s);
@@ -56,6 +69,7 @@ export default function Sauvegarde() {
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Échec de l’export.");
     } finally {
+      setActivite(null);
       setOccupe(false);
     }
   }
@@ -64,10 +78,10 @@ export default function Sauvegarde() {
     const fichier = e.target.files?.[0];
     e.target.value = "";
     if (!fichier) return;
-    setMessage(`Lecture du fichier (${(fichier.size / 1024).toFixed(0)} Ko)…`);
+    setMessage(null);
+    setActivite(`Lecture du fichier (${(fichier.size / 1024).toFixed(0)} Ko)…`);
     try {
       const s = JSON.parse(await lireTexte(fichier)) as Donnees;
-      setMessage(null);
       setEnAttente(s);
     } catch (erreur) {
       if (erreur instanceof SyntaxError)
@@ -78,6 +92,8 @@ export default function Sauvegarde() {
       setMessage(
         `Impossible de lire ce fichier (${detail || "erreur inconnue"}) — si le problème persiste depuis un stockage cloud, essayez de copier le fichier dans le stockage interne de l’appareil (pas juste « hors ligne » dans l’appli cloud) avant de réimporter.`,
       );
+    } finally {
+      setActivite(null);
     }
   }
 
@@ -87,7 +103,8 @@ export default function Sauvegarde() {
     e.target.value = "";
     if (!fichier) return;
     setOccupe(true);
-    setMessage(`Lecture du fichier (${(fichier.size / 1024).toFixed(0)} Ko)…`);
+    setMessage(null);
+    setActivite("Récupération en cours… ne fermez pas la page.");
     try {
       const s = JSON.parse(await lireTexte(fichier)) as Donnees;
       const c = await fusionnerDonnees(s);
@@ -97,6 +114,7 @@ export default function Sauvegarde() {
     } catch {
       setMessage("Fichier illisible : ce n’est pas une sauvegarde valide.");
     } finally {
+      setActivite(null);
       setOccupe(false);
     }
   }
@@ -104,6 +122,8 @@ export default function Sauvegarde() {
   async function confirmer() {
     if (!enAttente) return;
     setOccupe(true);
+    setMessage(null);
+    setActivite("Import de la sauvegarde en cours… ne fermez pas la page et patientez.");
     try {
       const c = await importerSauvegarde(enAttente);
       setMessage(
@@ -112,6 +132,7 @@ export default function Sauvegarde() {
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Échec de l’import.");
     } finally {
+      setActivite(null);
       setOccupe(false);
       setEnAttente(null);
     }
@@ -119,6 +140,17 @@ export default function Sauvegarde() {
 
   return (
     <div className="space-y-6">
+      {activite && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="sticky top-2 z-20 flex items-center gap-3 rounded-lg border border-accent-from/60 bg-surface p-4 text-sm text-foreground shadow-lg"
+        >
+          <Rond />
+          <span>{activite}</span>
+        </div>
+      )}
+
       <div className="rounded-lg border border-border-subtle bg-surface p-4">
         <h3 className="mb-1 text-sm font-semibold text-foreground">Exporter</h3>
         <p className="mb-3 text-xs text-muted">
@@ -154,6 +186,7 @@ export default function Sauvegarde() {
           type="file"
           accept="application/json"
           onChange={choisirFichier}
+          disabled={occupe}
           className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:bg-surface-alt file:px-3 file:py-2 file:text-xs file:text-foreground hover:file:bg-border-strong"
         />
       </div>
@@ -197,7 +230,13 @@ export default function Sauvegarde() {
               disabled={occupe}
               className="rounded bg-danger px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
             >
-              {occupe ? "…" : "Confirmer le remplacement"}
+              {occupe ? (
+                <span className="inline-flex items-center gap-2">
+                  <Rond className="h-3 w-3" /> Import…
+                </span>
+              ) : (
+                "Confirmer le remplacement"
+              )}
             </button>
             <button
               onClick={() => setEnAttente(null)}
