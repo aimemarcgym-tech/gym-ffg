@@ -35,6 +35,10 @@ interface Element {
 const PLATEFORMES =
   /(youtube\.com|youtu\.be|music\.youtube|dailymotion|vimeo|soundcloud|spotify|deezer|tiktok|facebook|instagram)/i;
 
+// « Plus tard » sur la proposition d'installation de l'aide : on ne la repropose plus à l'arrivée sur cet appareil.
+const CLE_PLUS_TARD = "ffg:aide-plus-tard";
+const DOSSIER_AIDE = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide`;
+
 export default function PanneauConversion({
   onCouper,
 }: {
@@ -52,15 +56,51 @@ export default function PanneauConversion({
     "verification",
   );
   const [aideVisible, setAideVisible] = useState(false);
-  // Linux de bureau (pas Android) : on propose le fichier d'installation de l'aide.
-  const [enLinux, setEnLinux] = useState(false);
+  // Ordinateur où l'aide peut s'installer : Windows, ou Linux de bureau (pas Android). Ailleurs, rien n'est proposé.
+  const [systeme, setSysteme] = useState<"windows" | "linux" | null>(null);
+  // L'installation est proposée dès l'arrivée quand l'aide ne répond pas ; « Plus tard » la masque sur cet appareil.
+  const [propositionMasquee, setPropositionMasquee] = useState(true);
+  // L'utilisateur a téléchargé l'installeur : on affiche les étapes et on guette l'aide.
+  const [installation, setInstallation] = useState(false);
   useEffect(() => {
+    const ua = navigator.userAgent;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setEnLinux(
-      /Linux|X11/.test(navigator.userAgent) &&
-        !/Android/.test(navigator.userAgent),
+    setSysteme(
+      /Windows/.test(ua)
+        ? "windows"
+        : /Linux|X11/.test(ua) && !/Android/.test(ua)
+          ? "linux"
+          : null,
     );
+    let masquee = false;
+    try {
+      masquee = localStorage.getItem(CLE_PLUS_TARD) === "1";
+    } catch {
+      // stockage indisponible : on propose
+    }
+    setPropositionMasquee(masquee);
   }, []);
+
+  function masquerProposition(masquee: boolean) {
+    setPropositionMasquee(masquee);
+    try {
+      if (masquee) localStorage.setItem(CLE_PLUS_TARD, "1");
+      else localStorage.removeItem(CLE_PLUS_TARD);
+    } catch {
+      // stockage indisponible : sans conséquence
+    }
+  }
+
+  // Pendant l'installation : la page détecte l'aide toute seule dès qu'elle répond.
+  const aidePrete = aide !== "verification" && !!aide?.ok;
+  useEffect(() => {
+    if (!installation || aidePrete) return;
+    const minuteur = setInterval(async () => {
+      const etat = await etatAide();
+      if (etat) setAide(etat);
+    }, 3000);
+    return () => clearInterval(minuteur);
+  }, [installation, aidePrete]);
 
   async function verifierAide() {
     setAide("verification");
@@ -131,10 +171,13 @@ export default function PanneauConversion({
       setMessageLien("Démarrage de l’aide…");
       const etat = await lancerAide();
       if (!etat?.ok) {
+        if (systeme) masquerProposition(false);
         setMessageLien(
-          etat
-            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (Windows : winget install yt-dlp, winget install ffmpeg ; Linux : relancez l’installateur de l’aide) puis cliquez de nouveau sur Convertir."
-            : "L’aide ne démarre pas toute seule. Installez-la une fois avec le bouton « Télécharger l’aide » ci-dessous (Linux) (Windows : double-cliquez sur « Installer-aide-musique.bat » dans le dossier de l’appli). Elle se lancera ensuite automatiquement, puis cliquez de nouveau sur Convertir.",
+          !systeme
+            ? "Les liens YouTube et autres plateformes demandent l’aide locale, qui n’existe que sur un ordinateur Windows ou Linux."
+            : etat
+              ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : relancez l’installation proposée en haut de ce panneau, puis cliquez de nouveau sur Convertir."
+              : "L’aide n’est pas installée sur cet ordinateur, ou ne démarre pas : installez-la avec la proposition en haut de ce panneau, puis cliquez de nouveau sur Convertir.",
         );
         return;
       }
@@ -228,6 +271,114 @@ export default function PanneauConversion({
     <section className={panneau}>
       <h2 className={titrePanneau}>Convertir en MP3</h2>
 
+      {/* Proposition d'installation de l'aide : affichée dès l'arrivée si l'aide ne répond pas sur cet ordinateur. */}
+      {systeme &&
+        aide !== "verification" &&
+        !aide?.ok &&
+        (!propositionMasquee || installation) && (
+          <div
+            role="status"
+            className="mb-4 space-y-2 rounded-lg border border-accent-from/50 bg-surface-alt/40 p-3 text-xs text-muted"
+          >
+            <p className="text-sm font-semibold text-foreground">
+              Installer l’aide pour YouTube et les liens web ?
+            </p>
+            <p>
+              {aide
+                ? "L’aide est lancée, mais yt-dlp ou ffmpeg manque sur cet ordinateur : relancez l’installation."
+                : "Elle n’est pas installée sur cet ordinateur. Elle sert à convertir en MP3 un lien YouTube ou d’une autre plateforme ; le reste de la page fonctionne sans elle."}
+            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={
+                  systeme === "windows"
+                    ? `${DOSSIER_AIDE}/Installer-aide-musique.cmd`
+                    : `${DOSSIER_AIDE}/ffg-aide-musique.deb`
+                }
+                download
+                onClick={() => setInstallation(true)}
+                className="accent-gradient inline-block rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+              >
+                {systeme === "windows"
+                  ? "Installer l’aide"
+                  : "Installer l’aide (Deepin, Ubuntu, Debian, Mint)"}
+              </a>
+              {!installation && (
+                <button
+                  type="button"
+                  onClick={() => masquerProposition(true)}
+                  className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:text-foreground"
+                >
+                  Plus tard
+                </button>
+              )}
+            </div>
+            {installation && systeme === "windows" && (
+              <ol className="list-decimal space-y-1 pl-4">
+                <li>
+                  Ouvrez le fichier téléchargé « Installer-aide-musique.cmd ».
+                  Si le navigateur hésite à le garder, choisissez « Conserver ».
+                </li>
+                <li>
+                  Si Windows affiche « Windows a protégé votre ordinateur »,
+                  cliquez sur « Informations complémentaires » puis « Exécuter
+                  quand même ».
+                </li>
+                <li>
+                  Laissez la fenêtre noire travailler jusqu’à « Termine » : elle
+                  installe ce qui manque (Windows peut demander votre
+                  autorisation) et lance l’aide.
+                </li>
+                <li>
+                  Revenez ici : la page détecte l’aide toute seule. Si le
+                  navigateur demande l’accès aux applications de cet appareil,
+                  acceptez.
+                </li>
+              </ol>
+            )}
+            {installation && systeme === "linux" && (
+              <p>
+                Double-cliquez sur le fichier téléchargé : le gestionnaire de
+                paquets s’ouvre, cliquez sur « Installer » (mot de passe
+                demandé). Tout le reste est automatique, et la page détecte
+                l’aide toute seule.
+              </p>
+            )}
+            {systeme === "linux" && (
+              <p>
+                Autre distribution :{" "}
+                <a
+                  href={`${DOSSIER_AIDE}/Installer-aide-musique-linux.sh`}
+                  download
+                  onClick={() => setInstallation(true)}
+                  className="underline hover:text-foreground"
+                >
+                  installateur générique
+                </a>
+                .
+              </p>
+            )}
+            {installation && (
+              <p className="flex items-center gap-2 text-foreground">
+                <span
+                  aria-hidden="true"
+                  className="inline-block h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-border-strong border-t-accent-from"
+                />
+                En attente de l’aide…
+              </p>
+            )}
+          </div>
+        )}
+      {installation && aidePrete && (
+        <p
+          role="status"
+          className="mb-4 rounded-lg border border-border-subtle bg-surface-alt/40 p-3 text-xs text-foreground"
+        >
+          <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-success" />
+          Aide installée : YouTube et les autres liens sont pris en charge.
+        </p>
+      )}
+
       <div className={`${onglets} mb-4`}>
         <button
           onClick={() => setSource("fichiers")}
@@ -320,6 +471,19 @@ export default function PanneauConversion({
                     Démarrer l’aide
                   </button>
                 )}
+                {aide !== "verification" &&
+                  !aide?.ok &&
+                  systeme &&
+                  propositionMasquee &&
+                  !installation && (
+                    <button
+                      type="button"
+                      onClick={() => masquerProposition(false)}
+                      className="underline hover:text-foreground"
+                    >
+                      Installer l’aide
+                    </button>
+                  )}
                 <button
                   type="button"
                   onClick={verifierAide}
@@ -338,34 +502,6 @@ export default function PanneauConversion({
             <p className="rounded border border-border-strong bg-surface-alt p-2 text-xs text-foreground">
               {messageLien}
             </p>
-          )}
-          {aide !== "verification" && !aide?.ok && enLinux && (
-            <div className="space-y-1.5 rounded border border-border-subtle bg-surface-alt/40 p-2 text-xs text-muted">
-              <a
-                href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/ffg-aide-musique.deb`}
-                download
-                className="accent-gradient inline-block rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
-              >
-                Télécharger l’aide (Deepin, Ubuntu, Debian, Mint)
-              </a>
-              <p>
-                Double-cliquez ensuite sur le fichier téléchargé : le
-                gestionnaire de paquets s’ouvre, cliquez sur « Installer » (mot
-                de passe demandé). Tout le reste est automatique, puis rouvrez
-                cet onglet.
-              </p>
-              <p>
-                Autre distribution :{" "}
-                <a
-                  href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/Installer-aide-musique-linux.sh`}
-                  download
-                  className="underline hover:text-foreground"
-                >
-                  installateur générique
-                </a>
-                .
-              </p>
-            </div>
           )}
         </div>
       )}

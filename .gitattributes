@@ -1,0 +1,2 @@
+# L'installeur Windows de l'aide musique utilise des renvois internes : il lui faut des fins de ligne Windows.
+public/aide/*.cmd text eol=crlf

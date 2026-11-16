@@ -33,7 +33,7 @@ export async function etatAide(): Promise<EtatAide | null> {
   }
 }
 
-// Demande à Windows de lancer l'aide via le lien ffg-aide:// (enregistré par Installer-aide-musique.bat), puis attend qu'elle réponde.
+// Demande à Windows de lancer l'aide via le lien ffg-aide:// (enregistré par l'installeur de l'aide, public/aide/Installer-aide-musique.cmd), puis attend qu'elle réponde.
 export async function demarrerAide(attenteMax = 12000): Promise<EtatAide | null> {
   const a = document.createElement("a");
   a.href = "ffg-aide://demarrer";

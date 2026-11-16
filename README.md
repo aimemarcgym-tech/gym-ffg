@@ -34,3 +34,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Aide « Faire ces musiques »
+
+Convertir un lien YouTube (ou autre plateforme) en MP3 demande une aide installée sur l'ordinateur : `tools/aide-musique.mjs`, un petit serveur local (port 47615) qui utilise yt-dlp et ffmpeg. Un site web ne peut rien installer lui-même : l'utilisateur télécharge un fichier et l'ouvre une fois.
+
+- **Dans l'appli** : à l'arrivée sur « Faire ces musiques », si l'aide ne répond pas (Windows ou Linux de bureau), la page propose de l'installer, affiche les étapes et détecte l'aide toute seule. « Plus tard » masque la proposition sur cet appareil ; elle revient par le lien « Installer l'aide » de l'onglet « Lien web », ou quand on tente de convertir un lien.
+- **Windows** : `public/aide/Installer-aide-musique.cmd`, un seul fichier. Il installe Node.js, yt-dlp et ffmpeg avec `winget` s'ils manquent, copie l'aide dans `%LOCALAPPDATA%\ffg-aide`, la lance au démarrage de Windows et enregistre le lien `ffg-aide://`. Après une réinstallation de Windows, il suffit de le relancer. Pour enlever l'aide : `%LOCALAPPDATA%\ffg-aide\aide.cmd /desinstaller`.
+- **Linux** : `public/aide/ffg-aide-musique.deb` (fabriqué par `scripts/build-deb.py`, à relancer après une modification de l'aide) ou `Installer-aide-musique-linux.sh`.
+- **Build** : `scripts/copie-aide.mjs` (lancé par `npm run build`) copie `tools/aide-musique.mjs` dans `public/aide/` et garde l'installeur Windows en fins de ligne CRLF, sans accent.
+- L'aide garde la version de yt-dlp en mémoire : la page n'attend sa réponse que 1,5 seconde.

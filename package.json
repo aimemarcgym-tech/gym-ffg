@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/generate-sw.mjs && node scripts/sync-docs.mjs",
+    "build": "node scripts/copie-aide.mjs && next build && node scripts/generate-sw.mjs && node scripts/sync-docs.mjs",
     "start": "next start",
     "lint": "eslint",
     "aide-musique": "node tools/aide-musique.mjs",
-    "deploy": "next build && node scripts/generate-sw.mjs && firebase deploy --only hosting"
+    "deploy": "node scripts/copie-aide.mjs && next build && node scripts/generate-sw.mjs && firebase deploy --only hosting"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
