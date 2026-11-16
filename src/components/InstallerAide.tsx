@@ -109,10 +109,11 @@ export default function InstallerAide({
                     Informations complémentaires » puis « Exécuter quand même ».
                   </li>
                   <li>
-                    Une petite boîte annonce que l’installation commence : elle
-                    se fait sans fenêtre noire et prend quelques minutes.
+                    Une fenêtre d’avancement s’ouvre et reste affichée pendant
+                    toute l’installation (quelques minutes) : ne la fermez pas.
                     Windows peut demander votre autorisation pour Node.js :
-                    répondez « Oui ». Une autre boîte annonce la fin.
+                    répondez « Oui ». La fenêtre annonce la fin et se ferme avec
+                    le bouton « Fermer ».
                   </li>
                   <li>
                     Revenez ici : cette fenêtre détecte l’aide toute seule. Si le
