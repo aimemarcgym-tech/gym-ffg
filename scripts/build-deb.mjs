@@ -12,7 +12,7 @@ import { gzipSync } from "node:zlib";
 
 const racine = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sortie = join(racine, "public", "aide", "ffg-aide-musique.deb");
-const VERSION = "1.2";
+const VERSION = "1.3";
 
 const control = `Package: ffg-aide-musique
 Version: ${VERSION}
@@ -32,6 +32,21 @@ set -e
 if ! command -v yt-dlp >/dev/null 2>&1; then
   curl -fsSL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp || true
   chmod 755 /usr/local/bin/yt-dlp 2>/dev/null || true
+fi
+# yt-dlp a besoin d'un moteur JavaScript (Deno) pour YouTube : sans lui, YouTube répond « HTTP Error 403 ».
+if ! command -v deno >/dev/null 2>&1; then
+  case "$(uname -m)" in
+    x86_64) cible=x86_64-unknown-linux-gnu ;;
+    aarch64) cible=aarch64-unknown-linux-gnu ;;
+    *) cible= ;;
+  esac
+  if [ -n "$cible" ]; then
+    tmp=$(mktemp -d)
+    if curl -fsSL "https://github.com/denoland/deno/releases/latest/download/deno-$cible.zip" -o "$tmp/deno.zip"; then
+      python3 -c "import sys, zipfile; zipfile.ZipFile(sys.argv[1]).extract('deno', sys.argv[2])" "$tmp/deno.zip" "$tmp" && install -m 755 "$tmp/deno" /usr/local/bin/deno || true
+    fi
+    rm -rf "$tmp"
+  fi
 fi
 command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database -q /usr/share/applications || true
 exit 0

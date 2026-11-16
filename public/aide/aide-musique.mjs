@@ -76,6 +76,9 @@ function lancer(url, kbps, playlist) {
     "-x", "--audio-format", "mp3", "--audio-quality", `${kbps}K`,
     playlist ? "--yes-playlist" : "--no-playlist",
     "--newline", "--no-warnings",
+    // YouTube exige un moteur JavaScript : Deno est utilisé tout seul s'il est installé ; on autorise aussi Node.js (déjà là, puisque
+    // l'aide tourne avec lui). Option connue seulement des yt-dlp récents (novembre 2025 et après) : sinon yt-dlp refuserait de démarrer.
+    ...(outils.ytdlp && outils.ytdlp >= "2025.11.12" ? ["--js-runtimes", "node"] : []),
     "-o", join(dossier, "%(title).150B.%(ext)s"),
     "--", url,
   ];
