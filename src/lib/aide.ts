@@ -18,6 +18,16 @@ export function aideDejaInstallee(): boolean {
   }
 }
 
+// L'aide ne répond plus et ne se relance pas (désinstallée, Windows réinstallé…) : on oublie qu'elle était installée,
+// pour ne plus tenter de la lancer par le lien ffg-aide:// (sans lui enregistré, Windows ouvre une fenêtre « Microsoft Store »).
+export function oublierAideInstallee(): void {
+  try {
+    localStorage.removeItem(CLE_INSTALLEE);
+  } catch {
+    // stockage indisponible : sans conséquence
+  }
+}
+
 export async function etatAide(): Promise<EtatAide | null> {
   try {
     const r = await fetch(`${ADRESSE}/etat`, { signal: AbortSignal.timeout(1500) });
