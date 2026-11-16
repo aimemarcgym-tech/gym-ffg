@@ -4,7 +4,7 @@
 // Lancement : npm run aide-musique   (ou double-clic sur Lancer-aide-musique.bat). Arrêt : Ctrl+C.
 import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
-import { spawn, spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -16,11 +16,25 @@ const ORIGINES = [/^https?:\/\/localhost(:\d+)?$/, /^https?:\/\/127\.0\.0\.1(:\d
 const travaux = new Map();
 
 function disponible(commande, args) {
-  const r = spawnSync(commande, args, { encoding: "utf8", shell: false });
-  return r.status === 0 ? String(r.stdout).split("\n")[0].trim() : null;
+  return new Promise((resolve) => {
+    let sortie = "";
+    const p = spawn(commande, args, { shell: false, windowsHide: true });
+    p.stdout.on("data", (c) => (sortie += c));
+    p.on("error", () => resolve(null));
+    p.on("close", (code) => resolve(code === 0 ? sortie.split("\n")[0].trim() : null));
+  });
 }
-const versionYtdlp = () => disponible("yt-dlp", ["--version"]);
-const versionFfmpeg = () => disponible("ffmpeg", ["-version"]);
+
+// yt-dlp met plusieurs secondes à donner sa version, alors que l'appli n'attend que 1,5 s : on garde la réponse en mémoire
+// (lue au lancement, relue en arrière-plan au plus une fois par minute) pour que /etat réponde tout de suite.
+const outils = { ytdlp: null, ffmpeg: false, lu: 0 };
+let lecture = null;
+function lireOutils() {
+  lecture ??= Promise.all([disponible("yt-dlp", ["--version"]), disponible("ffmpeg", ["-version"])])
+    .then(([ytdlp, ffmpeg]) => Object.assign(outils, { ytdlp, ffmpeg: !!ffmpeg, lu: Date.now() }))
+    .finally(() => (lecture = null));
+  return lecture;
+}
 
 function entetes(req, extra = {}) {
   const origine = req.headers.origin;
@@ -123,9 +137,10 @@ const serveur = createServer(async (req, res) => {
     if (origine && !ORIGINES.some((re) => re.test(origine))) return json(res, req, 403, { erreur: "Origine non autorisée" });
 
     if (req.method === "GET" && pathname === "/etat") {
-      const ytdlp = versionYtdlp();
-      const ffmpeg = versionFfmpeg();
-      return json(res, req, 200, { ok: !!ytdlp && !!ffmpeg, ytdlp, ffmpeg: !!ffmpeg });
+      if (!outils.lu) await lireOutils();
+      else if (Date.now() - outils.lu > 60_000) void lireOutils();
+      const { ytdlp, ffmpeg } = outils;
+      return json(res, req, 200, { ok: !!ytdlp && ffmpeg, ytdlp, ffmpeg });
     }
     if (req.method === "POST" && pathname === "/lancer") {
       const { url, kbps = 192, playlist = false } = JSON.parse((await lire(req)) || "{}");
@@ -163,8 +178,9 @@ serveur.on("error", (e) => {
   throw e;
 });
 
-serveur.listen(PORT, "127.0.0.1", () => {
+serveur.listen(PORT, "127.0.0.1", async () => {
   console.log(`Aide « Faire ces musiques » prête sur http://127.0.0.1:${PORT}`);
-  console.log(`yt-dlp : ${versionYtdlp() ?? "INTROUVABLE"} · ffmpeg : ${versionFfmpeg() ? "ok" : "INTROUVABLE"}`);
+  const { ytdlp, ffmpeg } = await lireOutils();
+  console.log(`yt-dlp : ${ytdlp ?? "INTROUVABLE"} · ffmpeg : ${ffmpeg ? "ok" : "INTROUVABLE"}`);
   console.log("Laissez cette fenêtre ouverte pendant que vous utilisez l’appli. Ctrl+C pour arrêter.");
 });
