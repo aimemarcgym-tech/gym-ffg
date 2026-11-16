@@ -1,7 +1,7 @@
 @echo off
 rem Aide "Faire ces musiques" pour Windows : un seul fichier qui installe, lance et desinstalle.
 rem   double-clic        : installe SANS fenetre noire ce qui manque (Node.js, yt-dlp, ffmpeg), copie l'aide et la lance ;
-rem                        une seule fenetre d'avancement (barre qui tourne) reste affichee du debut a la fin ;
+rem                        une seule fenetre d'avancement (carres bleus + pourcentage) reste affichee du debut a la fin ;
 rem                        le detail est dans installation.log
 rem   /visible           : meme installation avec la fenetre noire (pour comprendre un probleme)
 rem   /lancer            : fait tourner l'aide (appele sans fenetre au demarrage de Windows et par l'appli)
@@ -10,6 +10,7 @@ rem Ce fichier doit garder des fins de ligne Windows (CRLF) et rester sans accen
 rem "#e" donne e accent aigu, "#a" a accent grave, "#f" e accent circonflexe, "#r" e accent grave, "#c" c cedille
 rem (remplaces par PowerShell) et "|" donne un retour a la ligne.
 rem La fin du fichier (apres le dernier "exit") est du PowerShell : la fenetre d'avancement. cmd ne la lit jamais.
+rem L'avancement est donne par etapes : "call :etat COURS 5 35" = l'etape commence a 5 % et avance doucement jusqu'a 35 %.
 setlocal EnableExtensions
 set "SITE=https://gym-ffg.web.app/aide"
 set "DOSSIER=%LOCALAPPDATA%\ffg-aide"
@@ -40,16 +41,16 @@ if not exist "%DOSSIER%" mkdir "%DOSSIER%"
 > "%DOSSIER%\installation.log" echo Installation de l'aide - %DATE% %TIME%
 del "%FFG_ETAT%" >nul 2>&1
 set "FFG_MSG=Pr#eparation de l'installation...|Cela prend quelques minutes : ne fermez pas cette fen#ftre."
-call :etat COURS
+call :etat COURS 0 4
 rem Fenetre d'avancement : le PowerShell situe a la fin de ce fichier, lu et lance ici.
 start "" /b powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command "$t=[IO.File]::ReadAllText($env:FFG_CMD); . ([scriptblock]::Create($t.Substring($t.IndexOf('#PS'+'-DEBUT'))))"
 call :principal >> "%DOSSIER%\installation.log" 2>&1
 exit /b 0
 
 :etat
-rem Ecrit l'etat lu par la fenetre d'avancement : COURS, FIN ou ERREUR, suivi du texte de FFG_MSG.
+rem Ecrit l'etat lu par la fenetre : %1 = COURS, FIN ou ERREUR, %2 et %3 = pourcentage de debut et de fin d'etape, puis FFG_MSG.
 if /i not "%MODE%"=="cache" exit /b 0
-set "FFG_ET=%~1"
+set "FFG_ET=%~1:%~2:%~3"
 <nul set /p "=%FFG_ET%:%FFG_MSG%" > "%FFG_ETAT%"
 exit /b 0
 
@@ -58,10 +59,10 @@ if /i "%MODE%"=="visible" pause
 exit /b 0
 
 :installer
-rem %1 = nom affiche, %2 = identifiant winget, %3 = remarque facultative
+rem %1 = nom affiche, %2 = identifiant winget, %3 et %4 = pourcentage de debut et de fin, %5 = remarque facultative
 echo  - Installation de %~1...
-set "FFG_MSG=Installation de %~1...|Cela prend quelques minutes : ne fermez pas cette fen#ftre.|%~3"
-call :etat COURS
+set "FFG_MSG=Installation de %~1...|Cela prend quelques minutes : ne fermez pas cette fen#ftre.|%~5"
+call :etat COURS %~3 %~4
 winget install --id %~2 -e --source winget --silent --accept-source-agreements --accept-package-agreements
 call :chemin
 exit /b 0
@@ -82,11 +83,11 @@ where winget >nul 2>&1
 if errorlevel 1 goto sanswinget
 
 where node >nul 2>&1
-if errorlevel 1 call :installer Node.js OpenJS.NodeJS.LTS "Windows peut demander votre autorisation : r#epondez Oui."
+if errorlevel 1 call :installer Node.js OpenJS.NodeJS.LTS 5 35 "Windows peut demander votre autorisation : r#epondez Oui."
 where yt-dlp >nul 2>&1
-if errorlevel 1 call :installer yt-dlp yt-dlp.yt-dlp
+if errorlevel 1 call :installer yt-dlp yt-dlp.yt-dlp 35 50
 where ffmpeg >nul 2>&1
-if errorlevel 1 call :installer ffmpeg yt-dlp.FFmpeg
+if errorlevel 1 call :installer ffmpeg yt-dlp.FFmpeg 50 85
 
 set "MANQUE="
 where node >nul 2>&1 || set "MANQUE=Node.js"
@@ -97,7 +98,7 @@ if defined MANQUE goto incomplet
 :copie
 echo  - Copie de l'aide...
 set "FFG_MSG=Installation de l'aide...|Copie des fichiers de l'aide."
-call :etat COURS
+call :etat COURS 85 90
 call :arreter
 if not exist "%DOSSIER%" mkdir "%DOSSIER%"
 if exist "%~dp0aide-musique.mjs" (
@@ -117,7 +118,7 @@ reg add "HKCU\Software\Classes\ffg-aide\shell\open\command" /ve /d "wscript.exe 
 
 echo  - Lancement de l'aide...
 set "FFG_MSG=Installation de l'aide...|D#emarrage de l'aide."
-call :etat COURS
+call :etat COURS 90 98
 wscript.exe "%DOSSIER%\lancer.vbs"
 set "PRETE="
 for /l %%i in (1,1,10) do if not defined PRETE (
@@ -129,7 +130,7 @@ if not defined PRETE goto muette
 echo  Termine : l'aide est lancee et demarrera toute seule avec Windows.
 echo  Retournez sur la page "Faire ces musiques" : elle la detecte toute seule.
 set "FFG_MSG=L'aide est install#ee.|Elle se lancera toute seule avec Windows.|Vous pouvez revenir sur la page Faire ces musiques : elle d#etecte l'aide toute seule."
-call :etat FIN
+call :etat FIN 100 100
 call :pause
 exit /b 0
 
@@ -138,7 +139,7 @@ echo  L'aide est installee mais ne repond pas encore.
 echo  Redemarrez l'ordinateur, puis rouvrez la page "Faire ces musiques".
 echo  Journal : %DOSSIER%\installation.log
 set "FFG_MSG=L'aide est install#ee mais ne r#epond pas encore.|Red#emarrez l'ordinateur, puis rouvrez la page Faire ces musiques.|Journal : %DOSSIER%\installation.log"
-call :etat ERREUR
+call :etat ERREUR 0 0
 call :pause
 exit /b 2
 
@@ -147,7 +148,7 @@ echo.
 echo  Installation incomplete, il manque : %MANQUE%
 echo  Relancez ce fichier. Si le probleme reste, redemarrez l'ordinateur puis relancez-le.
 set "FFG_MSG=L'installation n'a pas pu se terminer : il manque %MANQUE%.|Relancez Installer-aide-musique.cmd. Si le probl#reme reste, red#emarrez l'ordinateur puis relancez-le.|Journal : %DOSSIER%\installation.log"
-call :etat ERREUR
+call :etat ERREUR 0 0
 call :pause
 exit /b 1
 
@@ -157,7 +158,7 @@ echo  Windows ne trouve pas son installeur de programmes, winget.
 echo  Ouvrez le Microsoft Store, mettez a jour "Programme d'installation d'application",
 echo  puis relancez ce fichier.
 set "FFG_MSG=Windows ne trouve pas son installeur de programmes (winget).|Ouvrez le Microsoft Store, mettez #a jour Programme d'installation d'application, puis relancez ce fichier."
-call :etat ERREUR
+call :etat ERREUR 0 0
 call :pause
 exit /b 1
 
@@ -165,7 +166,7 @@ exit /b 1
 echo.
 echo  Impossible de telecharger l'aide : verifiez la connexion internet puis relancez ce fichier.
 set "FFG_MSG=Impossible de t#el#echarger l'aide : v#erifiez la connexion internet puis relancez Installer-aide-musique.cmd."
-call :etat ERREUR
+call :etat ERREUR 0 0
 call :pause
 exit /b 3
 
@@ -210,7 +211,8 @@ for /f "usebackq delims=" %%p in (`powershell -NoProfile -Command "[Environment]
 exit /b 0
 
 #PS-DEBUT
-# Fenetre d'avancement de l'installation : une seule fenetre, du debut a la fin, qui lit le fichier d'etat ecrit par l'installeur.
+# Fenetre d'avancement de l'installation : une seule fenetre, du debut a la fin. Elle lit le fichier d'etat ecrit par l'installeur
+# (ETAT:debut:fin:message) et affiche des carres bleus qui s'ajoutent, avec le pourcentage.
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -222,7 +224,12 @@ function T([string]$s) {
 $global:fichier = $env:FFG_ETAT
 $global:parent = (Get-CimInstance Win32_Process -Filter "ProcessId=$PID").ParentProcessId
 $global:fini = $false
+$global:echec = $false
 $global:debut = Get-Date
+$global:pct = 0.0
+$global:max = 4.0
+$global:ligne = ''
+$global:nbCarres = 25
 
 $global:f = New-Object System.Windows.Forms.Form
 $global:f.Text = T "Installation de l'aide"
@@ -238,14 +245,37 @@ $global:f.Font = New-Object System.Drawing.Font('Segoe UI', 10)
 
 $global:l = New-Object System.Windows.Forms.Label
 $global:l.Location = New-Object System.Drawing.Point(20, 15)
-$global:l.Size = New-Object System.Drawing.Size(420, 130)
+$global:l.Size = New-Object System.Drawing.Size(420, 110)
 $global:l.Text = T "Pr#eparation de l'installation...|Cela prend quelques minutes : ne fermez pas cette fen#ftre."
 
-$global:p = New-Object System.Windows.Forms.ProgressBar
-$global:p.Location = New-Object System.Drawing.Point(20, 155)
-$global:p.Size = New-Object System.Drawing.Size(420, 22)
-$global:p.Style = 'Marquee'
-$global:p.MarqueeAnimationSpeed = 30
+# Rangee de petits carres : un carre bleu de plus tous les 4 %.
+$global:g = New-Object System.Windows.Forms.Panel
+$global:g.Location = New-Object System.Drawing.Point(20, 135)
+$global:g.Size = New-Object System.Drawing.Size(420, 14)
+[void]$global:g.GetType().GetProperty('DoubleBuffered', [Reflection.BindingFlags]'NonPublic,Instance').SetValue($global:g, $true, $null)
+
+function Dessiner($gr) {
+  $n = [int][math]::Floor($global:pct / 100.0 * $global:nbCarres)
+  if ($global:fini -and -not $global:echec) { $n = $global:nbCarres }
+  $pas = 420.0 / $global:nbCarres
+  $cote = $pas - 4.0
+  if ($global:echec) { $couleur = [System.Drawing.Color]::FromArgb(200, 60, 60) } else { $couleur = [System.Drawing.Color]::FromArgb(0, 120, 215) }
+  $plein = New-Object System.Drawing.SolidBrush($couleur)
+  $creux = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(222, 222, 222))
+  for ($k = 0; $k -lt $global:nbCarres; $k++) {
+    if ($k -lt $n) { $pinceau = $plein } else { $pinceau = $creux }
+    $gr.FillRectangle($pinceau, [single]($k * $pas), [single]0, [single]$cote, [single]13)
+  }
+  $plein.Dispose()
+  $creux.Dispose()
+}
+$global:g.Add_Paint({ param($expediteur, $arguments) Dessiner $arguments.Graphics })
+
+$global:q = New-Object System.Windows.Forms.Label
+$global:q.Location = New-Object System.Drawing.Point(20, 162)
+$global:q.Size = New-Object System.Drawing.Size(200, 36)
+$global:q.Font = New-Object System.Drawing.Font('Segoe UI', 16, [System.Drawing.FontStyle]::Bold)
+$global:q.Text = '0 %'
 
 $global:b = New-Object System.Windows.Forms.Button
 $global:b.Text = 'Fermer'
@@ -255,18 +285,19 @@ $global:b.Visible = $false
 $global:b.Add_Click({ $global:f.Close() })
 
 $global:f.Controls.Add($global:l)
-$global:f.Controls.Add($global:p)
+$global:f.Controls.Add($global:g)
+$global:f.Controls.Add($global:q)
 $global:f.Controls.Add($global:b)
 
 function Terminer([string]$etat, [string]$msg) {
   $global:fini = $true
   $global:t.Stop()
-  $global:p.MarqueeAnimationSpeed = 0
-  $global:p.Style = 'Continuous'
-  if ($etat -eq 'FIN') { $global:p.Value = 100 } else { $global:p.Value = 0 }
+  if ($etat -eq 'FIN') { $global:pct = 100.0 } else { $global:echec = $true }
+  $global:q.Text = ([string][int][math]::Floor($global:pct)) + ' %'
   $global:l.Text = $msg
   $global:f.UseWaitCursor = $false
   $global:b.Visible = $true
+  $global:g.Invalidate()
 }
 
 function Verifier {
@@ -277,16 +308,31 @@ function Verifier {
     $s = $r.ReadToEnd()
     $r.Close()
   } catch { }
-  $i = $s.IndexOf(':')
+  # Quatre morceaux au plus : le message lui-meme peut contenir des ":".
+  $morceaux = $s.Split([char[]]@([char]58), 4)
   $etat = ''
   $msg = ''
-  if ($i -gt 0) {
-    $etat = $s.Substring(0, $i).Trim()
-    $msg = T ($s.Substring($i + 1).Trim())
+  $deb = 0.0
+  $fin = 0.0
+  if ($morceaux.Count -ge 4) {
+    $etat = $morceaux[0].Trim()
+    [void][double]::TryParse($morceaux[1], [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$deb)
+    [void][double]::TryParse($morceaux[2], [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$fin)
+    $msg = T ($morceaux[3].Trim())
   }
   $journal = Join-Path $env:LOCALAPPDATA 'ffg-aide\installation.log'
   if ($etat -eq 'COURS') {
-    if ($global:l.Text -ne $msg) { $global:l.Text = $msg }
+    if ($s -ne $global:ligne) {
+      $global:ligne = $s
+      if ($deb -gt $global:pct) { $global:pct = $deb }
+      $global:max = [math]::Max($fin, $global:pct)
+      if ($global:l.Text -ne $msg) { $global:l.Text = $msg }
+    }
+    # Pendant une etape longue, l'avancement monte doucement sans jamais atteindre la fin de l'etape.
+    $plafond = $global:max - 1.0
+    if ($global:pct -lt $plafond) { $global:pct = $global:pct + ($plafond - $global:pct) * 0.015 }
+    $global:q.Text = ([string][int][math]::Floor($global:pct)) + ' %'
+    $global:g.Invalidate()
   }
   elseif ($etat -eq 'FIN' -or $etat -eq 'ERREUR') {
     Terminer $etat $msg
