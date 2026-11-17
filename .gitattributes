@@ -1,2 +1,4 @@
 # L'installeur Windows de l'aide musique utilise des renvois internes : il lui faut des fins de ligne Windows.
 public/aide/*.cmd text eol=crlf
+# L'installeur Mac doit rester en fins de ligne Unix (sinon « #!/bin/bash^M » : le Mac ne peut pas le lancer).
+scripts/aide-mac/*.command text eol=lf

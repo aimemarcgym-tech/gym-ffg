@@ -14,7 +14,7 @@ export default function InstallerAide({
   onPlusTard,
   onFermer,
 }: {
-  systeme: "windows" | "linux";
+  systeme: "windows" | "mac" | "linux";
   // Le fichier d'installation a été téléchargé : on attend que l'aide réponde.
   telecharge: boolean;
   aidePrete: boolean;
@@ -122,6 +122,48 @@ export default function InstallerAide({
                   </li>
                 </ol>
               </>
+            ) : systeme === "mac" ? (
+              <>
+                <div>
+                  <p className="mb-1 font-medium text-foreground">
+                    Ce qui sera installé, une seule fois
+                  </p>
+                  <ul className="list-disc space-y-0.5 pl-5">
+                    <li>
+                      Homebrew (l’installeur de programmes du Mac), s’il manque :
+                      le Mac demande alors le mot de passe de votre session.
+                    </li>
+                    <li>Node.js, yt-dlp, ffmpeg et Deno, s’ils manquent.</li>
+                    <li>
+                      L’aide elle-même : elle démarre ensuite toute seule à
+                      l’ouverture de votre session.
+                    </li>
+                  </ul>
+                </div>
+                <ol className="list-decimal space-y-1.5 pl-5">
+                  <li>
+                    Cliquez sur « Télécharger l’installeur » ci-dessous. Si le
+                    fichier zip ne s’ouvre pas tout seul, double-cliquez dessus :
+                    il contient « Installer-aide-musique ».
+                  </li>
+                  <li>
+                    Double-cliquez sur « Installer-aide-musique ». Si le Mac dit
+                    qu’il ne peut pas vérifier le fichier : clic droit sur le
+                    fichier, « Ouvrir », puis « Ouvrir ».
+                  </li>
+                  <li>
+                    Une fenêtre du Terminal s’ouvre et montre l’avancement :
+                    laissez-la travailler et ne la fermez pas (quelques minutes,
+                    jusqu’à 20 si Homebrew doit être installé). Si le Mac demande
+                    le mot de passe de votre session, tapez-le dans cette
+                    fenêtre : rien ne s’affiche pendant la frappe, c’est normal.
+                  </li>
+                  <li>
+                    Revenez ici : cette fenêtre détecte l’aide toute seule. Si ce
+                    n’est pas le cas dans Safari, essayez avec Chrome ou Firefox.
+                  </li>
+                </ol>
+              </>
             ) : (
               <>
                 <p>
@@ -178,7 +220,9 @@ export default function InstallerAide({
                 href={
                   systeme === "windows"
                     ? `${DOSSIER_AIDE}/Installer-aide-musique.cmd`
-                    : `${DOSSIER_AIDE}/ffg-aide-musique.deb`
+                    : systeme === "mac"
+                      ? `${DOSSIER_AIDE}/Installer-aide-musique-mac.zip`
+                      : `${DOSSIER_AIDE}/ffg-aide-musique.deb`
                 }
                 download
                 onClick={onTelecharge}

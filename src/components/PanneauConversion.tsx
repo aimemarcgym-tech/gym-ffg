@@ -57,8 +57,10 @@ export default function PanneauConversion({
     "verification",
   );
   const [aideVisible, setAideVisible] = useState(false);
-  // Ordinateur où l'aide peut s'installer : Windows, ou Linux de bureau (pas Android). Ailleurs, rien n'est proposé.
-  const [systeme, setSysteme] = useState<"windows" | "linux" | null>(null);
+  // Ordinateur où l'aide peut s'installer : Windows, Mac ou Linux de bureau (pas Android, iPhone ni iPad). Ailleurs, rien n'est proposé.
+  const [systeme, setSysteme] = useState<"windows" | "mac" | "linux" | null>(
+    null,
+  );
   // La fenêtre d'installation s'ouvre toute seule sur l'onglet « Lien web » quand l'aide ne répond pas ; « Plus tard » l'en empêche sur cet appareil.
   const [propositionMasquee, setPropositionMasquee] = useState(true);
   // Fermée par l'utilisateur pour cette visite ; ouverte à la main (lien « Installer l'aide », conversion sans aide).
@@ -72,9 +74,12 @@ export default function PanneauConversion({
     setSysteme(
       /Windows/.test(ua)
         ? "windows"
-        : /Linux|X11/.test(ua) && !/Android/.test(ua)
-          ? "linux"
-          : null,
+        : // Un iPad en mode « site pour ordinateur » se présente comme un Mac : l'écran tactile le distingue.
+          /Macintosh/.test(ua) && navigator.maxTouchPoints <= 1
+          ? "mac"
+          : /Linux|X11/.test(ua) && !/Android/.test(ua)
+            ? "linux"
+            : null,
     );
     let masquee = false;
     try {
@@ -126,7 +131,8 @@ export default function PanneauConversion({
   async function lancerAide(): Promise<EtatAide | null> {
     setAide("verification");
     let etat = await etatAide();
-    if (!etat && aideDejaInstallee()) {
+    // Pas de lancement par lien sur Mac : l'aide y démarre à l'ouverture de la session, et le lien ffg-aide:// n'y existe pas.
+    if (!etat && aideDejaInstallee() && systeme !== "mac") {
       etat = await demarrerAide();
       // Le lien est introuvable ou l'aide est cassée : on oublie qu'elle était installée et on repropose l'installation.
       if (!etat) oublierAideInstallee();
@@ -195,7 +201,7 @@ export default function PanneauConversion({
         if (systeme) ouvrirFenetre();
         setMessageLien(
           !systeme
-            ? "Les liens YouTube et autres plateformes demandent l’aide locale, qui n’existe que sur un ordinateur Windows ou Linux."
+            ? "Les liens YouTube et autres plateformes demandent l’aide locale, qui n’existe que sur un ordinateur Windows, Mac ou Linux."
             : etat
               ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : relancez l’installation proposée dans la fenêtre, puis cliquez de nouveau sur Convertir."
               : "L’aide n’est pas installée sur cet ordinateur, ou ne démarre pas : installez-la avec la fenêtre qui vient de s’ouvrir, puis cliquez de nouveau sur Convertir.",
