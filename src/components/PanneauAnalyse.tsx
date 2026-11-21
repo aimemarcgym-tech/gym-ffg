@@ -79,7 +79,7 @@ interface Props {
   nbSauts: number;
   d: number;
   dMax: number;
-  // Avertissement de composition (par exemple : le sol doit finir par une acrobatie).
+  // Avertissement de composition (par exemple : pas de sortie en Performance 7-9 ans).
   avertissement?: string | null;
   // Identifiants validés à la main (Performance 1 : bonifications sur éléments et saut).
   bonifsChoisies?: string[];

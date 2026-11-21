@@ -31,7 +31,6 @@ import {
   calculerNoteD,
   calculerNoteDSaut,
   etatBonifications,
-  estAcro,
   avertissementFinMouvement,
   noteDMax,
   sautsValides,
@@ -66,8 +65,6 @@ export default function MouvementEditeur() {
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [instantanes, setInstantanes] = useState<Instantane[]>([]);
   const [message, setMessage] = useState("");
-  // Alerte au centre de la page (règle « le sol finit par une acrobatie »).
-  const [alerte, setAlerte] = useState<string | null>(null);
   const [renommeInstantane, setRenommeInstantane] = useState<string | null>(
     null,
   );
@@ -172,48 +169,8 @@ export default function MouvementEditeur() {
     setTimeout(() => setMessage(""), 2500);
   }
 
-  // Au sol, le mouvement finit par une acrobatie : un élément qui n'en est pas une ne se place jamais en dernier (il passe avant la
-  // dernière acrobatie) et on ne peut pas déplacer un autre élément en dernière position.
-  function alerter(texte: string) {
-    setAlerte(texte);
-    setTimeout(() => setAlerte((a) => (a === texte ? null : a)), 4000);
-  }
-
-  function ajouter(l: string[], nouveaux: string[]): string[] {
-    const dernier = l.length ? getElementFedA(l[l.length - 1]) : undefined;
-    if (
-      agres === "SOL" &&
-      dernier &&
-      estAcro(dernier) &&
-      nouveaux.some((c) => {
-        const e = getElementFedA(c);
-        return e && !estAcro(e);
-      })
-    ) {
-      alerter(
-        "Le sol doit finir par une acrobatie : l’élément est placé avant la dernière acrobatie.",
-      );
-      return [...l.slice(0, -1), ...nouveaux, l[l.length - 1]];
-    }
-    return [...l, ...nouveaux];
-  }
-
-  function reordonner(suite: string[]) {
-    if (agres === "SOL" && suite.length && ids.length) {
-      const nouveauDernier = getElementFedA(suite[suite.length - 1]);
-      const ancienDernier = getElementFedA(ids[ids.length - 1]);
-      if (
-        nouveauDernier &&
-        !estAcro(nouveauDernier) &&
-        ancienDernier &&
-        estAcro(ancienDernier)
-      ) {
-        alerter("Impossible : le sol doit finir par une acrobatie.");
-        return;
-      }
-    }
-    setIds(suite);
-  }
+  // Les éléments se placent à la suite, dans l'ordre choisi : aucune contrainte sur le dernier élément.
+  const ajouter = (l: string[], nouveaux: string[]): string[] => [...l, ...nouveaux];
 
   async function majInstantane() {
     if (!modifId) return;
@@ -275,17 +232,6 @@ export default function MouvementEditeur() {
 
   return (
     <div className="min-h-screen">
-      {alerte && (
-        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            role="alert"
-            className="pointer-events-auto max-w-sm rounded-lg border border-border-strong bg-surface-alt px-5 py-4 text-center text-sm font-semibold text-red-500 shadow-2xl"
-            onClick={() => setAlerte(null)}
-          >
-            ⚠ {alerte}
-          </div>
-        </div>
-      )}
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-[1600px] px-6 py-5">
           {gymnaste && (
@@ -416,7 +362,7 @@ export default function MouvementEditeur() {
                   })
                 }
                 onRetirerSaut={(s) => setSauts((l) => l.filter((x) => x !== s))}
-                onReordonner={reordonner}
+                onReordonner={setIds}
               />
             )}
             {instantanes.length > 0 && (

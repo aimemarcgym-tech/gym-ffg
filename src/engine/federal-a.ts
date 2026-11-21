@@ -170,21 +170,15 @@ export function bonifsElement(element: ElementFedA, niveau: NiveauId = "A"): Bon
   return element.bonifFamille ? bonifsServies(element, "A").filter((b) => !!b.contribue.bonifFamille) : [];
 }
 
-// Acrobatie : famille « Acrobaties » du sol (Fédéral A) ou acrobaties de la grille Fédéral B.
-export function estAcro(e: ElementFedA): boolean {
-  return e.famille === "ACROBATIES" || e.famille.startsWith("ACRO") || e.famille.startsWith("B_ACRO");
-}
-
-// Au sol, le mouvement doit finir par une acrobatie : renvoie un avertissement quand le dernier élément n'en est pas une.
+// Avertissement de composition sur la sortie : en Performance 7-9 ans, à la poutre et aux barres, sans sortie (famille « _6 » d'au moins 0,10).
+// Plus aucune règle sur le sol : un mouvement n'a pas à finir par une acrobatie.
 export function avertissementFinMouvement(agres: Agres, elements: ElementFedA[]): string | null {
   if (elements.length > 0 && elements[0].grille === "PF") {
     if ((agres === "BARRES" || agres === "POUTRE") && !elements.some((e) => e.famille.endsWith("_6") && e.valeur >= 0.1)) {
       return "Pas de sortie : 7 éléments seulement sont comptés et −0,50 sur la note finale.";
     }
-    return null;
   }
-  if (agres !== "SOL" || elements.length === 0) return null;
-  return estAcro(elements[elements.length - 1]) ? null : "Le sol doit finir par une acrobatie : le dernier élément n’en est pas une.";
+  return null;
 }
 
 export interface SautChoisi {
