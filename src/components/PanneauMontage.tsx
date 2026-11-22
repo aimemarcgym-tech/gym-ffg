@@ -22,6 +22,11 @@ import { champ, panneau, titrePanneau } from "@/lib/styles";
 const HAUTEUR = 96;
 const bouton =
   "rounded-md border border-border-strong px-3 py-1.5 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50";
+// Boutons de retrait : le dernier sur lequel on a cliqué est allumé (dégradé), les autres sont éteints. Même taille pour ne pas bouger.
+const boutonAllume =
+  "rounded-md border border-transparent accent-gradient px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50";
+
+type BoutonRetrait = "retirer" | "garder" | "annuler" | "tout";
 
 export default function PanneauMontage({
   aCouper,
@@ -35,6 +40,8 @@ export default function PanneauMontage({
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const [retraits, setRetraits] = useState<Segment[]>([]);
+  // Dernier bouton de retrait cliqué : c'est celui qui est allumé.
+  const [dernierBouton, setDernierBouton] = useState<BoutonRetrait>("retirer");
   const [a, setA] = useState("");
   const [b, setB] = useState("");
   const [position, setPosition] = useState(0);
@@ -131,6 +138,7 @@ export default function PanneauMontage({
 
   // Remet le panneau à zéro : morceau, repères A et B, retraits et résultat sont effacés.
   function reinitialiser() {
+    setDernierBouton("retirer");
     audio.current?.pause();
     setFichier(null);
     setBuffer(null);
@@ -550,27 +558,43 @@ export default function PanneauMontage({
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => retirer()}
-              className="accent-gradient rounded px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+              onClick={() => {
+                setDernierBouton("retirer");
+                retirer();
+              }}
+              className={dernierBouton === "retirer" ? boutonAllume : bouton}
             >
               ✂ Retirer la sélection A–B
             </button>
-            <button type="button" onClick={garder} className={bouton}>
+            <button
+              type="button"
+              onClick={() => {
+                setDernierBouton("garder");
+                garder();
+              }}
+              className={dernierBouton === "garder" ? boutonAllume : bouton}
+            >
               Garder uniquement la sélection
             </button>
             <button
               type="button"
               disabled={retraits.length === 0}
-              onClick={() => setRetraits((l) => l.slice(0, -1))}
-              className={bouton}
+              onClick={() => {
+                setDernierBouton("annuler");
+                setRetraits((l) => l.slice(0, -1));
+              }}
+              className={dernierBouton === "annuler" ? boutonAllume : bouton}
             >
               ↶ Annuler le dernier retrait
             </button>
             <button
               type="button"
               disabled={retraits.length === 0}
-              onClick={() => setRetraits([])}
-              className={bouton}
+              onClick={() => {
+                setDernierBouton("tout");
+                setRetraits([]);
+              }}
+              className={dernierBouton === "tout" ? boutonAllume : bouton}
             >
               ↺ Tout réafficher
             </button>
