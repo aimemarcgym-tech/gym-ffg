@@ -129,19 +129,7 @@ body[data-filiere="PERFORMANCE"] {
     color: #000;
   }
 
-  /* Impression des mouvements : feuille claire, une page par mouvement. Les couleurs du thème sombre sont remplacées par des
-     couleurs lisibles sur papier, uniquement dans la feuille. */
   .feuille-impression {
-    --color-foreground: #111827;
-    --color-muted: #4b5563;
-    --color-surface: #ffffff;
-    --color-surface-alt: #f3f4f6;
-    --color-border-subtle: #d1d5db;
-    --color-border-strong: #9ca3af;
-    --color-success: #15803d;
-    --color-warning: #b45309;
-    --color-danger: #b91c1c;
-    color: #111827;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -151,11 +139,6 @@ body[data-filiere="PERFORMANCE"] {
   .feuille-impression[data-orientation] {
     position: static;
     width: auto;
-  }
-  /* « Mon mouvement » et « Analyse » restent côte à côte, même sur la largeur d'une page portrait. */
-  .page-impression > section > .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
   }
   /* La réduction (zoom) de chaque mouvement est calculée par le composant pour qu'il tienne sur une page. */
   .page-impression {
@@ -167,13 +150,30 @@ body[data-filiere="PERFORMANCE"] {
   }
 }
 
-/* Feuille d'impression des mouvements (montée au clic sur Imprimer) : hors écran, à la largeur utile de la page choisie, pour que
-   sa hauteur puisse être mesurée. */
+/* Feuille des mouvements (montée au clic sur Imprimer ou sur Télécharger en PDF) : hors écran, à la largeur utile de la page choisie,
+   pour que sa hauteur puisse être mesurée et qu'on puisse la capturer en PDF. Elle est claire (les couleurs du thème sombre sont
+   remplacées par des couleurs lisibles sur papier), à l'impression comme dans le PDF. */
 .feuille-impression {
   position: fixed;
   left: -10000px;
   top: 0;
   pointer-events: none;
+  --color-foreground: #111827;
+  --color-muted: #4b5563;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f3f4f6;
+  --color-border-subtle: #d1d5db;
+  --color-border-strong: #9ca3af;
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-danger: #b91c1c;
+  color: #111827;
+}
+/* « Mon mouvement » et « Analyse » restent côte à côte, même sur la largeur d'une page portrait (et sans dépendre de la taille de
+   l'écran : la capture PDF ne voit pas les mêmes points de rupture). */
+.page-impression > section > .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 .feuille-impression[data-orientation="portrait"] {
   width: 718px;
