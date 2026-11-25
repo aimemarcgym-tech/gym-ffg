@@ -108,6 +108,9 @@ body[data-filiere="PERFORMANCE"] {
   html,
   body {
     background: #fff !important;
+    /* Le corps a une hauteur minimale d'un écran (100vh) : à l'impression, cela ajoutait une page blanche avant la feuille. */
+    min-height: 0 !important;
+    height: auto !important;
   }
   body:has(.suivi-impression) * {
     visibility: hidden;
