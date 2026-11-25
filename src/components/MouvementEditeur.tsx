@@ -26,7 +26,7 @@ import {
   type SerieType,
 } from "@/lib/data";
 import PartageBouton from "@/components/PartageBouton";
-import FeuilleImpression, { useImpression } from "@/components/FeuilleImpression";
+import BoutonImprimer from "@/components/FeuilleImpression";
 import { createShare } from "@/lib/shares";
 import {
   calculerNoteD,
@@ -66,8 +66,6 @@ export default function MouvementEditeur() {
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [instantanes, setInstantanes] = useState<Instantane[]>([]);
   const [message, setMessage] = useState("");
-  // Impression du mouvement : la feuille est montée au clic sur « Imprimer », puis retirée à la fermeture de la fenêtre d'impression.
-  const [feuille, imprimer] = useImpression();
   const [renommeInstantane, setRenommeInstantane] = useState<string | null>(
     null,
   );
@@ -234,7 +232,6 @@ export default function MouvementEditeur() {
   const libelleAgres = AGRES.find((a) => a.id === agres)!.label;
 
   return (
-    <>
     <div className="min-h-screen print:hidden">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-[1600px] px-6 py-5">
@@ -317,13 +314,22 @@ export default function MouvementEditeur() {
           </div>
           <div className="flex items-center gap-2">
             <PartageBouton onCreate={creerLien} className={btnContour} />
-            <button
-              onClick={imprimer}
+            <BoutonImprimer
+              gymnaste={gymnaste ? `${gymnaste.prenom} ${gymnaste.nom}` : ""}
+              mouvements={[
+                {
+                  nom,
+                  agres,
+                  niveau: niveauId,
+                  elementIds: ids,
+                  bonifIds: bonifs,
+                  sauts,
+                  series,
+                },
+              ]}
               className={btnContour}
-              title="Imprime le mouvement (éléments et analyse) sur une page blanche"
-            >
-              Imprimer
-            </button>
+              titre="Imprime le mouvement (éléments, analyse et détail du calcul) sur une page blanche"
+            />
             {modifId && (
               <button
                 onClick={majInstantane}
@@ -549,22 +555,5 @@ export default function MouvementEditeur() {
         </div>
       </main>
     </div>
-    {feuille && (
-      <FeuilleImpression
-        gymnaste={gymnaste ? `${gymnaste.prenom} ${gymnaste.nom}` : ""}
-        mouvements={[
-          {
-            nom,
-            agres,
-            niveau: niveauId,
-            elementIds: ids,
-            bonifIds: bonifs,
-            sauts,
-            series,
-          },
-        ]}
-      />
-    )}
-    </>
   );
 }

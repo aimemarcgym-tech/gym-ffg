@@ -49,13 +49,11 @@ import {
 import type { Agres, NiveauId } from "@/regulation/types";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
 import PartageBouton from "@/components/PartageBouton";
-import FeuilleImpression, { useImpression } from "@/components/FeuilleImpression";
+import BoutonImprimer from "@/components/FeuilleImpression";
 import { createShare } from "@/lib/shares";
 
 export default function FicheGymnaste() {
   const [supprId, setSupprId] = useState<string | null>(null);
-  // Impression des mouvements : la feuille est montée au clic sur « Imprimer les mouvements », puis retirée à la fermeture.
-  const [feuille, imprimer] = useImpression();
   const router = useRouter();
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [club, setClub] = useState<Club | null>(null);
@@ -306,7 +304,6 @@ export default function FicheGymnaste() {
     }));
 
   return (
-    <>
     <div className="min-h-screen print:hidden">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-5xl px-6 py-5">
@@ -435,14 +432,13 @@ export default function FicheGymnaste() {
             </h2>
             {mouvements.length > 0 && (
               <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={imprimer}
+                <BoutonImprimer
+                  gymnaste={`${gymnaste.prenom} ${gymnaste.nom}`}
+                  mouvements={mouvementsAImprimer}
+                  label="Imprimer les mouvements"
                   className={btnContour}
-                  title="Imprime tous les mouvements de la gymnaste, un par page"
-                >
-                  Imprimer les mouvements
-                </button>
+                  titre="Imprime tous les mouvements de la gymnaste, un par page"
+                />
                 <PartageBouton
                   label="Partager les 4 agrès"
                   onCreate={partagerMouvements}
@@ -546,12 +542,5 @@ export default function FicheGymnaste() {
         <ProfilTechnique gymnaste={gymnaste} onChanger={changerStatut} />
       </main>
     </div>
-    {feuille && (
-      <FeuilleImpression
-        gymnaste={`${gymnaste.prenom} ${gymnaste.nom}`}
-        mouvements={mouvementsAImprimer}
-      />
-    )}
-    </>
   );
 }

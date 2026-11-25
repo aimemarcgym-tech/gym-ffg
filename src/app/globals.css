@@ -142,26 +142,52 @@ body[data-filiere="PERFORMANCE"] {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  /* Page nommée : les mouvements s'impriment en A4 portrait (le reste de l'application garde le paysage ci-dessus). */
-  @page mouvement {
+  /* Pages nommées : portrait ou paysage au choix de l'utilisateur (le reste de l'application garde le paysage ci-dessus). */
+  @page mouvement-portrait {
     size: A4 portrait;
     margin: 10mm;
   }
-  .feuille-impression {
-    page: mouvement;
+  @page mouvement-paysage {
+    size: A4 landscape;
+    margin: 10mm;
   }
-  /* « Mon mouvement » et « Analyse » restent côte à côte même sur la largeur d'une page portrait. */
+  /* À l'impression, la feuille quitte sa position hors écran et prend la place de la page. */
+  .feuille-impression[data-orientation] {
+    position: static;
+    width: auto;
+  }
+  .feuille-impression[data-orientation="portrait"] {
+    page: mouvement-portrait;
+  }
+  .feuille-impression[data-orientation="paysage"] {
+    page: mouvement-paysage;
+  }
+  /* « Mon mouvement » et « Analyse » restent côte à côte, même sur la largeur d'une page portrait. */
   .page-impression > section > .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
+  /* La réduction (zoom) de chaque mouvement est calculée par le composant pour qu'il tienne sur une page. */
   .page-impression {
     break-after: page;
     break-inside: avoid;
-    /* Légèrement réduit : un mouvement d'une quinzaine d'éléments tient encore sur une page. */
-    zoom: 0.9;
   }
   .page-impression:last-child {
     break-after: auto;
   }
+}
+
+/* Feuille d'impression des mouvements (montée au clic sur Imprimer) : hors écran, à la largeur utile de la page choisie, pour que
+   sa hauteur puisse être mesurée. */
+.feuille-impression {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  pointer-events: none;
+}
+.feuille-impression[data-orientation="portrait"] {
+  width: 718px;
+}
+.feuille-impression[data-orientation="paysage"] {
+  width: 1047px;
 }
