@@ -33,7 +33,7 @@ export default function BandeauVerification() {
   }
 
   return (
-    <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-center text-xs text-warning">
+    <div className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-center text-xs text-warning print:hidden">
       Adresse e-mail non confirmée : consultez votre boîte mail (et les courriers indésirables) pour cliquer sur le lien de confirmation.{" "}
       <button type="button" disabled={occupe} onClick={renvoyer} className="font-semibold underline disabled:opacity-50">
         Renvoyer l’e-mail

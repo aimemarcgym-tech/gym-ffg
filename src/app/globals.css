@@ -125,4 +125,28 @@ body[data-filiere="PERFORMANCE"] {
     width: 100%;
     color: #000;
   }
+
+  /* Impression des mouvements : feuille claire, une page par mouvement. Les couleurs du thème sombre sont remplacées par des
+     couleurs lisibles sur papier, uniquement dans la feuille. */
+  .feuille-impression {
+    --color-foreground: #111827;
+    --color-muted: #4b5563;
+    --color-surface: #ffffff;
+    --color-surface-alt: #f3f4f6;
+    --color-border-subtle: #d1d5db;
+    --color-border-strong: #9ca3af;
+    --color-success: #15803d;
+    --color-warning: #b45309;
+    --color-danger: #b91c1c;
+    color: #111827;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page-impression {
+    break-after: page;
+    break-inside: avoid;
+  }
+  .page-impression:last-child {
+    break-after: auto;
+  }
 }

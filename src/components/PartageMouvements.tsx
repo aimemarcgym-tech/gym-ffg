@@ -58,7 +58,7 @@ const LIBELLE_LONG: Record<Agres, string> = {
 };
 
 // Même présentation que dans le constructeur : « Mon mouvement » et « Analyse », en lecture seule.
-function Panneaux({ m }: { m: MouvementPartage }) {
+export function Panneaux({ m }: { m: MouvementPartage }) {
   if (estPerf79(m.niveau)) {
     return (
       <section>

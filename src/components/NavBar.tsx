@@ -158,7 +158,7 @@ export default function NavBar() {
   );
 
   return (
-    <nav className="relative flex flex-nowrap items-center justify-start gap-2 overflow-x-auto overscroll-x-contain border-b border-border-subtle bg-surface px-4 py-3 md:[justify-content:safe_center]">
+    <nav className="relative flex print:hidden flex-nowrap items-center justify-start gap-2 overflow-x-auto overscroll-x-contain border-b border-border-subtle bg-surface px-4 py-3 md:[justify-content:safe_center]">
       {DEBUT.map((o) => (
         <Link
           key={o.href}

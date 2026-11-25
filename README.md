@@ -35,6 +35,10 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+## Impression des mouvements
+
+Bouton « Imprimer » dans le constructeur de mouvement (le mouvement ouvert) et « Imprimer les mouvements » sur la fiche d'une gymnaste (tous ses mouvements, dans l'ordre Saut, Barres, Poutre, Sol). `src/components/FeuilleImpression.tsx` monte une feuille au clic, une page par mouvement : nom de la gymnaste, date, puis les panneaux « Mon mouvement » et « Analyse » (ceux de la page de partage, `Panneaux` dans `PartageMouvements.tsx`), sur fond blanc. `globals.css` (`@media print`) remplace les couleurs du thème sombre par des couleurs de papier dans `.feuille-impression` ; le reste de la page, dont la barre de navigation, est masqué par `print:hidden`. Format A4 paysage (deux colonnes côte à côte).
+
 ## Aide « Faire ces musiques »
 
 Convertir un lien YouTube (ou autre plateforme) en MP3 demande une aide installée sur l'ordinateur : `tools/aide-musique.mjs`, un petit serveur local (port 47615) qui utilise yt-dlp et ffmpeg. Un site web ne peut rien installer lui-même : l'utilisateur télécharge un fichier et l'ouvre une fois.

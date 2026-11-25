@@ -38,6 +38,7 @@ import {
 } from "@/regulation/loader";
 import { AGRES, fmt } from "@/regulation/libelles";
 import {
+  btnContour,
   btnDanger,
   btnDegrade,
   carteLigne,
@@ -48,10 +49,13 @@ import {
 import type { Agres, NiveauId } from "@/regulation/types";
 import { ConfirmerEnLigne } from "@/components/EnLigne";
 import PartageBouton from "@/components/PartageBouton";
+import FeuilleImpression, { useImpression } from "@/components/FeuilleImpression";
 import { createShare } from "@/lib/shares";
 
 export default function FicheGymnaste() {
   const [supprId, setSupprId] = useState<string | null>(null);
+  // Impression des mouvements : la feuille est montée au clic sur « Imprimer les mouvements », puis retirée à la fermeture.
+  const [feuille, imprimer] = useImpression();
   const router = useRouter();
   const [gymnaste, setGymnaste] = useState<Gymnaste | null>(null);
   const [club, setClub] = useState<Club | null>(null);
@@ -284,8 +288,26 @@ export default function FicheGymnaste() {
     setGymnaste(await getGymnaste(gymnaste!.id).then((g) => g ?? gymnaste));
   }
 
+  // Mouvements de la gymnaste dans l'ordre Saut, Barres, Poutre, Sol (comme le partage).
+  const mouvementsAImprimer = [...mouvements]
+    .sort(
+      (a, b) =>
+        AGRES.findIndex((x) => x.id === a.agres) -
+        AGRES.findIndex((x) => x.id === b.agres),
+    )
+    .map((m) => ({
+      nom: m.nom,
+      agres: m.agres,
+      niveau: m.niveau,
+      elementIds: m.elementIds,
+      bonifIds: m.bonifIds,
+      sauts: m.sauts,
+      series: m.series,
+    }));
+
   return (
-    <div className="min-h-screen">
+    <>
+    <div className="min-h-screen print:hidden">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-5xl px-6 py-5">
           <Link href="/" className={lienDegrade}>
@@ -412,11 +434,21 @@ export default function FicheGymnaste() {
               Mouvements
             </h2>
             {mouvements.length > 0 && (
-              <PartageBouton
-                label="Partager les 4 agrès"
-                onCreate={partagerMouvements}
-                className={btnDegrade}
-              />
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={imprimer}
+                  className={btnContour}
+                  title="Imprime tous les mouvements de la gymnaste, un par page"
+                >
+                  Imprimer les mouvements
+                </button>
+                <PartageBouton
+                  label="Partager les 4 agrès"
+                  onCreate={partagerMouvements}
+                  className={btnDegrade}
+                />
+              </div>
             )}
           </div>
 
@@ -514,5 +546,12 @@ export default function FicheGymnaste() {
         <ProfilTechnique gymnaste={gymnaste} onChanger={changerStatut} />
       </main>
     </div>
+    {feuille && (
+      <FeuilleImpression
+        gymnaste={`${gymnaste.prenom} ${gymnaste.nom}`}
+        mouvements={mouvementsAImprimer}
+      />
+    )}
+    </>
   );
 }
