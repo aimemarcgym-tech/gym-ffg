@@ -90,7 +90,10 @@ export default function BoutonImprimer({
   const [orientation, setOrientation] = useState<Orientation>("portrait");
   const [monte, setMonte] = useState(false);
   const [demande, setDemande] = useState(0);
+  const [menu, setMenu] = useState(false);
+  const zone = useRef<HTMLSpanElement>(null);
 
+  // Dernière orientation utilisée : elle est marquée d'une coche dans le menu.
   useEffect(() => {
     try {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -100,42 +103,75 @@ export default function BoutonImprimer({
     }
   }, []);
 
+  // Le menu se ferme au clic ailleurs ou avec Échap.
+  useEffect(() => {
+    if (!menu) return;
+    const dehors = (e: MouseEvent) => {
+      if (!zone.current?.contains(e.target as Node)) setMenu(false);
+    };
+    const touche = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenu(false);
+    };
+    document.addEventListener("mousedown", dehors);
+    document.addEventListener("keydown", touche);
+    return () => {
+      document.removeEventListener("mousedown", dehors);
+      document.removeEventListener("keydown", touche);
+    };
+  }, [menu]);
+
   const lancer = useCallback(() => {
     window.addEventListener("afterprint", () => setMonte(false), { once: true });
     window.print();
   }, []);
 
+  // Un clic sur « Portrait » ou « Paysage » lance l'impression dans cette orientation.
+  function imprimerEn(o: Orientation) {
+    setOrientation(o);
+    try {
+      localStorage.setItem(CLE, o);
+    } catch {
+      // stockage indisponible : sans conséquence
+    }
+    setMenu(false);
+    setMonte(true);
+    setDemande((n) => n + 1);
+  }
+
   return (
     <>
-      <span className="inline-flex items-center gap-1.5">
-        <select
-          value={orientation}
-          onChange={(e) => {
-            const o = e.target.value as Orientation;
-            setOrientation(o);
-            try {
-              localStorage.setItem(CLE, o);
-            } catch {
-              // stockage indisponible : sans conséquence
-            }
-          }}
-          aria-label="Orientation de l’impression"
-          className="rounded border border-border-strong bg-surface-alt px-2 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-        >
-          <option value="portrait">Portrait</option>
-          <option value="paysage">Paysage</option>
-        </select>
+      <span ref={zone} className="relative inline-block">
         <button
           type="button"
-          onClick={() => {
-            setMonte(true);
-            setDemande((n) => n + 1);
-          }}
+          onClick={() => setMenu((v) => !v)}
+          aria-haspopup="menu"
+          aria-expanded={menu}
           className={className}
           title={titre}
         >
-          {label}
+          {label} <span aria-hidden="true">▾</span>
         </button>
+        {menu && (
+          <div
+            role="menu"
+            className="absolute right-0 top-full z-50 mt-1 min-w-full overflow-hidden rounded border border-border-strong bg-surface-alt text-sm shadow-xl"
+          >
+            {(["portrait", "paysage"] as const).map((o) => (
+              <button
+                key={o}
+                type="button"
+                role="menuitem"
+                onClick={() => imprimerEn(o)}
+                className="flex w-full items-center gap-2 whitespace-nowrap px-4 py-2 text-left text-foreground hover:bg-accent-from/15"
+              >
+                <span aria-hidden="true" className="w-3 text-xs">
+                  {orientation === o ? "✓" : ""}
+                </span>
+                {o === "portrait" ? "Portrait" : "Paysage"}
+              </button>
+            ))}
+          </div>
+        )}
       </span>
       {monte &&
         createPortal(
