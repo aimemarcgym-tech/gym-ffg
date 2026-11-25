@@ -142,9 +142,24 @@ body[data-filiere="PERFORMANCE"] {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+  /* Page nommée : les mouvements s'impriment en A4 portrait (le reste de l'application garde le paysage ci-dessus). */
+  @page mouvement {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  .feuille-impression {
+    page: mouvement;
+  }
+  /* « Mon mouvement » et « Analyse » restent côte à côte même sur la largeur d'une page portrait. */
+  .page-impression > section > .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
   .page-impression {
     break-after: page;
     break-inside: avoid;
+    /* Légèrement réduit : un mouvement d'une quinzaine d'éléments tient encore sur une page. */
+    zoom: 0.9;
   }
   .page-impression:last-child {
     break-after: auto;

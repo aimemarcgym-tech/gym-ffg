@@ -37,7 +37,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Impression des mouvements
 
-Bouton « Imprimer » dans le constructeur de mouvement (le mouvement ouvert) et « Imprimer les mouvements » sur la fiche d'une gymnaste (tous ses mouvements, dans l'ordre Saut, Barres, Poutre, Sol). `src/components/FeuilleImpression.tsx` monte une feuille au clic, une page par mouvement : nom de la gymnaste, date, puis les panneaux « Mon mouvement » et « Analyse » (ceux de la page de partage, `Panneaux` dans `PartageMouvements.tsx`), sur fond blanc. `globals.css` (`@media print`) remplace les couleurs du thème sombre par des couleurs de papier dans `.feuille-impression` ; le reste de la page, dont la barre de navigation, est masqué par `print:hidden`. Format A4 paysage (deux colonnes côte à côte).
+Bouton « Imprimer » dans le constructeur de mouvement (le mouvement ouvert) et « Imprimer les mouvements » sur la fiche d'une gymnaste (tous ses mouvements, dans l'ordre Saut, Barres, Poutre, Sol). `src/components/FeuilleImpression.tsx` monte une feuille au clic, une page par mouvement : nom de la gymnaste, date, puis les panneaux « Mon mouvement » et « Analyse » (ceux de la page de partage, `Panneaux` dans `PartageMouvements.tsx`), sur fond blanc. `globals.css` (`@media print`) remplace les couleurs du thème sombre par des couleurs de papier dans `.feuille-impression` ; le reste de la page, dont la barre de navigation, est masqué par `print:hidden`. Format A4 portrait (page nommée `mouvement` ; le reste de l'application s'imprime en paysage), les deux panneaux restent côte à côte pour qu'un mouvement tienne sur une page.
 
 ## Aide « Faire ces musiques »
 
