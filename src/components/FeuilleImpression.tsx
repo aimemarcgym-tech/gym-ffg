@@ -50,7 +50,7 @@ export default function FeuilleImpression({
             </span>
             <span className="text-xs text-muted">Imprimé le {date}</span>
           </div>
-          <Panneaux m={m} />
+          <Panneaux m={m} detailOuvert />
         </section>
       ))}
     </div>

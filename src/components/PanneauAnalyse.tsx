@@ -83,6 +83,8 @@ interface Props {
   avertissement?: string | null;
   // Identifiants validés à la main (Performance 1 : bonifications sur éléments et saut).
   bonifsChoisies?: string[];
+  // Impression : le détail du calcul est déroulé d'office et son bouton n'est pas affiché.
+  detailOuvert?: boolean;
 }
 
 export default function PanneauAnalyse(p: Props) {
@@ -324,13 +326,15 @@ export default function PanneauAnalyse(p: Props) {
         </div>
         {grille && (
           <>
-            <button
-              onClick={() => setDetail(!detail)}
-              className="mt-1 text-xs text-white/90 underline"
-            >
-              {detail ? "Masquer" : "Détail"} du calcul
-            </button>
-            {detail && p.noteD && (
+            {!p.detailOuvert && (
+              <button
+                onClick={() => setDetail(!detail)}
+                className="mt-1 text-xs text-white/90 underline"
+              >
+                {detail ? "Masquer" : "Détail"} du calcul
+              </button>
+            )}
+            {(detail || p.detailOuvert) && p.noteD && (
               <div className="mt-2 space-y-1 text-xs text-white/85">
                 <div>
                   Éléments : {fmt(p.noteD.totalElements)} pt (

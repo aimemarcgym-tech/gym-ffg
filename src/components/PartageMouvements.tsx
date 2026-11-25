@@ -58,7 +58,14 @@ const LIBELLE_LONG: Record<Agres, string> = {
 };
 
 // Même présentation que dans le constructeur : « Mon mouvement » et « Analyse », en lecture seule.
-export function Panneaux({ m }: { m: MouvementPartage }) {
+export function Panneaux({
+  m,
+  detailOuvert = false,
+}: {
+  m: MouvementPartage;
+  // Impression : déroule le détail du calcul de la note de départ.
+  detailOuvert?: boolean;
+}) {
   if (estPerf79(m.niveau)) {
     return (
       <section>
@@ -84,10 +91,16 @@ export function Panneaux({ m }: { m: MouvementPartage }) {
       </section>
     );
   }
-  return <PanneauxFederal m={m} />;
+  return <PanneauxFederal m={m} detailOuvert={detailOuvert} />;
 }
 
-function PanneauxFederal({ m }: { m: MouvementPartage }) {
+function PanneauxFederal({
+  m,
+  detailOuvert,
+}: {
+  m: MouvementPartage;
+  detailOuvert: boolean;
+}) {
   const grille = m.agres !== "SAUT";
   const ag = m.agres as AgresAvecGrille;
   const niveau = getNiveau(m.niveau);
@@ -132,6 +145,7 @@ function PanneauxFederal({ m }: { m: MouvementPartage }) {
           dMax={noteDMax(m.niveau, m.agres)}
           bonifsChoisies={m.bonifIds}
           avertissement={avertissementFinMouvement(m.agres, choisis)}
+          detailOuvert={detailOuvert}
         />
       </div>
     </section>
