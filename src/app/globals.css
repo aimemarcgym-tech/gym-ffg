@@ -145,25 +145,12 @@ body[data-filiere="PERFORMANCE"] {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  /* Pages nommées : portrait ou paysage au choix de l'utilisateur (le reste de l'application garde le paysage ci-dessus). */
-  @page mouvement-portrait {
-    size: A4 portrait;
-    margin: 10mm;
-  }
-  @page mouvement-paysage {
-    size: A4 landscape;
-    margin: 10mm;
-  }
+  /* Le format de page (portrait ou paysage, au choix de l'utilisateur) est donné par un <style> que le composant ajoute avec la
+     feuille : une seule règle @page, sans pages nommées (elles forçaient un saut de page, donc une page blanche, avant la feuille). */
   /* À l'impression, la feuille quitte sa position hors écran et prend la place de la page. */
   .feuille-impression[data-orientation] {
     position: static;
     width: auto;
-  }
-  .feuille-impression[data-orientation="portrait"] {
-    page: mouvement-portrait;
-  }
-  .feuille-impression[data-orientation="paysage"] {
-    page: mouvement-paysage;
   }
   /* « Mon mouvement » et « Analyse » restent côte à côte, même sur la largeur d'une page portrait. */
   .page-impression > section > .grid {

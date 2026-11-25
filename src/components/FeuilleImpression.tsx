@@ -50,6 +50,8 @@ function Feuille({
       aria-hidden="true"
       inert
     >
+      {/* Format de la page imprimée : une seule règle @page (celle du reste de l'application, en paysage, est remplacée). */}
+      <style>{`@page { size: A4 ${orientation === "portrait" ? "portrait" : "landscape"}; margin: 10mm; }`}</style>
       {mouvements.map((m, i) => (
         <section
           key={i}
